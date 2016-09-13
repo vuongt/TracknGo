@@ -1,6 +1,8 @@
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
-node_modules/
-platforms/
-plugins/
+FollowZBeat/platforms/
+FollowZBeat/plugins/
+.idea/
+FollowZBeat/node_modules/
+FollowZBeat/npm-debug.log
