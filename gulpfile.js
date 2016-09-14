@@ -13,7 +13,7 @@ var paths = {
 
 gulp.task('default', ['sass']);
 
-gulp.task('sass', function(done) {
+gulp.task('sass', function (done) {
   gulp.src('./scss/ionic.app.scss')
     .pipe(sass())
     .on('error', sass.logError)
@@ -21,23 +21,23 @@ gulp.task('sass', function(done) {
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
-    .pipe(rename({ extname: '.min.css' }))
+    .pipe(rename({extname: '.min.css'}))
     .pipe(gulp.dest('./www/css/'))
     .on('end', done);
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   gulp.watch(paths.sass, ['sass']);
 });
 
-gulp.task('install', ['git-check'], function() {
+gulp.task('install', ['git-check'], function () {
   return bower.commands.install()
-    .on('log', function(data) {
+    .on('log', function (data) {
       gutil.log('bower', gutil.colors.cyan(data.id), data.message);
     });
 });
 
-gulp.task('git-check', function(done) {
+gulp.task('git-check', function (done) {
   if (!sh.which('git')) {
     console.log(
       '  ' + gutil.colors.red('Git is not installed.'),
@@ -50,7 +50,7 @@ gulp.task('git-check', function(done) {
   done();
 });
 
-gulp.task('install', function(){
+gulp.task('install', function () {
   sh.exec('npm install');
   sh.exec('bower install');
   sh.exec('ionic state restore');
@@ -58,4 +58,32 @@ gulp.task('install', function(){
   console.log(
     gutil.colors.green('All your packages have been updated, you can start developing')
   )
+});
+
+gulp.task('start', function () {
+  sh.exec('node server');
+});
+
+gulp.task('check-config', function () {
+  var config = sh.grep('config-', './server.js');
+  var res = config.substring(24, config.indexOf('.', 24));
+  if (res === 'config-dev') {
+    console.log(
+      'Vous utilisez actuellement le fichier de configuration : ' + gutil.colors.green(res) + '.'
+    )
+  } else {
+    console.log(
+      'Vous utilisez actuellement le fichier de configuration : ' + gutil.colors.red(res) + '.'
+    )
+  }
+});
+
+gulp.task('change-config', function () {
+  var config = sh.grep('config-', './server.js');
+  var res = config.substring(24, config.indexOf('.', 24));
+  if (res === 'config-dev') {
+    sh.sed('-i','config-dev', 'config-prod', './server.js');
+  } else {
+    sh.sed('-i','config-prod', 'config-dev', './server.js');
+  }
 });

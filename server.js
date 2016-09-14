@@ -7,7 +7,7 @@ var express = require('express'),
 	urlencodedParser = bodyParser.urlencoded({ extended: false }); /* Parser that only parses urlencoded body */
 
 var app = express();
-var config = require('./config.js'); //config file contains all tokens and other private info
+var config = require('./config-dev.js'); //config file contains all tokens and other private info
 
 //===================PASSPORT======================
 /*Authentification strategy using passport.js and Redis*/
