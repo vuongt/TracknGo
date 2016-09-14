@@ -11,7 +11,7 @@ After each pull type :
 You are ready to go !
 
 
-#How to use the configuration you want
+# How to use the configuration you want
 
 The NodeJS server connects to the live MariaDB Database with a client that is generated when you launch the NodeJS server.
 How the connection is established depends on which configuration file you use :
