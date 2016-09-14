@@ -18,19 +18,17 @@
         <p>Titres favoris</p>
       </div>
     </div>
-    <ion-list id="page-list2">
-      <ion-item class="item-divider" id="page-list-item-divider1">Auteur</ion-item>
-      <ion-item id="page-list-item2">Item</ion-item>
-      <ion-item id="page-list-item3">Item</ion-item>
-      <ion-item id="page-list-item4">Item</ion-item>
+    <ion-list>
+      <ion-item class="item-divider">Auteur</ion-item>
+    </ion-list>
+    <ion-list ng-repeat="auteur in auteurs" id="page-list2">
+      <ion-item id="page-list-item4">{{auteur}}</ion-item>
     </ion-list>
     <ion-list id="page-list3">
       <ion-item class="item-divider" id="page-list-item-divider2">Titres</ion-item>
     </ion-list>
-    <ion-list id="page-list4">
-      <ion-item id="page-list-item5">Item 1</ion-item>
-      <ion-item id="page-list-item6">Item 2</ion-item>
-      <ion-item id="page-list-item7">Item 3</ion-item>
+    <ion-list ng-repeat="titre in titres" id="page-list4">
+      <ion-item>{{titre}}</ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
