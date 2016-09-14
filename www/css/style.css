@@ -31,6 +31,7 @@
   color:rgba(256,256,256,1);
 }
 
+/* CSS de la page "Concert" */
 
 .concert-background {
                     background-image: url('../img/concerta.jpg');
@@ -79,7 +80,54 @@ color: #FFFFFF;
 .ion-location{
 
 
-            font-size: 30px;
+            font-size: 28px;
               float:left;
+
+
+}
+
+/*CSS de la page Artist*/
+
+.artist-background {
+                    background-image: url('../img/thedumplings.jpg');
+
+                   background-size: cover;
+                   left: 0;
+                   right: 0;
+                   z-index: 1;
+                   /* On indique l'image de fond et les dimensions qu'elle occupe */
+                   display: block;
+
+                   height: 120px;
+                    padding: 30px;
+                    -webkit-filter: blur(5px);
+                    -moz-filter: blur(5px);
+                    -o-filter: blur(5px);
+                    -ms-filter: blur(5px);
+
+
+                  z-index: 1;
+
+                }
+
+
+.special-artist-background {
+
+                        position: fixed;
+                        left: 0;
+                        right: 0;
+                        z-index: 9999;
+                        position: fixed;
+
+
+
+                }
+
+
+.colored-black {
+        color: #000000;
+        font-size: 30px;
+
+
 
 }
