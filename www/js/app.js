@@ -69,6 +69,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
 
+
+    .state('tab.concert', {
+            url: '/concert',
+            views: {
+              'tab-concert': {
+                templateUrl: 'templates/tab-concert.html',
+                controller: 'ConcertCtrl'
+              }
+            }
+          })
+
   .state('tab.profil', {
     url: '/profil',
     views: {

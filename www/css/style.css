@@ -1,1 +1,52 @@
-/* Empty. Add your own CSS if you like */
+
+.concert-background {
+                    background-image: url('../img/concerta.jpg');
+
+                   background-size: cover;
+                   -webkit-background-size: cover;
+                       -moz-background-size: cover;
+                   height: 350px;
+                    padding: 30px;
+
+
+
+
+                }
+
+.ion-ios-star-outline {
+                 font-size: 40px;
+                 text-align:left;
+                 float:right;
+                 color: #FFFFFF;
+                }
+
+.ion-chevron-left{
+
+              font-size: 40px;
+              float:left;
+              color: #FFFFFF;
+
+
+}
+
+h1{
+
+color: #FFFFFF;
+
+}
+
+.rightheader{
+
+             padding-left:50px;
+             padding-top: -20px;
+
+}
+
+
+.ion-location{
+
+
+            font-size: 30px;
+              float:left;
+
+}
