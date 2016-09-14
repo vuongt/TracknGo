@@ -56,6 +56,6 @@ gulp.task('install', function(){
   sh.exec('ionic state restore');
 
   console.log(
-    gutil.colors.green('All your packages have been updated, you can start developing');
+    gutil.colors.green('All your packages have been updated, you can start developing')
   )
 });
