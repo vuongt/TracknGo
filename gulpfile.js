@@ -49,3 +49,13 @@ gulp.task('git-check', function(done) {
   }
   done();
 });
+
+gulp.task('install', function(){
+  sh.exec('npm install');
+  sh.exec('bower install');
+  sh.exec('ionic state restore');
+
+  console.log(
+    gutil.colors.green('All your packages have been updated, you can start developing');
+  )
+});
