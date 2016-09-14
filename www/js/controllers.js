@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers')
 
 .controller('HomeCtrl', function($scope) {})
 
@@ -19,10 +19,6 @@ angular.module('starter.controllers', [])
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('ProfilCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
 });
+
+

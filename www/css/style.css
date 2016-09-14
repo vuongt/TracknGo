@@ -1,3 +1,20 @@
+/* Empty. Add your own CSS if you like */
+.left {
+  float: left;
+  text-align: right;
+  margin: 2px 10px;
+  display: inline;
+}
+.right {
+  float: left;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline;
+}
+.big-header {
+  background-color: orangered;
+}
+
 
 .concert-background {
                     background-image: url('../img/concerta.jpg');
