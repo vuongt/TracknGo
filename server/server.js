@@ -1,13 +1,13 @@
-const express = require('express');
-const app = express();
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const RedisStore = require('connect-redis')(session);
-const session = require('express-session');
+var express = require('express'),
+	passport = require('passport'),
+	LocalStrategy = require('passport-local').Strategy,
+	session = require('express-session'),
+	RedisStore = require('connect-redis')(session),
+	bodyParser = require("body-parser"),
+	urlencodedParser = bodyParser.urlencoded({ extended: false }); /* Parser that only parses urlencoded body */
 
-var bodyParser = require("body-parser");
-var urlencodedParser = bodyParser.urlencoded({ extended: false }); /* Parser that only parses urlencoded body */
-
+var app = express();
+var config = require('./config.js'); //config file contains all tokens and other private info
 
 //===================PASSPORT======================
 /*Authentification strategy using passport.js and Redis*/
@@ -15,13 +15,9 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false }); /* Parser tha
 used as database, cache and message broker. */
 
 //====================EXPRESS=======================
-
 app.use(session({ //Initiate a session
-	store: new RedisStore({
-		url:config.redisStore.url
-	}),
-	secret: config.redisStore.secret,
-	resave:false,
+	secret: config.secret,
+	resave:true,
 	saveUninitialized:false
 }))
 .use(passport.initialize())
@@ -32,17 +28,17 @@ app.use(session({ //Initiate a session
 /*Mariasql client to connect to the mariaDB*/
 var Client = require("mariasql");
 var mariaClient = new Client({
-	host:'localhost',
-	user:'root',
-	password:'digitalLab',
-	db:'app'
+	host:config.host,
+	user:config.user,
+	password:config.password,
+	db:config.db
 });
 
 
 //======================API oeuvres===================
 var request = require('request-promise');
 const optionListWorks ={
-	method = 'GET',
+	method:'GET',
 	uri:'http://sacem.fr/oeuvresrest/getworks',
 	qs:{
 		token:'123456',
@@ -52,7 +48,7 @@ const optionListWorks ={
 		pagesize:'',
 		page:'',
 		blankfield:''
-	}
+	},
 	json:true
 }
 request(optionListWorks).then(function(res){
@@ -88,18 +84,17 @@ app.get("/", function(req, res){
 	mariaClient.end();
 	res.send("Inscription finished !");
 })
-.app.use(function(err,req,res,next){
+.use(function(err,req,res,next){
 	console.log(err);
 	res.status(500).send('Something broke!');
 }); // TODO error handling
 
 
 //=================PORT============================
-
-var port = process.env.PORT || 8080; //select your port or let it pull from .env file //
+var port = process.env.PORT || config.port ; //select your port or let it pull from .env file //
 app.listen(port,function(err){
 	if(err){
 		return console.log('Error listening to port'+port, err);
 	}
-	console.log("Server is listening on port" + port);
+	console.log("Server is listening on port " + port);
 });
