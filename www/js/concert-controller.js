@@ -1,4 +1,4 @@
-angular.module('starter.controllers', []).controller('ConcertCtrl', function($scope) {
+angular.module('starter.controllers').controller('ConcertCtrl', function($scope) {
 
   $scope.name="The Dumplings en concert";
 

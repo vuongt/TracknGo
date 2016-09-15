@@ -1,4 +1,4 @@
-angular.module('starter.controllers', []).controller('MusiqueCtrl', function($scope) {
+angular.module('starter.controllers').controller('MusiqueCtrl', function($scope) {
 
 
 });
