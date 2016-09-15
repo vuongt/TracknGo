@@ -1,6 +1,6 @@
 var express = require('express'),
 	// logger = require('morgan'),
-	// cookieParser = require('cookie-parser'),
+	cookieParser = require('cookie-parser'),
 	session = require('express-session'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy,
@@ -43,14 +43,15 @@ var mariaClient = new Client({
 /*Redis is an open source (BSD licensed), in-memory data structure store,
 used as database, cache and message broker. */
 passport.serializeUser(function(user, done) {
-  console.log("serializing " + user.email);
+  console.log("serializing " + user.id);
   //TODO decide what information to write to session
   return done(null, user);
 });
 passport.deserializeUser(function(obj, done) {
   console.log("deserializing " + obj);
-  // TODO
-  return done(null, obj);
+  mariaClient.query("SELECT * FROM users WHERE id="+id,function(err,rows){
+    return done(err,row[0]);
+  });
 });
 
 //sign up strategy
@@ -72,10 +73,11 @@ passport.use('local-signup', new LocalStrategy(
         var newUser = new Object();
         newUser.email = email;
         newUser.password = password;
-        //newUser.name = req.body.name;
-        var prep = mariaClient.prepare('INSERT INTO users (email,password) VALUES (:email,:password)');
-        mariaClient.query(prep({email: email, password: password}), function (err, rows) {
+        newUser.name= req.body.name;
+        var prep = mariaClient.prepare('INSERT INTO users (name,email,password) VALUES (:name,:email,:password)');
+        mariaClient.query(prep({name:req.body.name, email: email, password: password}), function (err, rows) {
           if (err) {return done(err);}
+          newUser.id=rows.insertId;
           return done(null, newUser);
         });
       } else {
@@ -101,16 +103,15 @@ function (req, email, password, done){
     if (rows[0].password !== password)
       return done(null, false, {message:'Wrong password'});
     // all is well, return successful user
+    console.log("Login succeded");
     return done (null, rows[0]);
   });
 }
 ));
-
 //====================EXPRESS=======================
 app.set('views', __dirname + '/server/views');
-
 //app.use(logger('combined'));// TODO logging
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false })) /* Parser that only parses urlencoded body de type string*/
 .use(bodyParser.json());
 
@@ -169,6 +170,7 @@ request(optionListWorks).then(function(res){
 app.get("/home", function(req, res){
 	res.setHeader('Content-Type','text/html');
 	res.send("<strong>Hello there</strong> <a href='/signin'>Go to sign up page</a>");
+  console.log(req.user.name);
 });
 
 //Sign in page
