@@ -44,10 +44,12 @@ var mariaClient = new Client({
 used as database, cache and message broker. */
 passport.serializeUser(function(user, done) {
   console.log("serializing " + user.email);
+  //TODO decide what information to write to session
   return done(null, user);
 });
 passport.deserializeUser(function(obj, done) {
   console.log("deserializing " + obj);
+  // TODO
   return done(null, obj);
 });
 
@@ -103,6 +105,7 @@ function (req, email, password, done){
   });
 }
 ));
+
 //====================EXPRESS=======================
 app.set('views', __dirname + '/server/views');
 
@@ -136,7 +139,6 @@ app.use(function(req, res, next){
   next();
 });
 
-
 //======================API oeuvres===================
 /*var request = require('request-promise');
 const optionListWorks ={
@@ -164,7 +166,7 @@ request(optionListWorks).then(function(res){
 
 //=======================ROUTES========================
 //Home page
-app.get("/", function(req, res){
+app.get("/home", function(req, res){
 	res.setHeader('Content-Type','text/html');
 	res.send("<strong>Hello there</strong> <a href='/signin'>Go to sign up page</a>");
 });
@@ -178,22 +180,60 @@ app.get("/signin",function(req,res){
 //sends the request through our local signup strategy, and if successful takes user to homepage,
 // otherwise returns then to signin page
 app.post("/local-reg", passport.authenticate('local-signup',{
-  successRedirect: '/',
+  successRedirect: '/home',
   failureRedirect: '/signin'
   })
 );
 //sends the request through our local signin strategy, and if successful takes user to homepage,
 // otherwise returns then to signin page
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/',
+    successRedirect: '/home',
     failureRedirect: '/signin'
   })
 );
 
+//research page
+app.get('/search', function(req,res){
+  //params : position, rayon, start, end
+});
+
+//profil
+app.get('/profil', function(req, res){
+
+
+});
+
+//planning
+
+app.get('/planning', function(req, res){
+
+});
+
+//action favorite
+app.get('/action/addfavorite',function(req,res){
+  //params: type, id
+});
+app.get('/action/removefavorite',function(req,res){
+  //params: type, id
+});
+
+//Auteur, compositor
+app.get('/auteur',function(req,res){
+  //params :id
+});
+
+app.get('/song', function(req,res){
+  //params :id
+});
+
+app.post('/comment',function(req,res){
+  //params: date, comment
+});
+
 //logs user out of site, deleting them from the session, and returns to homepage
 /*app.get('/logout', function(req, res){
   var name = req.user.username;
-  console.log("LOGGIN OUT " + req.user.username)
+  console.log("LOG OUT " + req.user.username)
   req.logout();
   res.redirect('/');
   req.session.notice = "You have successfully been logged out " + name + "!";
