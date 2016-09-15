@@ -43,14 +43,14 @@ var mariaClient = new Client({
 /*Redis is an open source (BSD licensed), in-memory data structure store,
 used as database, cache and message broker. */
 passport.serializeUser(function(user, done) {
-  console.log("serializing " + user.id);
+  console.log("serializing user id : " + user.id);
   //TODO decide what information to write to session
-  return done(null, user);
+  return done(null, user.id);
 });
-passport.deserializeUser(function(obj, done) {
-  console.log("deserializing " + obj);
-  mariaClient.query("SELECT * FROM users WHERE id="+id,function(err,rows){
-    return done(err,row[0]);
+passport.deserializeUser(function(id, done) {
+  console.log("deserializing user with id: " + id);
+  mariaClient.query("SELECT id, name FROM users WHERE id="+id,function(err,rows){
+    return done(err,rows[0]);
   });
 });
 
@@ -65,7 +65,7 @@ passport.use('local-signup', new LocalStrategy(
     // find a user whose email is the same as the forms email
     // we are checking to see if the user trying to sign up already exists
     mariaClient.query("SELECT * FROM users WHERE email='"+email+"'" ,function(err,rows){
-      console.log("rows object: " + rows);
+      console.log("rows object when checking email: " + rows);
       if (err) return done(err);
       if (!rows.length) {
         //If there is no user with that email
@@ -77,7 +77,11 @@ passport.use('local-signup', new LocalStrategy(
         var prep = mariaClient.prepare('INSERT INTO users (name,email,password) VALUES (:name,:email,:password)');
         mariaClient.query(prep({name:req.body.name, email: email, password: password}), function (err, rows) {
           if (err) {return done(err);}
-          newUser.id=rows.insertId;
+          console.log('row insert result: ')
+          console.dir(rows);
+          newUser.id = rows.info.insertId;
+          console.log("newUser object: ");
+          console.dir(newUser);
           return done(null, newUser);
         });
       } else {
@@ -168,15 +172,20 @@ request(optionListWorks).then(function(res){
 //=======================ROUTES========================
 //Home page
 app.get("/home", function(req, res){
-	res.setHeader('Content-Type','text/html');
-	res.send("<strong>Hello there</strong> <a href='/signin'>Go to sign up page</a>");
-  console.log(req.user.name);
+  res.setHeader('Content-Type','text/html');
+  console.log('user in session: ');
+  console.log(req.user);
+  if(req.user){
+    res.render('index.ejs',{name:req.user.name});
+  }else{
+    res.redirect("/signin");
+  }
 });
 
 //Sign in page
 app.get("/signin",function(req,res){
 	res.setHeader('Content-Type','text/html');
-	res.render('index.ejs',{});
+	res.render('signin.ejs',{});
 });
 
 //sends the request through our local signup strategy, and if successful takes user to homepage,
@@ -200,15 +209,14 @@ app.get('/search', function(req,res){
 });
 
 //profil
-app.get('/profil', function(req, res){
-
-
+app.get('/profile', function(req, res){
+  res.setHeader('Content-Type','text/plain');
 });
 
 //planning
 
 app.get('/planning', function(req, res){
-
+  res.setHeader('Content-Type','text/plain');
 });
 
 //action favorite
@@ -233,14 +241,13 @@ app.post('/comment',function(req,res){
 });
 
 //logs user out of site, deleting them from the session, and returns to homepage
-/*app.get('/logout', function(req, res){
-  var name = req.user.username;
-  console.log("LOG OUT " + req.user.username)
+app.get('/logout', function(req, res){
+  var name = req.user.name;
+  console.log("LOG OUT " + req.user.name)
   req.logout();
-  res.redirect('/');
+  res.redirect('/home');
   req.session.notice = "You have successfully been logged out " + name + "!";
 });
-*/
 
 // TODO error handling
 app.use(function(err,req,res,next){
@@ -248,6 +255,7 @@ app.use(function(err,req,res,next){
 	res.status(500).send('Something broke!');
 });
 
+mariaClient.end();
 //=================PORT============================
 var port = process.env.PORT || config.port ; //select your port or let it pull from .env file //
 app.listen(port,function(err){

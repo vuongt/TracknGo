@@ -3,9 +3,9 @@ module.exports = {
 	"secret":"FollowZBeat",
 	"mariasql":{
 		'host':'localhost',
-		'user':'root',
-		'password':'digitalLab',
-		'db':'app'
+		'user':'dty',
+		'password':'dty',
+		'db':'appdb'
 	},
 	"oeuvre":{
 		"token":"23d3cb8e-6852-4c3a-acb6-f964ce1e8109",
