@@ -11,16 +11,27 @@ CREATE OR REPLACE TABLE users (
 	PRIMARY KEY (id)
 );
 
-CREATE OR REPLACE TABLE favorite_content (
+CREATE OR REPLACE TABLE favorite_oeuvres (
   id_user MEDIUMINT NOT NULL,
   id_content INT NOT NULL,
-  content_type VARCHAR(10)
+);
+
+CREATE OR REPLACE TABLE favorite_authors (
+  id_user MEDIUMINT NOT NULL,
+  id_content INT NOT NULL,
 );
 
 CREATE OR REPLACE TABLE comment (
   id_comment INT NOT NULL AUTO_INCREMENT,
+  id_prog INT NOT NULL,
   id_user MEDIUMINT NOT NULL,
   creation_date DATE,
   content VARCHAR(2000),
   PRIMARY KEY (id_comment)
 );
+
+CREATE OR REPLACE TABLE planning (
+  id_user MEDIUMINT NOT NULL
+  id_prog INT NOT NULL
+  prog_date DATE
+  );

@@ -44,7 +44,6 @@ var mariaClient = new Client({
 used as database, cache and message broker. */
 passport.serializeUser(function(user, done) {
   console.log("serializing user id : " + user.id);
-  //TODO decide what information to write to session
   return done(null, user.id);
 });
 passport.deserializeUser(function(id, done) {
@@ -208,13 +207,18 @@ app.get('/search', function(req,res){
   //params : position, rayon, start, end
 });
 
-//profil
+//profile
 app.get('/profile', function(req, res){
-  res.setHeader('Content-Type','text/plain');
+  res.setHeader('Content-Type','application/json');
+  var user = {
+    'name':req.user.name,
+    'songs':['song1','song2'],
+    'authors':['author1','author2']
+  }
+  res.send(JSON.stringify(user));
 });
 
 //planning
-
 app.get('/planning', function(req, res){
   res.setHeader('Content-Type','text/plain');
 });
