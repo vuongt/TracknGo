@@ -1,5 +1,4 @@
-angular.module('starter.controllers', []).controller('ArtistCtrl', function($scope) {
-
+angular.module('starter.controllers', []).controller('AuteurCtrl', function($scope) {
   $scope.name="The Dumplings";
   $scope.album1="Album 1";
   $scope.album2="Album 2";

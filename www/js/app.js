@@ -83,12 +83,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           })
 
 
-     .state('tab.artist', {
-                 url: '/artist',
+     .state('tab.auteur', {
+                 url: '/auteur',
                  views: {
-                   'tab-artist': {
-                     templateUrl: 'templates/tab-artist.html',
-                     controller: 'ArtistCtrl'
+                   'tab-auteur': {
+                     templateUrl: 'templates/tab-auteur.html',
+                     controller: 'AuteurCtrl'
                    }
                  }
                })
