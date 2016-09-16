@@ -156,7 +156,7 @@ var optionSacem ={
     token:config.sacem.token,
     query:'', //search criteria
     filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
-    pagesize:10, //Number of works per page
+    pagesize:50, //Number of works per page
     //page:1, //Number of page to return,
     blankfield:true
   },
@@ -272,6 +272,7 @@ app.get('/search/works',function(req,res){
 //---------------artist------------------/
 //Get artist information from Bands In Town
 app.get('/artist',function(req,res){
+  //TODO work list : API sacem, concert : Bands In town
   res.setHeader('Content-Type','application/json');
   artist = req.query.name;
   optionBIT.uri='http://api.bandsintown.com/artists/'+ artist +'.json';
@@ -302,6 +303,14 @@ app.get('/author',function(req,res){
       }
     }
   });
+  var author = [
+    {"title":"cjnkg",
+      "iswc":"cnorf"
+    },
+    {"title":"cjnkg",
+      "iswc":"cnorf"
+    }
+  ];
 });
 
 //---------------work details---------------
@@ -321,6 +330,26 @@ app.get('/work', function(req,res){
       }
     }
   });
+  var work = {
+    "title":"07 DEC",
+    "iswc":"njdsg",
+    "Compositor/Author":"Zazie",
+    "Performer":"Zazie",
+    "Concerts":[
+      {
+        "title":"cnjdif",
+        "date":"bxuhezf",
+        "code":"cnjg",
+        "location":{"address":"cjsdf", "hall":"ncjdg"}
+      },
+      {
+        "title":"cnjdcerdif",
+        "date":"bxuhezf",
+        "code":"cnjg",
+        "location":{"address":"cjsdf", "hall":"ncjdg"}
+      }
+    ]
+  };
 });
 
 //---------------profile---------------
