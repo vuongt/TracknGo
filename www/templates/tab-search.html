@@ -1,5 +1,39 @@
 <ion-view view-title="Chats">
   <ion-content>
+    <div class="item item-input list">
+        <label class="item-input item-select dropdrow-left" id="page-select2">
+          <select>
+            <option>Toutes</option>
+            <option>Concerts</option>
+            <option>Auteurs</option>
+            <option>Chansons</option>
+          </select>
+        </label>
+      <label class="search-right">
+        <input type="text" placeholder="Search">
+      </label>
+    </div>
 
+
+    <ion-list>
+      <ion-item class="item-divider" id="page-list-item-divider1">Concert</ion-item>
+      <ion-item ng-repeat="item in concerts"
+                item="item"
+                ng-click="item.show = !item.show" class="item-remove-animate"
+                ng-class="{'concertbackground' : item.show}" >
+        <p><h3>{{ item.titre}}</h3><span class="right" ng-show="item.show">     {{item.date}}</span></p>
+        <p ng-show="item.show">{{item.adresse}}</p>
+        <div>
+          <button id="page-button1" class="button button-planning" ng-show="item.show">
+            J'y vais !
+          </button>
+        </div>
+      </ion-item>
+
+    <ion-item class="item-divid^er" id="page-list-item-divider1">Auteurs</ion-item>
+    <ion-item collection-repeat="item in auteurs">
+      {{item}}<i id="liked" class="star" ng-class="{'ion-ios-star': liked, 'ion-ios-star-outline': !liked}" ng-click="liked=!liked"></i>
+    </ion-item>
   </ion-content>
 </ion-view>
+<!--

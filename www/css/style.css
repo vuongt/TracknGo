@@ -6,13 +6,31 @@
   display: inline-block;
 }
 .right {
-  float: left;
+  float: right;
   text-align: left;
   margin: 2px 10px;
   display: inline-block;
 }
+.dropdrow-left{
+  float: right;
+  text-align: left;
+  width: 40%;
+  display: inline-block;
+}
+.search-right{
+  float: left;
+  text-align: left;
+  width: 60%;
+  display: inline-block;
+}
+
 .container{
   display: inline-block;
+}
+
+.platform-android .tabs { top: 0 !important; }
+.has-tabs-top {
+  top: 49px !important; /*  height of the tabs */
 }
 
 .big-header {
@@ -30,7 +48,12 @@
   background: rgba(256,256,256,0.4);;
   color:rgba(256,256,256,1);
 }
-
+.concertbackground {
+  background-image: url('../img/concerta.jpg');
+  color: white;
+}
+.concertbackground p{  color: white;  }
+.concertbackground h3 {  color: white;  }
 /* CSS de la page "Concert" */
 
 .concert-background {
@@ -41,10 +64,6 @@
                        -moz-background-size: cover;
                    height: 350px;
                     padding: 30px;
-
-
-
-
                 }
 
 .star {
