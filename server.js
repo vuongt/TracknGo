@@ -156,27 +156,14 @@ var optionSacem ={
     query:'', //search criteria
     filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
     pagesize:10, //Number of works per page
-    page:1 //Number of page to return
+    page:1, //Number of page to return,
+    blankfield:true
   },
   headers:{
     'Origin':'http//dty.sacem.fr'
   }
 };
-/*var request = require('request-promise');
-const optionListWorks ={
-	method:'GET',
-	uri:config.oeuvre.uri,
-	qs:{
-		token:config.oeuvre.token,
-		query:'',
-		filters:'',
-		cc:'',
-		pagesize:'',
-		page:'',
-		blankfield:''
-	},
-	json:true
-};
+/*
 request(optionListWorks).then(function(res){
 	//Request succeed
 }).catch(function(err){
@@ -187,16 +174,16 @@ request(optionListWorks).then(function(res){
 //=======================API BandsInTown===============
 //Connect to BandsInTown V2 API
 //=====================================================
-/*var artist = 'Skrillex';
-const option ={
+var artist = 'Skrillex';
+var optionBIT ={
  method:'GET',
  uri:'http://api.bandsintown.com/artists/'+ artist +'.json',
  qs:{
-   api_version:2.0,
-   app_id:'Sacem',
+   api_version:'2.0',
+   app_id:'Sacem'
  }
-};
-request(option,function(err,res,body){
+ };
+/*request(optionBIT,function(err,res,body){
   if(err) {
     return console.log(err);
   } else {
@@ -249,11 +236,11 @@ app.get('/logout', function(req, res){
 });
 
 //---------------research page---------------
-app.get('/search', function(req,res){
+app.get('/search/concerts', function(req,res){
   //params : position, rayon, start, end
 });
 
-app.get('/search/oeuvres',function(req,res){
+app.get('/search/works',function(req,res){
   res.setHeader('Content-Type','application/json');
   optionSacem.qs.query=req.query.query;
   optionSacem.qs.filters=req.query.filters;
@@ -267,43 +254,60 @@ app.get('/search/oeuvres',function(req,res){
   });
 });
 
+app.get('/artist',function(req,res){
+  res.setHeader('Content-Type','application/json');
+  request(optionBIT,function(err,response,body){
+    if(err) {
+      return console.log(err);
+    } else {
+      console.log(res.statusCode, body);
+      res.send(body);
+    }
+  });
+});
+//---------------author---------------
+app.get('/author',function(req,res){
+  //params :id
+});
+
+//---------------song---------------
+app.get('/song', function(req,res){
+  //params :id
+});
+
 //---------------profile---------------
 app.get('/profile', function(req, res){
   res.setHeader('Content-Type','application/json');
-  var user = {
-    'name':req.user.name,
-    'songs':['song1','song2'],
-    'authors':['author1','author2']
+  if(req.user){
+    var user = {
+      'name':req.user.name,
+      'songs':['song1','song2'],
+      'authors':['author1','author2']
+    }
+    res.send(JSON.stringify(user));
+  }else{
+    res.redirect("/signin");
   }
-  res.send(JSON.stringify(user));
+
 });
 
 //---------------planning---------------
 app.get('/planning', function(req, res){
-  res.setHeader('Content-Type','text/plain');
+  res.setHeader('Content-Type','application/json');
 });
 
 //---------------action favorite---------------
 app.get('/action/addfavorite',function(req,res){
   //params: type, id
-  mariaClient.query("INSERT INTO TABLE")
-  res.redirect('/home');
+  //res.redirect('/home');
 });
 app.get('/action/removefavorite',function(req,res){
   //params: type, id
 });
 
-//---------------author---------------
-app.get('/auteur',function(req,res){
-  //params :id
-});
-//---------------song---------------
-app.get('/song', function(req,res){
-  //params :id
-});
 //---------------comment---------------
 app.post('/comment',function(req,res){
-  //params: date, comment
+  //params: date, content
 });
 
 // TODO error handling
