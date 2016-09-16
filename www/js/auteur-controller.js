@@ -1,19 +1,11 @@
 angular.module('starter.controllers').controller('AuteurCtrl', function($scope) {
 
   $scope.name="The Dumplings";
-  $scope.albums=[{"name":"album1", "titres":"item1"}, {"name":"album2", "titres":"item1"}];
+  A=["titre1", "titre2"];
+  B=["titre3", "titre4"];
+  $scope.albums=[{"name":"album1", "titres": A}, {"name":"album2", "titres": B}];
 
 
-$scope.groups = [];
-  for (var i=0; i<10; i++) {
-    $scope.groups[i] = {
-      name: i,
-      items: []
-    };
-    for (var j=0; j<3; j++) {
-      $scope.groups[i].items.push(i + '-' + j);
-    }
-  }
 
   /*
    * if given group is the selected group, deselect it

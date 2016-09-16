@@ -1,0 +1,43 @@
+<ion-view>
+
+
+  <ion-content>
+
+  <div class="artist-background">
+
+
+  </div>
+
+    <div class="special-artist-background">
+      <span class="ion-chevron-left"></span>
+
+      <div class="rightheader " >
+
+        <h1> {{name}} </h1>
+        <p> {{date}} </br> {{time}}</p>
+
+
+      </div>
+    </div>
+
+
+    <ion-list>
+      <div ng-repeat="albi in albums">
+        <ion-item class="item-stable"
+                  ng-click="toggleGroup(albi)"
+                  ng-class="{active: isGroupShown(albi)}">
+          <i class="icon" ng-class="isGroupShown(albi) ? 'ion-minus' : 'ion-plus'"></i>
+          &nbsp;
+           {{albi.name}}
+        </ion-item>
+        <ion-item class="item-accordion"
+                  ng-repeat="title in albi.titres"
+                  ng-show="isGroupShown(albi)">
+          {{title}}
+        </ion-item>
+      </div>
+    </ion-list>
+
+
+  </ion-content>
+</ion-view>
