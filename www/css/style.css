@@ -73,11 +73,11 @@
 
                 }
 
-.ion-chevron-left{
+.ion-ios-arrow-left{
 
               font-size: 40px;
               float:left;
-              color: #FFFFFF;
+              color: #000000;
 
 
 }
@@ -114,7 +114,6 @@ color: #FFFFFF;
                    left: 0;
                    right: 0;
                    z-index: 1;
-                   /* On indique l'image de fond et les dimensions qu'elle occupe */
                    display: block;
 
                    height: 120px;
@@ -136,7 +135,9 @@ color: #FFFFFF;
                         left: 0;
                         right: 0;
                         z-index: 9999;
-                        top: 50px;
+                        top: 40px;
+                         color: #000000;
+                         left: 15px;
 
 
 
@@ -229,4 +230,12 @@ body {
 .list .item.item-accordion.ng-hide-add,
 .list .item.item-accordion.ng-hide-remove {
   display: block !important;
+}
+
+
+.titleBlack{
+    font-size: xx-large;
+    ;
+
+
 }

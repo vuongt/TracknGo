@@ -1,7 +1,29 @@
 angular.module('starter.controllers')
   .controller('ProfilCtrl', function($scope) {
     $scope.name = "Louise Legall";
-    $scope.auteurs = ["auteur 1", "auteur 2","auteur 3", "auteur 4"];
-    $scope.titres = ["titre 1", "titre 2","titre 3"];
 
+
+//Les auteurs favoris
+  A=["auteur1", "auteur2"];
+
+  // Les morceaux favoris
+  B=["titre1", "titre2"];
+
+  $scope.nbrTitres= A.length;
+  $scope.nbrAuteurs= B.length;
+
+
+  $scope.albums=[{"name":"Auteur", "items": A}, {"name":"Titre", "items": B}];
+
+
+  $scope.toggleGroup = function(group) {
+    if ($scope.isGroupShown(group)) {
+      $scope.shownGroup = null;
+    } else {
+      $scope.shownGroup = group;
+    }
+  };
+  $scope.isGroupShown = function(group) {
+    return $scope.shownGroup === group;
+  };
   });

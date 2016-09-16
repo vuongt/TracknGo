@@ -12,26 +12,32 @@
       </div>
       <div class="container">
         <div class="left">
-          <h3>4</h3>
+          <h3>{{nbrAuteurs}}</h3>
           <p>Auteurs suivi</p>
         </div>
         <div class="right">
-          <h3>13</h3>
+          <h3> {{nbrTitres}} </h3>
           <p>Titres favoris</p>
         </div>
       </div>
     </div>
+
     <ion-list>
-      <ion-item class="item-divider">Auteur</ion-item>
+      <div ng-repeat="albi in albums">
+        <ion-item class="item-stable"
+                  ng-click="toggleGroup(albi)"
+                  ng-class="{active: isGroupShown(albi)}">
+          <i class="icon" ng-class="isGroupShown(albi) ? 'ion-minus' : 'ion-plus'"></i>
+          &nbsp;
+          {{albi.name}}
+        </ion-item>
+        <ion-item class="item-accordion"
+                  ng-repeat="title in albi.items"
+                  ng-show="isGroupShown(albi)">
+          {{title}}
+        </ion-item>
+      </div>
     </ion-list>
-    <ion-list ng-repeat="auteur in auteurs" id="page-list2">
-      <ion-item id="page-list-item4">{{auteur}}</ion-item>
-    </ion-list>
-    <ion-list id="page-list3">
-      <ion-item class="item-divider" id="page-list-item-divider2">Titres</ion-item>
-    </ion-list>
-    <ion-list ng-repeat="titre in titres" id="page-list4">
-      <ion-item>{{titre}}</ion-item>
-    </ion-list>
+
   </ion-content>
 </ion-view>
