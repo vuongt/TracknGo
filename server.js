@@ -20,7 +20,6 @@ var mariaClient = new Client({
   password: config.mariasql.password,
   db: config.mariasql.db
 });
-
 /*
  app.post("/local-reg", function(req,res){
  const user = req.body;
@@ -149,26 +148,20 @@ app.use(function(req, res, next){
 //======================API oeuvres===================
 // Establish connection with API oeuvres
 //====================================================
-const optionOeuvres ={
+var optionSacem ={
   method:'GET',
   uri:config.oeuvre.uri,
   qs:{
     token:config.oeuvre.token,
-    query:'song',
-    filters:'titles',
-    pagesize:20
+    query:'', //search criteria
+    filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
+    pagesize:10, //Number of works per page
+    page:1 //Number of page to return
   },
   headers:{
     'Origin':'http//dty.sacem.fr'
   }
 };
-request(optionOeuvres,function(err,res,body){
-  if(err) {
-    return console.log(err);
-  } else {
-    console.log(res.statusCode, body);
-  }
-});
 /*var request = require('request-promise');
 const optionListWorks ={
 	method:'GET',
@@ -258,6 +251,20 @@ app.get('/logout', function(req, res){
 //---------------research page---------------
 app.get('/search', function(req,res){
   //params : position, rayon, start, end
+});
+
+app.get('/search/oeuvres',function(req,res){
+  res.setHeader('Content-Type','application/json');
+  optionSacem.qs.query=req.query.query;
+  optionSacem.qs.filters=req.query.filters;
+  request(optionSacem,function(err,response,body){
+    if(err) {
+      return console.log(err);
+    } else {
+      console.dir(response.statusCode, body);
+      res.send(body);
+    }
+  });
 });
 
 //---------------profile---------------
