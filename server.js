@@ -156,7 +156,7 @@ var optionSacem ={
     query:'', //search criteria
     filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
     pagesize:10, //Number of works per page
-    page:1, //Number of page to return,
+    //page:1, //Number of page to return,
     blankfield:true
   },
   headers:{
@@ -174,14 +174,14 @@ request(optionListWorks).then(function(res){
 //=======================API BandsInTown===============
 //Connect to BandsInTown V2 API
 //=====================================================
-var artist = 'Skrillex';
+var artist = '';
 var optionBIT ={
  method:'GET',
  uri:'http://api.bandsintown.com/artists/'+ artist +'.json',
  qs:{
    api_version:'2.0',
    app_id:'Sacem'
- }
+  }
  };
 /*request(optionBIT,function(err,res,body){
   if(err) {
@@ -248,26 +248,48 @@ app.get('/search/works',function(req,res){
     if(err) {
       return console.log(err);
     } else {
-      console.dir(response.statusCode, body);
-      res.send(body);
+      if(body){
+        res.send(body);
+      }else{
+        res.send("No Result Found");
+      }
     }
   });
 });
 
+//---------------artist------------------/
+//Get artist information from Bands In Town
 app.get('/artist',function(req,res){
   res.setHeader('Content-Type','application/json');
+  artist = req.query.name;
+  optionBIT.uri='http://api.bandsintown.com/artists/'+ artist +'.json';
+  //TODO artist not found
   request(optionBIT,function(err,response,body){
     if(err) {
       return console.log(err);
     } else {
-      console.log(res.statusCode, body);
       res.send(body);
     }
   });
 });
 //---------------author---------------
+//TODO : show result from API ouvres or Eliza ? Rather API oeuvres
 app.get('/author',function(req,res){
   //params :id
+  res.setHeader('Content-Type','application/json');
+  optionSacem.qs.query= req.query.name;
+  optionSacem.qs.filters='parties'
+  request(optionSacem,function(err,response,body){
+    if(err) {
+      return console.log(err);
+    } else {
+      if(body){
+        res.send(body);
+      }else{
+        res.send("No Result Found");
+      }
+    }
+  });
 });
 
 //---------------song---------------
