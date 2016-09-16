@@ -4,7 +4,7 @@ var express = require('express'),
 	session = require('express-session'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy,
-	// RedisStore = require('connect-redis')(session),
+  request =require('request'),
 	bodyParser = require('body-parser'),
 	config = require('./config.js'), //config file contains all tokens and other private info
   funct = require('./server/function.js'); // funct file contains helper functions for Passport and database work
@@ -39,13 +39,14 @@ var mariaClient = new Client({
  */
 
 //===================PASSPORT======================
-/*Sign in/up strategy using passport.js and Redis*/
-/*Redis is an open source (BSD licensed), in-memory data structure store,
-used as database, cache and message broker. */
+/*Sign in/up strategy using passport.js*/
+//=================================================
+//Put user.id in session
 passport.serializeUser(function(user, done) {
   console.log("serializing user id : " + user.id);
   return done(null, user.id);
 });
+//Retrieve user's information from session cookie.
 passport.deserializeUser(function(id, done) {
   console.log("deserializing user with id: " + id);
   mariaClient.query("SELECT id, name FROM users WHERE id="+id,function(err,rows){
@@ -53,7 +54,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-//sign up strategy
+//--------Sign up strategy----------------
 passport.use('local-signup', new LocalStrategy(
   {// by default, local strategy uses username and password, we will override with email
   usernameField : 'email',
@@ -90,7 +91,7 @@ passport.use('local-signup', new LocalStrategy(
   }
 ));
 
-//Sign in strategy
+//---------------Sign in strategy----------------
 passport.use('local-login', new LocalStrategy({
   usernameField : 'email',
   passwordField : 'password',
@@ -112,6 +113,8 @@ function (req, email, password, done){
 }
 ));
 //====================EXPRESS=======================
+// Express configuration
+//==================================================
 app.set('views', __dirname + '/server/views');
 //app.use(logger('combined'));// TODO logging
 app.use(cookieParser());
@@ -144,6 +147,28 @@ app.use(function(req, res, next){
 });
 
 //======================API oeuvres===================
+// Establish connection with API oeuvres
+//====================================================
+const optionOeuvres ={
+  method:'GET',
+  uri:config.oeuvre.uri,
+  qs:{
+    token:config.oeuvre.token,
+    query:'song',
+    filters:'titles',
+    pagesize:20
+  },
+  headers:{
+    'Origin':'http//dty.sacem.fr'
+  }
+};
+request(optionOeuvres,function(err,res,body){
+  if(err) {
+    return console.log(err);
+  } else {
+    console.log(res.statusCode, body);
+  }
+});
 /*var request = require('request-promise');
 const optionListWorks ={
 	method:'GET',
@@ -158,18 +183,37 @@ const optionListWorks ={
 		blankfield:''
 	},
 	json:true
-}
+};
 request(optionListWorks).then(function(res){
-	//Request succed
+	//Request succeed
 }).catch(function(err){
 	console.log(err);
 	//TODO Handle Error
 });*/
 
-
-
+//=======================API BandsInTown===============
+//Connect to BandsInTown V2 API
+//=====================================================
+/*var artist = 'Skrillex';
+const option ={
+ method:'GET',
+ uri:'http://api.bandsintown.com/artists/'+ artist +'.json',
+ qs:{
+   api_version:2.0,
+   app_id:'Sacem',
+ }
+};
+request(option,function(err,res,body){
+  if(err) {
+    return console.log(err);
+  } else {
+    console.log(res.statusCode, body);
+  }
+});*/
 //=======================ROUTES========================
-//Home page
+// Express routing
+//=====================================================
+//---------------Home page-----------------------
 app.get("/home", function(req, res){
   res.setHeader('Content-Type','text/html');
   console.log('user in session: ');
@@ -181,7 +225,7 @@ app.get("/home", function(req, res){
   }
 });
 
-//Sign in page
+//---------------Sign in, log out---------------
 app.get("/signin",function(req,res){
 	res.setHeader('Content-Type','text/html');
 	res.render('signin.ejs',{});
@@ -202,12 +246,21 @@ app.post('/login', passport.authenticate('local-login', {
   })
 );
 
-//research page
+//logs user out of site, deleting them from the session, and returns to homepage
+app.get('/logout', function(req, res){
+  var name = req.user.name;
+  console.log("LOG OUT " + req.user.name)
+  req.logout();
+  res.redirect('/home');
+  req.session.notice = "You have successfully been logged out " + name + "!";
+});
+
+//---------------research page---------------
 app.get('/search', function(req,res){
   //params : position, rayon, start, end
 });
 
-//profile
+//---------------profile---------------
 app.get('/profile', function(req, res){
   res.setHeader('Content-Type','application/json');
   var user = {
@@ -218,39 +271,32 @@ app.get('/profile', function(req, res){
   res.send(JSON.stringify(user));
 });
 
-//planning
+//---------------planning---------------
 app.get('/planning', function(req, res){
   res.setHeader('Content-Type','text/plain');
 });
 
-//action favorite
+//---------------action favorite---------------
 app.get('/action/addfavorite',function(req,res){
   //params: type, id
+  mariaClient.query("INSERT INTO TABLE")
+  res.redirect('/home');
 });
 app.get('/action/removefavorite',function(req,res){
   //params: type, id
 });
 
-//Auteur, compositor
+//---------------author---------------
 app.get('/auteur',function(req,res){
   //params :id
 });
-
+//---------------song---------------
 app.get('/song', function(req,res){
   //params :id
 });
-
+//---------------comment---------------
 app.post('/comment',function(req,res){
   //params: date, comment
-});
-
-//logs user out of site, deleting them from the session, and returns to homepage
-app.get('/logout', function(req, res){
-  var name = req.user.name;
-  console.log("LOG OUT " + req.user.name)
-  req.logout();
-  res.redirect('/home');
-  req.session.notice = "You have successfully been logged out " + name + "!";
 });
 
 // TODO error handling
