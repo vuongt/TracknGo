@@ -1,4 +1,6 @@
-/* Empty. Add your own CSS if you like */
+/*CSS A regarder: http://ionicframework.com/docs/components/#outlined-buttons */
+
+
 .left {
   float: left;
   text-align: left;
@@ -48,22 +50,21 @@
   background: rgba(256,256,256,0.4);;
   color:rgba(256,256,256,1);
 }
-.concertbackground {
-  background-image: url('../img/concerta.jpg');
-  color: white;
-}
+
 .concertbackground p{  color: white;  }
 .concertbackground h3 {  color: white;  }
 /* CSS de la page "Concert" */
 
 .concert-background {
-                    background-image: url('../img/concerta.jpg');
+                    background-image: url('../img/concertab.jpg');
+
 
                    background-size: cover;
                    -webkit-background-size: cover;
                        -moz-background-size: cover;
                    height: 350px;
                     padding: 30px;
+
                 }
 
 .star {
@@ -79,6 +80,13 @@
               float:left;
               color: #000000;
 
+
+}
+
+.white{
+
+color: white;
+font-size: 40px;
 
 }
 

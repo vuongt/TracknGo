@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
 
 
-.controller('ConcertCtrl', function($scope) {
+.controller('ConcertCtrl', function($scope, $ionicModal) {
 
   $scope.name="The Dumplings en concert";
 
@@ -12,6 +12,18 @@ angular.module('starter.controllers')
   $scope.comments=[{"sender":"EouiseLeGall", "date":"Hier, à 20h", "content":"Lorem ipsum dolor "}, {"sender":"LouiseLeGall", "date":"Hier, à 20h", "content":"Lorem ipsum dolor "}];
   $scope.place="La Grande Hall";
   $scope.adress="211 Avenue Jean Jaurès, 75019 Paris";
+
+
+concerts=["concert1", "concert2"];
+
+  $scope.myGoBack = function() {
+window.history.back()  };
+
+
+
+
+
+
 
 
 

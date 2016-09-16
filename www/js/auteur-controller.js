@@ -22,4 +22,10 @@ angular.module('starter.controllers').controller('AuteurCtrl', function($scope) 
     return $scope.shownGroup === group;
   };
 
+
+  $scope.myGoBack = function() {
+window.history.back()  };
+
+
 });
+

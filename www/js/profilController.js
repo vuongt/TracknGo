@@ -16,6 +16,10 @@ angular.module('starter.controllers')
   $scope.albums=[{"name":"Auteur", "items": A}, {"name":"Titre", "items": B}];
 
 
+  $scope.myGoBack = function() {
+window.history.back()  };
+
+
   $scope.toggleGroup = function(group) {
     if ($scope.isGroupShown(group)) {
       $scope.shownGroup = null;
