@@ -148,11 +148,12 @@ app.use(function(req, res, next){
 //======================API oeuvres===================
 // Establish connection with API oeuvres
 //====================================================
+//Option to reserche by titles, authors, performers,...
 var optionSacem ={
   method:'GET',
-  uri:config.oeuvre.uri,
+  uri:config.sacem.uri,
   qs:{
-    token:config.oeuvre.token,
+    token:config.sacem.token,
     query:'', //search criteria
     filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
     pagesize:10, //Number of works per page
@@ -160,7 +161,18 @@ var optionSacem ={
     blankfield:true
   },
   headers:{
-    'Origin':'http//dty.sacem.fr'
+    'Origin':config.sacem.headerOrigin
+  }
+};
+var optionSacemDetail={
+  method:'GET',
+  uri:config.sacem.uri_detail,
+  qs:{
+    token:config.sacem.token,
+    iswc:''
+  },
+  headers:{
+    'Origin':config.sacem.headerOrigin
   }
 };
 /*
@@ -278,7 +290,7 @@ app.get('/author',function(req,res){
   //params :id
   res.setHeader('Content-Type','application/json');
   optionSacem.qs.query= req.query.name;
-  optionSacem.qs.filters='parties'
+  optionSacem.qs.filters='parties';
   request(optionSacem,function(err,response,body){
     if(err) {
       return console.log(err);
@@ -292,9 +304,23 @@ app.get('/author',function(req,res){
   });
 });
 
-//---------------song---------------
-app.get('/song', function(req,res){
-  //params :id
+//---------------work details---------------
+//Song details from API Sacem
+app.get('/work', function(req,res){
+  //params :iswc
+  res.setHeader('Content-Type','application/json');
+  optionSacemDetail.qs.iswc=req.query.iswc;
+  request(optionSacemDetail,function(err,response,body){
+    if(err) {
+      return console.log(err);
+    } else {
+      if(body){
+        res.send(body);
+      }else{
+        res.send("No Result Found");
+      }
+    }
+  });
 });
 
 //---------------profile---------------
