@@ -94,15 +94,36 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                })
 
 
-     .state('tab.album', {
-                 url: '/album',
+     .state('tab.musique', {
+                 url: '/musique',
                  views: {
-                   'tab-album': {
-                     templateUrl: 'templates/tab-album.html',
-                     controller: 'AlbumCtrl'
+                   'tab-musique': {
+                     templateUrl: 'templates/tab-musique.html',
+                     controller: 'MusiqueCtrl'
                    }
                  }
                })
+
+     .state('tab.signin', {
+                       url: '/signin',
+                       views: {
+                         'tab-signin': {
+                           templateUrl: 'templates/tab-signin.html',
+                           controller: 'SigninCtrl'
+                         }
+                       }
+                     })
+
+
+      .state('tab.signup', {
+                              url: '/signup',
+                              views: {
+                                'tab-signup': {
+                                  templateUrl: 'templates/tab-signup.html',
+                                  controller: 'SignupCtrl'
+                                }
+                              }
+                            })
 
 
   .state('tab.profil', {

@@ -47,11 +47,11 @@
 
                 }
 
-.ion-ios-star-outline {
-                 font-size: 40px;
+.star {
+                 font-size: 25px;
                  text-align:left;
                  float:right;
-                 color: #FFFFFF;
+
                 }
 
 .ion-chevron-left{
@@ -86,7 +86,7 @@ color: #FFFFFF;
 
 }
 
-/*CSS de la page Artist*/
+/*CSS de la page Auteur*/
 
 .artist-background {
                     background-image: url('../img/thedumplings.jpg');
@@ -117,7 +117,7 @@ color: #FFFFFF;
                         left: 0;
                         right: 0;
                         z-index: 9999;
-                        position: fixed;
+                        top: 50px;
 
 
 
@@ -130,4 +130,84 @@ color: #FFFFFF;
 
 
 
+}
+
+.item-divider{
+
+position: relative;
+
+}
+
+
+.list-concert{
+  display: block;
+
+
+}
+
+.position-button{
+  float:right;
+  font-weight:lighter;
+ background-color: Transparent;
+            background-repeat:no-repeat;
+            border: none;
+            cursor:pointer;
+            overflow: hidden;
+  padding-top: 5px;
+
+}
+
+.myform{
+  float:left;
+  width: 80%;
+  padding-top:20px;
+
+
+
+}
+
+.bottom-concert{
+
+padding-left:20px;
+}
+
+
+.iconeperso{
+
+border-radius: 50%;
+background-color: #B22222;
+font-weight: bold;
+color: white;
+padding: 12px;
+padding-right:15px;
+padding-left:15px;
+
+}
+
+
+.lighter{
+font-weight: lighter;
+
+}
+
+
+body {
+  cursor: url('http://ionicframework.com/img/finger.png'), auto;
+}
+
+/*
+ * http://docs.angularjs.org/api/ng/directive/ngShow#usage_animations
+ */
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.09s all linear;
+}
+.list .item.item-accordion.ng-hide {
+  line-height: 0px;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
 }
