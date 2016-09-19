@@ -24,7 +24,7 @@
         <h3>{{ item.titre}}</h3><span class="right" ng-show="item.show">     {{item.date}}</span></p>
         <p ng-show="item.show">{{item.adresse}}</p>
         <div>
-          <button id="page-button1" class="button button-planning" ng-show="item.show">
+          <button id="page-button1" class="button button-planning" ng-show="item.show" ui-sref="tab.concert">
             J'y vais !
           </button>
         </div>

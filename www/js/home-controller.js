@@ -39,4 +39,7 @@ angular.module('starter.controllers')
         show: false
       }
     ];
+    $scope.goConcert = function () {
+      $state.go('tab.concert');
+    }
   });
