@@ -73,7 +73,7 @@ gulp.task('check-config', function () {
     )
   } else {
     console.log(
-      'Vous utilisez actuellement le fichier de configuration : ' + gutil.colors.red(res) + '.'
+      'Vous utilisez actuellement le fichier de configuration : ' + gutil.colors.yellow(res) + '.'
     )
   }
 });
