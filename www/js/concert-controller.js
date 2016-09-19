@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
 
 
-.controller('ConcertCtrl', function($scope, $ionicModal) {
+.controller('ConcertCtrl', function($scope, $ionicModal,$state) {
 
   $scope.name="The Dumplings en concert";
 
@@ -18,13 +18,6 @@ concerts=["concert1", "concert2"];
 
   $scope.myGoBack = function() {
 window.history.back()  };
-
-
-
-
-
-
-
 
 
 

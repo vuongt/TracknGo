@@ -40,6 +40,7 @@ angular.module('starter.controllers')
       }
     ];
     $scope.goConcert = function () {
-      $state.go('tab.concert');
+      $state.go('^.concertHome' );
+
     }
   });

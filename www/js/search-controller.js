@@ -2,8 +2,8 @@ angular.module('starter.controllers')
   .controller('SearchCtrl', function($scope) {
 
   $scope.isConcert = true;
-  $scope.isArtist = false;
-  $scope.isAuthor = false;
+  $scope.isArtist = true;
+  $scope.isAuthor = true;
   $scope.isSong = true;
 
 
