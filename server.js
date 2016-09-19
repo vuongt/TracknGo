@@ -261,14 +261,18 @@ app.get('/search/works',function(req,res){
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
   optionSacem.qs.query=req.query.query;
   optionSacem.qs.filters=req.query.filters;
+  if (req.query.page) optionSacem.qs.page = req.query.page;
+  var results = [];
   request(optionSacem,function(err,response,body){
     if(err) {
-      return console.log(err);
+      return console.log(err); //TODO handle no result
     } else {
-      if(body){
-        res.send(body);
-      }else{
-        res.send("No Result Found");
+      var bodyObj = JSON.parse(body);
+      for (var i = 0, length = bodyObj.works.length;i<length; i++){
+        var result = {};
+        result.iswc = bodyObj.works[i].iswc;
+        result.title = bodyObj.works[i].title;
+        results.push(result);
       }
     }
   });
@@ -302,7 +306,7 @@ app.get('/artist',function(req,res){
       var lenBit = objectBit.length;
       for (var i=0; i<lenBit;i++){
         var concertBit=objectBit[i];
-        var concert = new Object();
+        var concert = {};
         concert.title = concertBit.title;
         concert.datetime = concertBit.formatted_datetime;
         concert.location = concertBit.formatted_location;
@@ -318,7 +322,7 @@ app.get('/artist',function(req,res){
           var lenSacem = objectSacem.works.length;
           for (var i=0; i<lenSacem; i++){
             var workSacem = objectSacem.works[i];
-            var work = new Object();
+            var work = {};
             work.iswc= workSacem.iswc;
             work.title= workSacem.title;
             detailsArtist.works.push(work);
@@ -346,7 +350,7 @@ app.get('/author',function(req,res){
       var bodyObject = JSON.parse(body);
       var length = bodyObject.works.length;
       for (var i=0; i<length;i++){
-        var work = new Object();
+        var work = {};
         work.iswc = bodyObject.works[i].iswc;
         work.title = bodyObject.works[i].title;
         author.push(work);
