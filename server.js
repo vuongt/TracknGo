@@ -156,8 +156,8 @@ var optionSacem ={
     token:config.sacem.token,
     query:'', //search criteria
     filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
-    pagesize:15, //Number of works per page
-    //page:1, //Number of page to return,
+    pagesize:100, //Number of works per page
+    page:1, //Number of page to return,
     blankfield:true
   },
   headers:{
@@ -334,26 +334,30 @@ app.get('/author',function(req,res){
   res.setHeader('Content-Type','application/json');
   res.setHeader('Allow-Control-Access-Origin',config.accessControl);
   optionSacem.qs.query= req.query.name;
+  if (req.query.page) optionSacem.qs.page = req.query.page;
   optionSacem.qs.filters='parties';
+  var author = [];
   request(optionSacem,function(err,response,body){
     if(err) {
-      return console.log(err);
+      return console.log(err); //TODO Error Handler
     } else {
       if(body){
-        res.send(body);
+        console.log(body);
+        var bodyObject = JSON.parse(body);
+        var length = bodyObject.works.length;
+        for (var i=0; i<length;i++){
+          var work = new Object();
+          work.iswc = bodyObject.works[i].iswc;
+          work.title = bodyObject.works[i].title;
+          author.push(work);
+        }
+        res.send(JSON.stringify(author));
       }else{
         res.send("No Result Found");
+        //TODO
       }
     }
   });
-  var author = [
-    {"title":"cjnkg",
-      "iswc":"cnorf"
-    },
-    {"title":"cjnkg",
-      "iswc":"cnorf"
-    }
-  ];
 });
 
 //---------------work details---------------
