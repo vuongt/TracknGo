@@ -14,21 +14,21 @@
   display: inline-block;
 }
 .dropdrow-left{
-  float: right;
-  text-align: left;
   width: 40%;
-  display: inline-block;
+  height: 30px;
+  float: left;
+
 }
 .search-right{
   float: left;
   text-align: left;
   width: 60%;
   display: inline-block;
+  background-color: white;
+  border-radius:5px 5px 5px 5px;
 }
 
-.container{
-  display: inline-block;
-}
+
 
 .platform-android .tabs { top: 0 !important; }
 .has-tabs-top {
