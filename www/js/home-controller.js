@@ -17,4 +17,26 @@ angular.module('starter.controllers')
     }, function(error){
       console.log("Could not get location");
     });
+
+    $scope.concerts = [
+      {
+        titre : "titre 1",
+        date : "date 1",
+        adresse: "adresse 1",
+        show: false
+      }
+      ,
+      {
+        titre : "titre 2",
+        date : "date 2",
+        adresse: "adresse 2",
+        show: false
+      },
+      {
+        titre : "titre 3",
+        date : "date 3",
+        adresse: "adresse 3",
+        show: false
+      }
+    ];
   });

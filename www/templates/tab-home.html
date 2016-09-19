@@ -1,5 +1,19 @@
 <ion-view view-title="Dashboard">
-  <ion-content class="padding">
+  <ion-content class="">
     <div id="map" data-tap-disabled="true"></div>
+    <ion-item class="item item-divider">3 Concerts autour de vous</ion-item>
+    <ion-item ng-repeat="item in concerts"
+              item="item"
+              class="concertbackground">
+      <p>
+      <h3>{{item.titre}}</h3><span class="right">      {{item.date}}</span></p>
+      <p>{{item.adresse}}</p>
+      <div>
+        <button id="page-button1" class="button button-planning">
+          J'y vais !
+        </button>
+      </div>
+    </ion-item>
+
   </ion-content>
 </ion-view>
