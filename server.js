@@ -169,7 +169,8 @@ var optionSacemDetail={
   uri:config.sacem.uri_detail,
   qs:{
     token:config.sacem.token,
-    iswc:''
+    iswc:'',
+    blankfield:true
   },
   headers:{
     'Origin':config.sacem.headerOrigin
@@ -285,6 +286,7 @@ app.get('/artist',function(req,res){
     works:[]
   };
   artist = req.query.name;
+  detailsArtist.name = artist;
   //TODO artist name with space
   // Searching for concert of this artist from BandsInTown's API
   optionBIT.uri='http://api.bandsintown.com/artists/'+ artist +'/events.json';
@@ -339,23 +341,17 @@ app.get('/author',function(req,res){
   var author = [];
   request(optionSacem,function(err,response,body){
     if(err) {
-      return console.log(err); //TODO Error Handler
+      return console.log(err); //TODO Error Handler. No result found
     } else {
-      if(body){
-        console.log(body);
-        var bodyObject = JSON.parse(body);
-        var length = bodyObject.works.length;
-        for (var i=0; i<length;i++){
-          var work = new Object();
-          work.iswc = bodyObject.works[i].iswc;
-          work.title = bodyObject.works[i].title;
-          author.push(work);
-        }
-        res.send(JSON.stringify(author));
-      }else{
-        res.send("No Result Found");
-        //TODO
+      var bodyObject = JSON.parse(body);
+      var length = bodyObject.works.length;
+      for (var i=0; i<length;i++){
+        var work = new Object();
+        work.iswc = bodyObject.works[i].iswc;
+        work.title = bodyObject.works[i].title;
+        author.push(work);
       }
+      res.send(JSON.stringify(author));
     }
   });
 });
@@ -366,39 +362,49 @@ app.get('/work', function(req,res){
   //params :iswc
   res.setHeader('Content-Type','application/json');
   res.setHeader('Allow-Control-Access-Origin',config.accessControl);
-
+  var work = {
+    iswc:"",
+    title:"",
+    composerAuthor:[], // TODO is ipi code necessary ?
+    performer:[]/*,
+    Concerts:[
+      {
+        title:"cnjdif",
+        date:"bxuhezf",
+        code:"cnjg",
+        location:{"address":"cjsdf", "hall":"ncjdg"}
+      },
+      {
+        title:"cnjdcerdif",
+        date:"bxuhezf",
+        code:"cnjg",
+        location:{"address":"cjsdf", "hall":"ncjdg"}
+      }
+    ]*/
+    //TODO retrieve information from Eliza
+  };
   optionSacemDetail.qs.iswc=req.query.iswc;
   request(optionSacemDetail,function(err,response,body){
     if(err) {
-      return console.log(err);
+      return console.log(err); //TODO Error Handler. No result found
     } else {
-      if(body){
-        res.send(body);
-      }else{
-        res.send("No Result Found");
+      var bodyObj = JSON.parse(body);
+      work.title = bodyObj.title;
+      work.iswc = bodyObj.iswc;
+      var length = bodyObj['interested parties'].length;
+      for (var i =0; i< length; i++){
+        var party = bodyObj['interested parties'][i];
+        if (party.role == "Composer/Author"){
+          if (work.composerAuthor) work.composerAuthor.push(party['first name'] + ' ' + party['last name']);
+          else work.composerAuthor= [party['first name'] + ' ' + party['last name']];
+        } else if (party.role == "Performer"){
+          if (work.performer) work.performer.push(party['first name'] + ' ' + party['last name']);
+          else work.performer= [party['first name'] + ' ' + party['last name']];
+        }
       }
+      res.send(JSON.stringify(work));
     }
   });
-  var work = {
-    "title":"07 DEC",
-    "iswc":"njdsg",
-    "Compositor/Author":"Zazie",
-    "Performer":"Zazie",
-    "Concerts":[
-      {
-        "title":"cnjdif",
-        "date":"bxuhezf",
-        "code":"cnjg",
-        "location":{"address":"cjsdf", "hall":"ncjdg"}
-      },
-      {
-        "title":"cnjdcerdif",
-        "date":"bxuhezf",
-        "code":"cnjg",
-        "location":{"address":"cjsdf", "hall":"ncjdg"}
-      }
-    ]
-  };
 });
 
 //---------------profile---------------
