@@ -61,15 +61,73 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
       }
     })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
+
+
+
+    .state('tab.concert', {
+            url: '/concert',
+            views: {
+              'tab-concert': {
+                templateUrl: 'templates/tab-concert.html',
+                controller: 'ConcertCtrl'
+              }
+            }
+          })
+
+
+     .state('tab.auteur', {
+                 url: '/auteur',
+                 views: {
+                   'tab-auteur': {
+                     templateUrl: 'templates/tab-auteur.html',
+                     controller: 'AuteurCtrl'
+                   }
+                 }
+               })
+
+
+     .state('tab.artist', {
+                 url: '/artist',
+                 views: {
+                   'tab-artist': {
+                     templateUrl: 'templates/tab-artist.html',
+                     controller: 'ArtistCtrl'
+                   }
+                 }
+               })
+
+
+     .state('tab.musique', {
+                 url: '/musique',
+                 views: {
+                   'tab-musique': {
+                     templateUrl: 'templates/tab-musique.html',
+                     controller: 'MusiqueCtrl'
+                   }
+                 }
+               })
+
+     .state('tab.signin', {
+                       url: '/signin',
+                       views: {
+                         'tab-signin': {
+                           templateUrl: 'templates/tab-signin.html',
+                           controller: 'SigninCtrl'
+                         }
+                       }
+                     })
+
+
+      .state('tab.signup', {
+                              url: '/signup',
+                              views: {
+                                'tab-signup': {
+                                  templateUrl: 'templates/tab-signup.html',
+                                  controller: 'SignupCtrl'
+                                }
+                              }
+                            })
+
 
   .state('tab.profil', {
     url: '/profil',
@@ -79,8 +137,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         controller: 'ProfilCtrl'
       }
     }
-  });
+  })
 
+  .state('tab.planning', {
+    url: '/profil/planning',
+    views: {
+      'tab-planning': {
+        templateUrl: 'templates/tab-planning.html',
+        controller: 'PlanningController'
+      }
+    }
+  });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/home');
 

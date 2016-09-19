@@ -1,0 +1,70 @@
+
+
+<ion-view>
+
+
+  <ion-content>
+
+
+
+  <div class="concert-background">
+
+    <span class="ion-chevron-left"></span>
+    <div class="rightheader" style="color: #FFFFFF;">
+
+          <h1>{{name}}</h1>
+      <p> {{date}} </br> {{time}}
+        </br></br>
+      <span class="ion-location"> </span>
+      <p>  &nbsp  <strong> {{place}} </strong>  </br> {{adress}}</p>
+
+    </div>
+
+
+        </br> </br>
+        <a href="#" onclick="window.open('PagePlanning', '_system', 'location=yes'); return false;" id="concert-button1" style="font-weight:lighter;font-size:-15px;border-radius:200px 200px 200px 200px;" class="button button-light button-medium button-outline">Ajouter à mon planning</a>
+
+        <span class="ion-ios-star-outline" </span>
+        </br> </br>
+  </div>
+
+
+
+
+
+    <ion-list id="page-list2">
+      <ion-item class="item-divider" id="page-list-item-divider1">Titres</ion-item>
+      <ion-item collection-repeat="item in titres">
+        {{item}}
+      </ion-item>
+
+
+    </ion-list>
+
+
+
+
+    <ion-list id="page-list3">
+        <ion-item class="item-divider" id="page-list-item-divider2">Commentaires</ion-item>
+
+      <ion-item collection-repeat="com in comments">
+        {{com}}
+      </ion-item>
+
+    </ion-list>
+
+
+
+    <form id="concert-form1" class="list">
+      <label class="item item-input" id="concert-input1" name="comment">
+
+        <input type="text" placeholder="Rédigez votre commentaire...">
+        <button class="button"> Envoyer </button>
+      </label>
+    </form>
+
+
+
+
+  </ion-content>
+</ion-view>
