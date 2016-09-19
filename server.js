@@ -268,12 +268,15 @@ app.get('/search/works',function(req,res){
       return console.log(err); //TODO handle no result
     } else {
       var bodyObj = JSON.parse(body);
-      for (var i = 0, length = bodyObj.works.length;i<length; i++){
-        var result = {};
-        result.iswc = bodyObj.works[i].iswc;
-        result.title = bodyObj.works[i].title;
-        results.push(result);
+      if (bodyObj.error !== "no work"){
+        for (var i = 0, length = bodyObj.works.length;i<length; i++){
+          var result = {};
+          result.iswc = bodyObj.works[i].iswc;
+          result.title = bodyObj.works[i].title;
+          results.push(result);
+        }
       }
+      res.send(JSON.stringify(results));
     }
   });
 });
@@ -315,14 +318,11 @@ app.get('/artist',function(req,res){
         detailsArtist.concerts.push(concert);
       }
       request(optionSacem, function (errSacem, resSacem, bodySacem) {
-        console.log(bodySacem);
         if (errSacem) {
           return console.log(errSacem); //TODO error handler
         } else {
           var objectSacem = JSON.parse(bodySacem);
-          if (objectSacem.error === "no work"){
-            return console.log("No work found"); //TODO no work found handler
-          } else {
+          if (objectSacem.error !== "no work"){
             var lenSacem = objectSacem.works.length;
             for (var i = 0; i < lenSacem; i++) {
               var workSacem = objectSacem.works[i];
@@ -353,14 +353,16 @@ app.get('/author',function(req,res){
       return console.log(err); //TODO Error Handler. No result found
     } else {
       var bodyObject = JSON.parse(body);
-      var length = bodyObject.works.length;
-      for (var i=0; i<length;i++){
-        var work = {};
-        work.iswc = bodyObject.works[i].iswc;
-        work.title = bodyObject.works[i].title;
-        author.push(work);
+      if (bodyObject.error !== 'no work'){
+        var length = bodyObject.works.length;
+        for (var i=0; i<length;i++){
+          var work = {};
+          work.iswc = bodyObject.works[i].iswc;
+          work.title = bodyObject.works[i].title;
+          author.push(work);
+        }
+        res.send(JSON.stringify(author));
       }
-      res.send(JSON.stringify(author));
     }
   });
 });
