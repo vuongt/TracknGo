@@ -156,7 +156,7 @@ var optionSacem ={
     token:config.sacem.token,
     query:'', //search criteria
     filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
-    pagesize:50, //Number of works per page
+    pagesize:15, //Number of works per page
     //page:1, //Number of page to return,
     blankfield:true
   },
@@ -280,38 +280,50 @@ app.get('/artist',function(req,res){
   res.setHeader('Content-Type','application/json');
   res.setHeader('Allow-Control-Access-Origin',config.accessControl);
   var detailsArtist ={
-    "name":"",
-    "concerts":[],
-    "works":[]
-  };
-  var concert ={
-    "title":"",
-    "datetime":"",
-    "location":"",
-    "venue":"",
-    "description":""
+    name:"",
+    concerts:[],
+    works:[]
   };
   artist = req.query.name;
   //TODO artist name with space
   // Searching for concert of this artist from BandsInTown's API
   optionBIT.uri='http://api.bandsintown.com/artists/'+ artist +'/events.json';
+  optionSacem.qs.query= artist;
+  optionSacem.qs.filters= "performers";
   //TODO artist not found
-  request(optionBIT,function(err,response,body){
-    if(err) {
-      return console.log(err);
+  //TODO how to make 2 independent requests
+  request(optionBIT,function(errBit,resBit,bodyBit){
+    if(errBit) {
+      return console.log(errBit); //TODO error handler
     } else {
-      var length = body.length;
-      console.log(length);
-      /*for (var i=0; i<length;i++){
-        var bitConcert=body[i];
-        concert.title = bitConcert.title;
-        concert.datetime = bitConcert.formatted_datetime;
-        concert.location = bitConcert.formatted_location;
-        //concert.venue = bitConcert.venue.place;
+      var objectBit =JSON.parse(bodyBit);
+      var lenBit = objectBit.length;
+      for (var i=0; i<lenBit;i++){
+        var concertBit=objectBit[i];
+        var concert = new Object();
+        concert.title = concertBit.title;
+        concert.datetime = concertBit.formatted_datetime;
+        concert.location = concertBit.formatted_location;
+        concert.venue = concertBit.venue.place;
+        concert.description =concertBit.description;
         detailsArtist.concerts.push(concert);
-        console.log(concert);
-      }*/
-      res.send(body);
+      }
+      request(optionSacem,function(errSacem,resSacem,bodySacem){
+        if(errSacem){
+          return console.log(errSacem); //TODO error handler
+        }else{
+          var objectSacem = JSON.parse(bodySacem);
+          var lenSacem = objectSacem.works.length;
+          for (var i=0; i<lenSacem; i++){
+            var workSacem = objectSacem.works[i];
+            var work = new Object();
+            work.iswc= workSacem.iswc;
+            work.title= workSacem.title;
+            detailsArtist.works.push(work);
+          }
+          res.send(JSON.stringify(detailsArtist));
+        }
+      });
     }
   });
 });
@@ -321,7 +333,6 @@ app.get('/author',function(req,res){
   //params :id
   res.setHeader('Content-Type','application/json');
   res.setHeader('Allow-Control-Access-Origin',config.accessControl);
-
   optionSacem.qs.query= req.query.name;
   optionSacem.qs.filters='parties';
   request(optionSacem,function(err,response,body){
