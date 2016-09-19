@@ -412,16 +412,37 @@ app.get('/work', function(req,res){
 });
 
 //---------------profile---------------
-app.get('/profile', function(req, res){
+app.get('/profile', function(req, res){ //TODO get or post ?
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
-
   if(req.user){
+    var id = req.user.id;
     var user = {
       'name':req.user.name,
-      'songs':['song1','song2'],
-      'authors':['author1','author2']
-    }
+      'works':[],
+      'authors':[]
+    };
+    mariaClient.query("SELECT * FROM favorite_works WHERE id_user='"+id+"'",function(err,rows){
+      if (err) return done(err);
+      else {
+        for (var i=0, length = rows.length;i<length; i++){
+          var work = {};
+          work.iswc = rows[i].iswc;
+          work.title = rows[i].title;
+          user.works.push(work); //TODO Attention works may be empty outside this scope
+        }
+      }
+    });
+    mariaClient.query("SELECT * FROM favorite_authors WHERE iser_id='"+id+"'", function(err, rows){
+      if (err) return done(err);
+      else {
+        for (var i=0, length = rows.length;i<length; i++){
+          var author = {};
+          author.name = rows[i].name_author;
+          user.authors.push(author); //TODO Attention works may be empty outside this scope
+        }
+      }
+    });
     res.send(JSON.stringify(user));
   }else{
     res.redirect("/signin");

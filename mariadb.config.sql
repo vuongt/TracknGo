@@ -11,14 +11,15 @@ CREATE OR REPLACE TABLE users (
 	PRIMARY KEY (id)
 );
 
-CREATE OR REPLACE TABLE favorite_oeuvres (
+CREATE OR REPLACE TABLE favorite_works (
   id_user MEDIUMINT NOT NULL,
-  id_content INT NOT NULL,
+  iswc VARCHAR(15) NOT NULL,
+  title VARCHAR(50)
 );
 
 CREATE OR REPLACE TABLE favorite_authors (
   id_user MEDIUMINT NOT NULL,
-  id_content INT NOT NULL,
+  name_author INT NOT NULL,
 );
 
 CREATE OR REPLACE TABLE comment (
