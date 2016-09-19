@@ -1,6 +1,51 @@
-<ion-view view-title="Account">
+<ion-view xmlns="http://www.w3.org/1999/html">
   <ion-content>
-    <ion-header-bar><h2>Louise LeGall</h2></ion-header-bar>
+    <div class="big-header">
+      <h3 id="page-heading1">{{name}}</h3>
+      <div id="page-markdown1">
+        <p>2 concerts cette semaine</p>
+      </div>
+      <div>
+        <button id="page-button1" class="button button-planning" ui-sref="/profil/planning">
+          Mon planning
+        </button>
+      </div>
+      <div class="container">
+        <div class="left">
+          <h3>{{nbrAuteurs}}</h3>
+          <p>Auteurs suivi</p>
+        </div>
+        <div class="right">
+          <h3> {{nbrTitres}} </h3>
+          <p>Titres favoris</p>
+        </div>
+      </div>
+    </div>
+
+
+
+    <ion-list>
+      <div ng-repeat="albi in albums">
+        <ion-item class="item-stable"
+                  ng-click="toggleGroup(albi)"
+                  ng-class="{active: isGroupShown(albi)}">
+          <i class="icon" ng-class="isGroupShown(albi) ? 'ion-minus' : 'ion-plus'"></i>
+          &nbsp;
+          {{albi.name}}
+        </ion-item>
+        <ion-item class="item-accordion"
+                  ng-repeat="title in albi.items"
+                  ng-show="isGroupShown(albi)">
+          {{title}}
+        </ion-item>
+      </div>
+    </ion-list>
+
+
+    <ion-list ng-repeat= "concert in concerts">
+      <ion-item> {{concert}} </ion-item>
+    </ion-list>
+
 
   </ion-content>
 </ion-view>

@@ -1,1 +1,249 @@
-/* Empty. Add your own CSS if you like */
+/*CSS A regarder: http://ionicframework.com/docs/components/#outlined-buttons */
+
+
+.left {
+  float: left;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline-block;
+}
+.right {
+  float: right;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline-block;
+}
+.dropdrow-left{
+  float: right;
+  text-align: left;
+  width: 40%;
+  display: inline-block;
+}
+.search-right{
+  float: left;
+  text-align: left;
+  width: 60%;
+  display: inline-block;
+}
+
+.container{
+  display: inline-block;
+}
+
+.platform-android .tabs { top: 0 !important; }
+.has-tabs-top {
+  top: 49px !important; /*  height of the tabs */
+}
+
+.big-header {
+  background: linear-gradient(-90deg, #C8503C , #FA654C);
+  color: white;
+  padding: 20px;
+}
+.big-header h3{
+  color: white;
+}
+
+.button-planning{
+  text-align:left;
+  border-radius:42px 42px 42px 42px;
+  background: rgba(256,256,256,0.4);;
+  color:rgba(256,256,256,1);
+}
+
+.concertbackground p{  color: white;  }
+.concertbackground h3 {  color: white;  }
+/* CSS de la page "Concert" */
+
+.concert-background {
+                    background-image: url('../img/concertab.jpg');
+
+
+                   background-size: cover;
+                   -webkit-background-size: cover;
+                       -moz-background-size: cover;
+                   height: 350px;
+                    padding: 30px;
+
+                }
+
+.star {
+                 font-size: 25px;
+                 text-align:left;
+                 float:right;
+
+                }
+
+.ion-ios-arrow-left{
+
+              font-size: 40px;
+              float:left;
+              color: #000000;
+
+
+}
+
+.white{
+
+color: white;
+font-size: 40px;
+
+}
+
+h1{
+
+color: #FFFFFF;
+
+}
+
+.rightheader{
+
+             padding-left:50px;
+             padding-top: -20px;
+
+}
+
+
+.ion-location{
+
+
+            font-size: 28px;
+              float:left;
+
+
+}
+
+/*CSS de la page Auteur*/
+
+.artist-background {
+                    background-image: url('../img/thedumplings.jpg');
+
+                   background-size: cover;
+                   left: 0;
+                   right: 0;
+                   z-index: 1;
+                   display: block;
+
+                   height: 120px;
+                    padding: 30px;
+                    -webkit-filter: blur(5px);
+                    -moz-filter: blur(5px);
+                    -o-filter: blur(5px);
+                    -ms-filter: blur(5px);
+
+
+                  z-index: 1;
+
+                }
+
+
+.special-artist-background {
+
+                        position: fixed;
+                        left: 0;
+                        right: 0;
+                        z-index: 9999;
+                        top: 40px;
+                         color: #000000;
+                         left: 15px;
+
+
+
+                }
+
+
+.colored-black {
+        color: #000000;
+        font-size: 30px;
+
+
+
+}
+
+.item-divider{
+
+position: relative;
+
+}
+
+
+.list-concert{
+  display: block;
+
+
+}
+
+.position-button{
+  float:right;
+  font-weight:lighter;
+ background-color: Transparent;
+            background-repeat:no-repeat;
+            border: none;
+            cursor:pointer;
+            overflow: hidden;
+  padding-top: 5px;
+
+}
+
+.myform{
+  float:left;
+  width: 80%;
+  padding-top:20px;
+
+
+
+}
+
+.bottom-concert{
+
+padding-left:20px;
+}
+
+
+.iconeperso{
+
+border-radius: 50%;
+background-color: #B22222;
+font-weight: bold;
+color: white;
+padding: 12px;
+padding-right:15px;
+padding-left:15px;
+
+}
+
+
+.lighter{
+font-weight: lighter;
+
+}
+
+
+body {
+  cursor: url('http://ionicframework.com/img/finger.png'), auto;
+}
+
+/*
+ * http://docs.angularjs.org/api/ng/directive/ngShow#usage_animations
+ */
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.09s all linear;
+}
+.list .item.item-accordion.ng-hide {
+  line-height: 0px;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
+}
+
+
+.titleBlack{
+    font-size: xx-large;
+    ;
+
+
+}
