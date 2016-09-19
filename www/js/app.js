@@ -66,7 +66,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.concert', {
         url: '/concert',
         views: {
-          'tab-concert': {
+          'tab-home': {
             templateUrl: 'templates/tab-concert.html',
             controller: 'ConcertCtrl'
           }
