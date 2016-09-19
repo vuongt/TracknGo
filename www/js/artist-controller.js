@@ -1,9 +1,36 @@
-angular.module('starter.controllers').controller('ArtistCtrl', function($scope) {
+angular.module('starter.controllers').controller('ArtistCtrl', function($scope, $http) {
 
-  $scope.name="The Dumplings";
-  A=["titre1", "titre2"];
-  B=["titre3", "titre4"];
-  $scope.albums=[{"name":"album1", "titres": A}, {"name":"album2", "titres": B}];
+  $scope.name= "Artist Name";
+
+	//$http.get('http://localhost:8080/artist?name=STROMAE').then(function(res){
+   // console.log(res.data);	})
+
+  $scope.isSong = true;
+
+
+$scope.concerts = [
+      {
+        titre : "titre 1",
+        date : "date 1",
+        adresse: "adresse 1",
+        show: false
+      }
+      ,
+      {
+        titre : "titre 2",
+        date : "date 2",
+        adresse: "adresse 2",
+        show: false
+      },
+      {
+        titre : "titre 3",
+        date : "date 3",
+        adresse: "adresse 3",
+        show: false
+      }
+    ];
+
+    $scope.songs = ["titre 1", "titre 2", "titre 3"];
 
 
 

@@ -1,11 +1,8 @@
+<ion-view>
+  <ion-content direction="xy">
 
 
-<ion-content direction="xy">
-
-
-
-
-  <div class="concert-background">
+    <div class="concert-background">
 
       <span ng-click="myGoBack()" class="ion-ios-arrow-left white"></span>
       <div class="rightheader" style="color: #FFFFFF;">
@@ -25,31 +22,34 @@
          class="button button-light button-medium button-outline">Ajouter à mon planning</a>
 
 
-
-
       </br> </br>
     </div>
 
 
+    <ion-list>
+      <ion-item class="item-divider">Titres</ion-item>
+    </ion-list>
+    <ion-list ng-repeat="titre in titres" id="page-list2">
+      <ion-item id="page-list-item4">{{titre.title}} {{titre.author}} {{titre.album}}<i id="liked" class="star"
+                                                                                        ng-class="{'ion-ios-star': liked, 'ion-ios-star-outline': !liked}"
+                                                                                        ng-click="liked=!liked"></i>
+      </ion-item>
+    </ion-list>
+    <ion-list id="page-list3">
+      <ion-item class="item-divider" id="page-list-item-divider2">Commentaires</ion-item>
+    </ion-list>
+    <ion-list ng-repeat="comment in comments" id="page-list4">
+      <ion-item><span class="iconeperso">{{comment.sender.charAt(0).toUpperCase()}}</span> &nbsp <strong>{{comment.sender}}
+        &nbsp </strong> <span class="lighter">{{comment.date}}</span>
+        </br> </br>  {{comment.content}}
+      </ion-item>
+    </ion-list>
 
-  <ion-list>
-    <ion-item class="item-divider">Titres</ion-item>
-  </ion-list>
-  <ion-list ng-repeat="titre in titres" id="page-list2">
-    <ion-item id="page-list-item4">{{titre.title}} {{titre.author}} {{titre.album}}<i id="liked" class="star" ng-class="{'ion-ios-star': liked, 'ion-ios-star-outline': !liked}" ng-click="liked=!liked"></i></ion-item>
-  </ion-list>
-  <ion-list id="page-list3">
-    <ion-item class="item-divider" id="page-list-item-divider2">Commentaires</ion-item>
-  </ion-list>
-  <ion-list ng-repeat="comment in comments" id="page-list4">
-    <ion-item> <span class="iconeperso">{{comment.sender.charAt(0).toUpperCase()}}</span> &nbsp  <strong>{{comment.sender}} &nbsp </strong> <span class="lighter">{{comment.date}}</span>
-      </br> </br>  {{comment.content}}</ion-item>
-  </ion-list>
-
-<div class="bottom-concert">
-    <input type="text" class="myform" placeholder="Rédigez votre commentaire...">
-    <span > <button class="position-button lighter"> Envoyer </button></span>
+    <div class="bottom-concert">
+      <input type="text" class="myform" placeholder="Rédigez votre commentaire...">
+      <span> <button class="position-button lighter"> Envoyer </button></span>
 
 
-</div>
-</ion-content>
+    </div>
+  </ion-content>
+</ion-view>
