@@ -1,4 +1,3 @@
-<ion-view view-title="Chats">
   <ion-content>
     <label class = "item item-input item-select">
       <div class = "input-label">
@@ -14,7 +13,7 @@
     </label>
 
 
-    <ion-list>
+    <ion-list ng-show="isConcert">
       <ion-item class="item-divider" id="page-list-item-divider1">Concert</ion-item>
       <ion-item ng-repeat="item in concerts"
                 item="item"
@@ -29,12 +28,32 @@
           </button>
         </div>
       </ion-item>
+    </ion-list>
 
+<ion-list ng-show="isAuthor">
       <ion-item class="item-divider" id="page-list-item-divider1">Auteurs</ion-item>
-      <ion-item collection-repeat="item in auteurs">
-        {{item}}<i id="liked" class="star" ng-class="{'ion-ios-star': liked, 'ion-ios-star-outline': !liked}"
+      <ion-item ng-repeat="author in authors">
+        {{author}}
+      </ion-item>
+    </ion-list>
+
+    <ion-list ng-show="isArtist">
+
+      <ion-item class="item-divider" id="page-list-item-divider1">Artistes</ion-item>
+      <ion-item ng-repeat="artist in artists">
+        {{artist}}
+      </ion-item>
+
+</ion-list >
+
+
+    <ion-list ng-show="isSong">
+      <ion-item class="item-divider" id="page-list-item-divider1">Songs</ion-item>
+      <ion-item ng-repeat="song in songs">
+        {{song}}<i id="liked" class="star" ng-class="{'ion-ios-star': liked, 'ion-ios-star-outline': !liked}"
                    ng-click="liked=!liked"></i>
       </ion-item>
+</ion-list>
+
   </ion-content>
-</ion-view>
-<!--
+

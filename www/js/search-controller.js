@@ -1,5 +1,13 @@
 angular.module('starter.controllers')
   .controller('SearchCtrl', function($scope) {
+
+  $scope.isConcert = true;
+  $scope.isArtist = false;
+  $scope.isAuthor = false;
+  $scope.isSong = true;
+
+
+
     $scope.concerts = [
       {
         titre : "titre 1",
@@ -21,7 +29,12 @@ angular.module('starter.controllers')
         show: false
       }
     ];
-    $scope.auteurs = ["auteur 1", "auteur 2", "auteur 3"];
+
+    $scope.authors = ["auteur 1", "auteur 2", "auteur 3"];
+    $scope.artists = ["artist 1", "artist 2", "artist 3"];
+    $scope.songs = ["titre 1", "titre 2", "titre 3"];
+
+
 
 
 
