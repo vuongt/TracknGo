@@ -94,6 +94,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                })
 
 
+     .state('tab.artist', {
+                 url: '/artist',
+                 views: {
+                   'tab-artist': {
+                     templateUrl: 'templates/tab-artist.html',
+                     controller: 'ArtistCtrl'
+                   }
+                 }
+               })
+
+
      .state('tab.musique', {
                  url: '/musique',
                  views: {
