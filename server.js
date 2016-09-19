@@ -299,33 +299,38 @@ app.get('/artist',function(req,res){
   //TODO artist not found
   //TODO how to make 2 independent requests
   request(optionBIT,function(errBit,resBit,bodyBit){
-    if(errBit) {
+    if (errBit) {
       return console.log(errBit); //TODO error handler
     } else {
-      var objectBit =JSON.parse(bodyBit);
+      var objectBit = JSON.parse(bodyBit);
       var lenBit = objectBit.length;
-      for (var i=0; i<lenBit;i++){
-        var concertBit=objectBit[i];
+      for (var i = 0; i < lenBit; i++) {
+        var concertBit = objectBit[i];
         var concert = {};
         concert.title = concertBit.title;
         concert.datetime = concertBit.formatted_datetime;
         concert.location = concertBit.formatted_location;
         concert.venue = concertBit.venue.place;
-        concert.description =concertBit.description;
+        concert.description = concertBit.description;
         detailsArtist.concerts.push(concert);
       }
-      request(optionSacem,function(errSacem,resSacem,bodySacem){
-        if(errSacem){
+      request(optionSacem, function (errSacem, resSacem, bodySacem) {
+        console.log(bodySacem);
+        if (errSacem) {
           return console.log(errSacem); //TODO error handler
-        }else{
+        } else {
           var objectSacem = JSON.parse(bodySacem);
-          var lenSacem = objectSacem.works.length;
-          for (var i=0; i<lenSacem; i++){
-            var workSacem = objectSacem.works[i];
-            var work = {};
-            work.iswc= workSacem.iswc;
-            work.title= workSacem.title;
-            detailsArtist.works.push(work);
+          if (objectSacem.error === "no work"){
+            return console.log("No work found"); //TODO no work found handler
+          } else {
+            var lenSacem = objectSacem.works.length;
+            for (var i = 0; i < lenSacem; i++) {
+              var workSacem = objectSacem.works[i];
+              var work = {};
+              work.iswc = workSacem.iswc;
+              work.title = workSacem.title;
+              detailsArtist.works.push(work);
+            }
           }
           res.send(JSON.stringify(detailsArtist));
         }
@@ -459,11 +464,35 @@ app.get('/planning', function(req, res){
 
 //---------------action favorite---------------
 app.get('/action/addfavorite',function(req,res){
-  //params: type, id
-  //res.redirect('/home');
+  res.setHeader('Content-Type','application/json');
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
+  //params: type, id of the content, title
+  if (req.user){
+    if (req.query.type === "work"){
+      mariaClient.query("INSERT INTO favorite_works (id_user, iswc, title) VALUES ("+req.user.id+","+req.query.iswc+","+req.query.title, function(err,rows){
+      if(err) return done(err);
+      else {
+        console.log('Add favorite ' + req.query.iswc + ' succeeded');
+      }
+    });
+    } else if (req.query.type==="author"){
+      mariaClient.query("INSERT INTO favorite_authors (id_user, name_author) VALUES ("+req.user.id+","+req.query.name, function(err,rows){
+      if (err) return done(err);
+      else {
+        console.log('Add favorite ' + req.query.name + ' succeeded');
+      }
+    });
+    } else {
+      //TODO Error handling
+    }
+  //TODO no redirect after action
+  } else res.redirect("/signin");
+
 });
 app.get('/action/removefavorite',function(req,res){
   //params: type, id
+  res.setHeader('Content-Type','application/json');
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
 });
 
 //---------------comment---------------
