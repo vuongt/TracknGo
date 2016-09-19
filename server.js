@@ -5,9 +5,8 @@ var express = require('express'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy,
   request =require('request'),
-	bodyParser = require('body-parser'),
-	config = require('./config.js'), //config file contains all tokens and other private info
-  funct = require('./server/function.js'); // funct file contains helper functions for Passport and database work
+	bodyParser = require('body-parser');
+//funct = require('./server/function.js'); // funct file contains helper functions for Passport and database work
 
 var app = express();
 var config = require('./config-dev.js'); //config file contains all tokens and other private info
@@ -248,13 +247,17 @@ app.get('/logout', function(req, res){
   req.session.notice = "You have successfully been logged out " + name + "!";
 });
 
-//---------------research page---------------
+//---------------research concert---------------
 app.get('/search/concerts', function(req,res){
-  //params : position, rayon, start, end
+  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+
+  //params : position, radius, start, end
 });
 
+//----------------research work------------------
 app.get('/search/works',function(req,res){
   res.setHeader('Content-Type','application/json');
+  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
   optionSacem.qs.query=req.query.query;
   optionSacem.qs.filters=req.query.filters;
   request(optionSacem,function(err,response,body){
@@ -273,15 +276,41 @@ app.get('/search/works',function(req,res){
 //---------------artist------------------/
 //Get artist information from Bands In Town
 app.get('/artist',function(req,res){
-  //TODO work list : API sacem, concert : Bands In town
+  //TODO  2 parties work list : API sacem, concert : Bands In town
   res.setHeader('Content-Type','application/json');
+  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+  var detailsArtist ={
+    "name":"",
+    "concerts":[],
+    "works":[]
+  };
+  var concert ={
+    "title":"",
+    "datetime":"",
+    "location":"",
+    "venue":"",
+    "description":""
+  };
   artist = req.query.name;
-  optionBIT.uri='http://api.bandsintown.com/artists/'+ artist +'.json';
+  //TODO artist name with space
+  // Searching for concert of this artist from BandsInTown's API
+  optionBIT.uri='http://api.bandsintown.com/artists/'+ artist +'/events.json';
   //TODO artist not found
   request(optionBIT,function(err,response,body){
     if(err) {
       return console.log(err);
     } else {
+      var length = body.length;
+      console.log(length);
+      /*for (var i=0; i<length;i++){
+        var bitConcert=body[i];
+        concert.title = bitConcert.title;
+        concert.datetime = bitConcert.formatted_datetime;
+        concert.location = bitConcert.formatted_location;
+        //concert.venue = bitConcert.venue.place;
+        detailsArtist.concerts.push(concert);
+        console.log(concert);
+      }*/
       res.send(body);
     }
   });
@@ -291,6 +320,8 @@ app.get('/artist',function(req,res){
 app.get('/author',function(req,res){
   //params :id
   res.setHeader('Content-Type','application/json');
+  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+
   optionSacem.qs.query= req.query.name;
   optionSacem.qs.filters='parties';
   request(optionSacem,function(err,response,body){
@@ -319,6 +350,8 @@ app.get('/author',function(req,res){
 app.get('/work', function(req,res){
   //params :iswc
   res.setHeader('Content-Type','application/json');
+  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+
   optionSacemDetail.qs.iswc=req.query.iswc;
   request(optionSacemDetail,function(err,response,body){
     if(err) {
@@ -356,6 +389,8 @@ app.get('/work', function(req,res){
 //---------------profile---------------
 app.get('/profile', function(req, res){
   res.setHeader('Content-Type','application/json');
+  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+
   if(req.user){
     var user = {
       'name':req.user.name,
@@ -372,6 +407,8 @@ app.get('/profile', function(req, res){
 //---------------planning---------------
 app.get('/planning', function(req, res){
   res.setHeader('Content-Type','application/json');
+  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+
 });
 
 //---------------action favorite---------------

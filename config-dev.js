@@ -12,5 +12,6 @@ module.exports = {
     "uri":"https://sigried.sacem.fr/oeuvresrest/getworks",
     "uri_detail":"https://sigried.sacem.fr/oeuvresrest/getworkdetails",
     "headerOrigin":"http//dty.sacem.fr"
-	}
+	},
+	"accessControl":"http://localhost:8100"
 }
