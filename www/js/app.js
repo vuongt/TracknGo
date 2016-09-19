@@ -63,10 +63,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       })
 
 
-      .state('tab.concert', {
+      .state('tab.concertHome', {
         url: '/concert',
         views: {
           'tab-home': {
+            templateUrl: 'templates/tab-concert.html',
+            controller: 'ConcertCtrl'
+          }
+        }
+      })
+      .state('tab.concertSearch', {
+        url: '/concert',
+        views: {
+          'tab-search': {
             templateUrl: 'templates/tab-concert.html',
             controller: 'ConcertCtrl'
           }
@@ -77,7 +86,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.auteur', {
         url: '/auteur',
         views: {
-          'tab-auteur': {
+          'tab-search': {
             templateUrl: 'templates/tab-auteur.html',
             controller: 'AuteurCtrl'
           }
@@ -88,7 +97,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.artist', {
         url: '/artist',
         views: {
-          'tab-artist': {
+          'tab-search': {
             templateUrl: 'templates/tab-artist.html',
             controller: 'ArtistCtrl'
           }
@@ -99,7 +108,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.musique', {
         url: '/musique',
         views: {
-          'tab-musique': {
+          'tab-search': {
             templateUrl: 'templates/tab-musique.html',
             controller: 'MusiqueCtrl'
           }
