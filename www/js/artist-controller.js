@@ -1,11 +1,67 @@
 angular.module('starter.controllers').controller('ArtistCtrl', function($scope, $http) {
 
-  $scope.name= "Artist Name";
+  $scope.name= "stromae";
 
-	//$http.get('http://localhost:8080/artist?name=STROMAE').then(function(res){
-   // console.log(res.data);	})
+  $scope.concerts=[];
+  $scope.songs=[];
 
-  $scope.isSong = true;
+
+
+
+$http({
+  method: 'GET',
+  url: 'http://localhost:8080/artist?name='+$scope.name,
+  header:{
+    Origin:'http://localhost:8100'
+  }
+}).then(function successCallback(response) {
+
+    $scope.answer = response.data;
+
+    for(var i = 0, len = $scope.answer.concerts.length; i < len; i++)
+    {
+
+        $scope.concerts.push({
+
+          titre : $scope.answer.concerts[i].title,
+          date : $scope.answer.concerts[i].datetime,
+          venue: $scope.answer.concerts[i].venue,
+          location: $scope.answer.concerts[i].location,
+          show: false
+
+        });
+
+    }
+
+
+    for(var i = 0, len = $scope.answer.works.length; i < len; i++)
+      {
+
+          $scope.songs.push({
+            titre : $scope.answer.works[i].title,
+            iswc : $scope.answer.works[i].iswc,
+
+
+          });
+
+      }
+
+
+     $scope.isSong = true;
+     $scope.isConcert = true;
+
+
+  }, function errorCallback(response) {
+
+// FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
+
+$scope.isSong=false;
+$scope.isConcert= false;
+
+  });
+
+
+
 
 
 $scope.concerts = [
@@ -30,7 +86,6 @@ $scope.concerts = [
       }
     ];
 
-    $scope.songs = ["titre 1", "titre 2", "titre 3"];
 
 
 

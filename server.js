@@ -250,7 +250,7 @@ app.get('/logout', function(req, res){
 
 //---------------research concert---------------
 app.get('/search/concerts', function(req,res){
-  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
 
   //params : position, radius, start, end
 });
@@ -258,7 +258,7 @@ app.get('/search/concerts', function(req,res){
 //----------------research work------------------
 app.get('/search/works',function(req,res){
   res.setHeader('Content-Type','application/json');
-  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
   optionSacem.qs.query=req.query.query;
   optionSacem.qs.filters=req.query.filters;
   request(optionSacem,function(err,response,body){
@@ -279,7 +279,7 @@ app.get('/search/works',function(req,res){
 app.get('/artist',function(req,res){
   //TODO  2 parties work list : API sacem, concert : Bands In town
   res.setHeader('Content-Type','application/json');
-  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
   var detailsArtist ={
     name:"",
     concerts:[],
@@ -334,7 +334,7 @@ app.get('/artist',function(req,res){
 app.get('/author',function(req,res){
   //params :id
   res.setHeader('Content-Type','application/json');
-  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
   optionSacem.qs.query= req.query.name;
   if (req.query.page) optionSacem.qs.page = req.query.page;
   optionSacem.qs.filters='parties';
@@ -361,7 +361,7 @@ app.get('/author',function(req,res){
 app.get('/work', function(req,res){
   //params :iswc
   res.setHeader('Content-Type','application/json');
-  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
   var work = {
     iswc:"",
     title:"",
@@ -410,7 +410,7 @@ app.get('/work', function(req,res){
 //---------------profile---------------
 app.get('/profile', function(req, res){
   res.setHeader('Content-Type','application/json');
-  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
 
   if(req.user){
     var user = {
@@ -428,7 +428,7 @@ app.get('/profile', function(req, res){
 //---------------planning---------------
 app.get('/planning', function(req, res){
   res.setHeader('Content-Type','application/json');
-  res.setHeader('Allow-Control-Access-Origin',config.accessControl);
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
 
 });
 
