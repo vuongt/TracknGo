@@ -50,8 +50,15 @@
   background: rgba(256,256,256,0.4);;
   color:rgba(256,256,256,1);
 }
+.concertbackground{
+  background-image: url('../img/concertab.jpg');
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+}
 
 .concertbackground p{  color: white;  }
+.concertbackground span{  color: white;  }
 .concertbackground h3 {  color: white;  }
 /* CSS de la page "Concert" */
 
