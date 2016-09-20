@@ -261,15 +261,22 @@ app.get('/search/works',function(req,res){
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
   optionSacem.qs.query=req.query.query;
   optionSacem.qs.filters=req.query.filters;
+  if (req.query.page) optionSacem.qs.page = req.query.page;
+  var results = [];
   request(optionSacem,function(err,response,body){
     if(err) {
-      return console.log(err);
+      return console.log(err); //TODO handle no result
     } else {
-      if(body){
-        res.send(body);
-      }else{
-        res.send("No Result Found");
+      var bodyObj = JSON.parse(body);
+      if (bodyObj.error !== "no work"){
+        for (var i = 0, length = bodyObj.works.length;i<length; i++){
+          var result = {};
+          result.iswc = bodyObj.works[i].iswc;
+          result.title = bodyObj.works[i].title;
+          results.push(result);
+        }
       }
+      res.send(JSON.stringify(results));
     }
   });
 });
@@ -295,33 +302,35 @@ app.get('/artist',function(req,res){
   //TODO artist not found
   //TODO how to make 2 independent requests
   request(optionBIT,function(errBit,resBit,bodyBit){
-    if(errBit) {
+    if (errBit) {
       return console.log(errBit); //TODO error handler
     } else {
-      var objectBit =JSON.parse(bodyBit);
+      var objectBit = JSON.parse(bodyBit);
       var lenBit = objectBit.length;
-      for (var i=0; i<lenBit;i++){
-        var concertBit=objectBit[i];
-        var concert = new Object();
+      for (var i = 0; i < lenBit; i++) {
+        var concertBit = objectBit[i];
+        var concert = {};
         concert.title = concertBit.title;
         concert.datetime = concertBit.formatted_datetime;
         concert.location = concertBit.formatted_location;
         concert.venue = concertBit.venue.place;
-        concert.description =concertBit.description;
+        concert.description = concertBit.description;
         detailsArtist.concerts.push(concert);
       }
-      request(optionSacem,function(errSacem,resSacem,bodySacem){
-        if(errSacem){
+      request(optionSacem, function (errSacem, resSacem, bodySacem) {
+        if (errSacem) {
           return console.log(errSacem); //TODO error handler
-        }else{
+        } else {
           var objectSacem = JSON.parse(bodySacem);
-          var lenSacem = objectSacem.works.length;
-          for (var i=0; i<lenSacem; i++){
-            var workSacem = objectSacem.works[i];
-            var work = new Object();
-            work.iswc= workSacem.iswc;
-            work.title= workSacem.title;
-            detailsArtist.works.push(work);
+          if (objectSacem.error !== "no work"){
+            var lenSacem = objectSacem.works.length;
+            for (var i = 0; i < lenSacem; i++) {
+              var workSacem = objectSacem.works[i];
+              var work = {};
+              work.iswc = workSacem.iswc;
+              work.title = workSacem.title;
+              detailsArtist.works.push(work);
+            }
           }
           res.send(JSON.stringify(detailsArtist));
         }
@@ -344,14 +353,16 @@ app.get('/author',function(req,res){
       return console.log(err); //TODO Error Handler. No result found
     } else {
       var bodyObject = JSON.parse(body);
-      var length = bodyObject.works.length;
-      for (var i=0; i<length;i++){
-        var work = new Object();
-        work.iswc = bodyObject.works[i].iswc;
-        work.title = bodyObject.works[i].title;
-        author.push(work);
+      if (bodyObject.error !== 'no work'){
+        var length = bodyObject.works.length;
+        for (var i=0; i<length;i++){
+          var work = {};
+          work.iswc = bodyObject.works[i].iswc;
+          work.title = bodyObject.works[i].title;
+          author.push(work);
+        }
+        res.send(JSON.stringify(author));
       }
-      res.send(JSON.stringify(author));
     }
   });
 });
@@ -408,16 +419,37 @@ app.get('/work', function(req,res){
 });
 
 //---------------profile---------------
-app.get('/profile', function(req, res){
+app.get('/profile', function(req, res){ //TODO get or post ?
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
-
   if(req.user){
+    var id = req.user.id;
     var user = {
       'name':req.user.name,
-      'songs':['song1','song2'],
-      'authors':['author1','author2']
-    }
+      'works':[],
+      'authors':[]
+    };
+    mariaClient.query("SELECT * FROM favorite_works WHERE id_user='"+id+"'",function(err,rows){
+      if (err) return done(err);
+      else {
+        for (var i=0, length = rows.length;i<length; i++){
+          var work = {};
+          work.iswc = rows[i].iswc;
+          work.title = rows[i].title;
+          user.works.push(work); //TODO Attention works may be empty outside this scope
+        }
+      }
+    });
+    mariaClient.query("SELECT * FROM favorite_authors WHERE iser_id='"+id+"'", function(err, rows){
+      if (err) return done(err);
+      else {
+        for (var i=0, length = rows.length;i<length; i++){
+          var author = {};
+          author.name = rows[i].name_author;
+          user.authors.push(author); //TODO Attention works may be empty outside this scope
+        }
+      }
+    });
     res.send(JSON.stringify(user));
   }else{
     res.redirect("/signin");
@@ -434,11 +466,35 @@ app.get('/planning', function(req, res){
 
 //---------------action favorite---------------
 app.get('/action/addfavorite',function(req,res){
-  //params: type, id
-  //res.redirect('/home');
+  res.setHeader('Content-Type','application/json');
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
+  //params: type, id of the content, title
+  if (req.user){
+    if (req.query.type === "work"){
+      mariaClient.query("INSERT INTO favorite_works (id_user, iswc, title) VALUES ("+req.user.id+","+req.query.iswc+","+req.query.title, function(err,rows){
+      if(err) return done(err);
+      else {
+        console.log('Add favorite ' + req.query.iswc + ' succeeded');
+      }
+    });
+    } else if (req.query.type==="author"){
+      mariaClient.query("INSERT INTO favorite_authors (id_user, name_author) VALUES ("+req.user.id+","+req.query.name, function(err,rows){
+      if (err) return done(err);
+      else {
+        console.log('Add favorite ' + req.query.name + ' succeeded');
+      }
+    });
+    } else {
+      //TODO Error handling
+    }
+  //TODO no redirect after action
+  } else res.redirect("/signin");
+
 });
 app.get('/action/removefavorite',function(req,res){
   //params: type, id
+  res.setHeader('Content-Type','application/json');
+  res.setHeader('Access-Control-Allow-Origin',config.accessControl);
 });
 
 //---------------comment---------------
