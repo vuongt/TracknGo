@@ -21,11 +21,13 @@
 
     <ion-list ng-show="isSong">
       <ion-item class="item-divider" id="page-list-item-divider1">Morceaux</ion-item>
-      <ion-item ng-repeat="song in songs">
+      <ion-item ng-repeat="song in songs | limitTo:numLimit"
+                ui-sref="tab.musique({iswc: song.iswc})">
         {{song.titre}}
       </ion-item>
     </ion-list>
 
+    <button class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats </button>
 
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider1">Concerts</ion-item>

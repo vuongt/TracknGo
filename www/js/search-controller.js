@@ -1,12 +1,10 @@
 angular.module('starter.controllers')
-  .controller('SearchCtrl', function($scope) {
+  .controller('SearchCtrl', function($scope, $http) {
 
   $scope.isConcert = true;
   $scope.isArtist = true;
   $scope.isAuthor = true;
   $scope.isSong = true;
-
-
 
     $scope.concerts = [
       {
@@ -35,7 +33,24 @@ angular.module('starter.controllers')
     $scope.songs = ["titre 1", "titre 2", "titre 3"];
 
 
+    $scope.submitSearch = function  () {
+
+
+            $http({
+              method: 'GET',
+              url: 'http://localhost:8080/search/works?query='+search+"&filters="+filter,
+              header:{
+              Origin:'http://localhost:8100'
+            }
+            })
+
+      }
 
 
 
   });
+
+
+
+
+

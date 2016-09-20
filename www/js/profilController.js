@@ -1,19 +1,20 @@
 angular.module('starter.controllers')
   .controller('ProfilCtrl', function($scope) {
-    $scope.name = "Louise Legall";
 
 
-//Les auteurs favoris
-  A=["auteur1", "auteur2"];
+ $scope.name = "Louise Legall";
+  var authors=[];
+  var songs=[];
+
+  $scope.authors = [{name:"mika"}, {name:"auteur2"}, {name:"mika"}];
 
   // Les morceaux favoris
-  B=["titre1", "titre2"];
+  $scope.songs = [{name: "Comme Toi", iswc:"T-003.040.646.2"}, {name:"All she wants", iswc:"T-003.040.646.2"}];
 
-  $scope.nbrTitres= A.length;
-  $scope.nbrAuteurs= B.length;
+  $scope.nbrTitres= $scope.songs.length;
+  $scope.nbrAuteurs= $scope.authors.length;
 
 
-  $scope.albums=[{"name":"Auteur", "items": A}, {"name":"Titre", "items": B}];
 
 
   $scope.myGoBack = function() {

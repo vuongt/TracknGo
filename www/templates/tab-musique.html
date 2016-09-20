@@ -1,8 +1,4 @@
 
-
-<ion-view>
-
-
   <ion-content>
 
     <div class="artist-background">
@@ -15,19 +11,21 @@
 
       <div class="rightheader" >
 
-        <div class="titleBlack"> {{name}} </div> </br>
-        <div class="subtitleBlack lighter"> {{name}} </div>
+        <div class="titleBlack"> {{title}} </div> </br>
+        <div class="subtitleBlack"> {{author}} </div>
 
 
       </div>
     </div>
 
-    </br></br>
-    </br>
 
-
-    Ici on affiche les concerts où  la musique apparait
-
+    <ion-list>
+      <ion-item class="item-divider" id="page-list-item-divider1">Interprètes</ion-item>
+      <ion-item ng-repeat="artist in artists"
+                ui-sref="tab.artist({name: artist.name})">
+        {{artist.name}}
+      </ion-item>
+    </ion-list>
 
 
 
@@ -37,4 +35,4 @@
 
 
   </ion-content>
-</ion-view>
+

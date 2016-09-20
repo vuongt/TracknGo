@@ -95,10 +95,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 
       .state('tab.artist', {
-        url: '/artist',
+        url: '/artist/?name',
         views: {
           'tab-search': {
             templateUrl: 'templates/tab-artist.html',
+            params: {name: null, },
             controller: 'ArtistCtrl'
           }
         }
@@ -106,10 +107,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 
       .state('tab.musique', {
-        url: '/musique',
+        url: '/musique/?iswc',
         views: {
           'tab-search': {
             templateUrl: 'templates/tab-musique.html',
+            params: {iswc: null, },
             controller: 'MusiqueCtrl'
           }
         }

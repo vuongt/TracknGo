@@ -1,14 +1,16 @@
   <ion-content>
     <label class = "item item-input item-select">
       <div class = "input-label">
-        <input type="text" placeholder="Search">
+        <input type="text" placeholder="Chercher" name="search" onKeyPress="if (event.keyCode == 13) submitSearch()">
+
       </div>
 
-      <select>
-        <option>Toutes catégories</option>
-        <option>Concerts</option>
-        <option>Auteurs</option>
-        <option>Chansons</option>
+      <select name="filter">
+        <option value="all">Toutes catégories</option>
+        <option value="concert">Concerts</option>
+        <option value="parties">Auteurs</option>
+        <option value="titles,subtitles">Chansons</option>
+        <option value="performers">Interprètes</option>
       </select>
     </label>
 

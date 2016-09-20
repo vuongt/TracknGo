@@ -1,12 +1,13 @@
-<ion-view xmlns="http://www.w3.org/1999/html">
+<ion-view>
   <ion-content>
+
     <div class="big-header">
       <h3 id="page-heading1">{{name}}</h3>
       <div id="page-markdown1">
         <p>2 concerts cette semaine</p>
       </div>
       <div>
-        <button id="page-button1" class="button button-planning" ui-sref="/profil/planning">
+        <button id="page-button1" class="button button-planning">
           Mon planning
         </button>
       </div>
@@ -22,28 +23,20 @@
       </div>
     </div>
 
-
     <ion-list>
-      <div ng-repeat="albi in albums">
-        <ion-item class="item-stable"
-                  ng-click="toggleGroup(albi)"
-                  ng-class="{active: isGroupShown(albi)}">
-          <i class="icon" ng-class="isGroupShown(albi) ? 'ion-minus' : 'ion-plus'"></i>
-          &nbsp;
-          {{albi.name}}
+      <ion-item class="item-divider" id="page-list-item-divider1">Artistes favoris</ion-item>
+      <ion-item  ng-repeat="author in authors"
+                   ui-sref="tab.artist({name: author.name})"> {{author.name}}
         </ion-item>
-        <ion-item class="item-accordion"
-                  ng-repeat="title in albi.items"
-                  ng-show="isGroupShown(albi)">
-          {{title}}
+    </ion-list>
+    <ion-list>
+      <ion-item class="item-divider" id="page-list-item-divider1">Musiques favorites</ion-item>
+      <ion-item ng-repeat="song in songs"
+                  ui-sref="tab.musique({iswc: song.iswc})">
+          {{song.name}}
         </ion-item>
-      </div>
     </ion-list>
 
-
-    <ion-list ng-repeat= "concert in concerts">
-      <ion-item> {{concert}} </ion-item>
-    </ion-list>
 
 
   </ion-content>

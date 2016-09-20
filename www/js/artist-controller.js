@@ -1,11 +1,13 @@
-angular.module('starter.controllers').controller('ArtistCtrl', function($scope, $http) {
+angular.module('starter.controllers').controller('ArtistCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams, $state){
 
-  $scope.name= "stromae";
+
+  $scope.name = $stateParams.name;
+
 
   $scope.concerts=[];
   $scope.songs=[];
 
-
+  $scope.numLimit=5;
 
 
 $http({
@@ -17,7 +19,6 @@ $http({
 }).then(function successCallback(response) {
 
     $scope.answer = response.data;
-
     for(var i = 0, len = $scope.answer.concerts.length; i < len; i++)
     {
 
@@ -38,7 +39,7 @@ $http({
       {
 
           $scope.songs.push({
-            titre : $scope.answer.works[i].title,
+            titre : $scope.answer.works[i].title.charAt(0).toUpperCase()+$scope.answer.works[i].title.substring(1).toLowerCase(),
             iswc : $scope.answer.works[i].iswc,
 
 
@@ -64,28 +65,6 @@ $scope.isConcert= false;
 
 
 
-$scope.concerts = [
-      {
-        titre : "titre 1",
-        date : "date 1",
-        adresse: "adresse 1",
-        show: false
-      }
-      ,
-      {
-        titre : "titre 2",
-        date : "date 2",
-        adresse: "adresse 2",
-        show: false
-      },
-      {
-        titre : "titre 3",
-        date : "date 3",
-        adresse: "adresse 3",
-        show: false
-      }
-    ];
-
 
 
 
@@ -104,10 +83,17 @@ $scope.concerts = [
     return $scope.shownGroup === group;
   };
 
+  $scope.printMore = function() {
+$scope.numLimit=$scope.numLimit+5;
+$route.reload();
+
+
+  };
+
 
   $scope.myGoBack = function() {
 window.history.back()  };
 
 
-});
+}]);
 
