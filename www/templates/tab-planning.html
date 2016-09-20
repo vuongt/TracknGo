@@ -1,8 +1,30 @@
 <ion-view>
   <ion-content>
-    <span class="ion-chevron-left"></span>
+    <div class="big-header">
+      <span class="ion-ios-arrow-left" ng-click="myGoBack()"></span>
+      <h3>Mon planning</h3>
 
+      <select class="item button-planning">
+        <option>Septembre 2016</option>
+        <option>Octobre</option>
+        <option>Novembre</option>
+        <option>Décembre</option>
+      </select>
 
+    </div>
+    <ion-item class="item-divider">Septembre</ion-item>
 
+    <ion-item ng-repeat="item in concerts"
+              item="item"
+              class="concertbackground">
+      <p>
+      <h3>{{item.titre}}</h3><span class="right">      {{item.date}}</span></p>
+      <p>{{item.adresse}}</p>
+      <div>
+        <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome">
+          J'y vais !
+        </button>
+      </div>
+    </ion-item>
   </ion-content>
 </ion-view>

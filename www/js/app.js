@@ -150,11 +150,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       })
 
       .state('tab.planning', {
-        url: '/profil/planning',
+        url: '/planning',
         views: {
-          'tab-planning': {
+          'tab-profil': {
             templateUrl: 'templates/tab-planning.html',
-            controller: 'PlanningController'
+            controller: 'PlanningCtrl'
           }
         }
       });

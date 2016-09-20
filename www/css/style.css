@@ -63,6 +63,19 @@
 .concertbackground p{  color: white;  }
 .concertbackground span{  color: white;  }
 .concertbackground h3 {  color: white;  }
+
+.concertbackground-odd{
+  background-image: url('../img/concertb.jpg');
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  padding-bottom: 10px;
+  padding-left:10px;
+}
+
+.concertbackground-odd p{  color: white;  }
+.concertbackground-odd span{  color: white;  }
+.concertbackground-odd h3 {  color: white;  }
 /* CSS de la page "Concert" */
 
 .concert-background {

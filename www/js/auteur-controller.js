@@ -21,7 +21,7 @@ $http({
 
         $scope.songs.push({
             titre : $scope.answer[i].title,
-            iswc : $scope.answer[i].iswc,
+            iswc : $scope.answer[i].iswc
 
         });
 
@@ -30,8 +30,8 @@ $http({
 $scope.isSong = true;
 
 
-  }, function errorCallback(response) {
-
+  }, function errorCallback(error) {
+console.log(error);
 $scope.isSong = false;
 
   });
