@@ -18,27 +18,38 @@ angular.module('starter.controllers')
       $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
       google.maps.event.addListenerOnce($scope.map, 'idle', function () {
-        var address = "27 rue de Tocqueville Paris ";
-        geocoder.geocode({'address': address}, function (results, status) {
-          if (status === google.maps.GeocoderStatus.OK) {
-            var marker = new google.maps.Marker({
-              map: $scope.map,
-              animation: google.maps.Animation.DROP,
-              position: results[0].geometry.location
-            });
-            var infoWindow = new google.maps.InfoWindow({
-              content: "Here I am!"
-            });
-
-            google.maps.event.addListener(marker, 'click', function () {
-              infoWindow.open($scope.map, marker);
-            });
+        for(var i = 0; i < $scope.concerts.length;i++){
+          (function(){
+            var concert = $scope.concerts[i];
+            var address = concert.adresse;
+            geocoder.geocode({'address': address}, function (results, status) {
+              if (status === google.maps.GeocoderStatus.OK) {
 
 
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
-        });
+                var marker = new google.maps.Marker({
+                  map: $scope.map,
+                  animation: google.maps.Animation.DROP,
+                  position: results[0].geometry.location
+                });
+
+                var infoWindow = new google.maps.InfoWindow({
+                  content: concert.titre
+                });
+
+                google.maps.event.addListener(marker, 'click', function () {
+                  infoWindow.open($scope.map, marker);
+                });
+
+
+              } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+              }
+            });
+
+          })();
+
+
+        }
 
 
 
@@ -52,22 +63,22 @@ angular.module('starter.controllers')
     //templates concerts
     $scope.concerts = [
       {
-        titre: "titre 1",
+        titre: "le Mood's",
         date: "date 1",
         adresse: "13 Passage du Moulinet, 75013 Paris ",
         show: false
       }
       ,
       {
-        titre: "titre 2",
+        titre: "Théatre Dunois",
         date: "date 2",
-        adresse: "adresse 2",
+        adresse: "7 Rue Louise Weiss, 75013 Paris",
         show: false
       },
       {
-        titre: "titre 3",
+        titre: "Théâtre13-Seine",
         date: "date 3",
-        adresse: "adresse 3",
+        adresse: "30 Rue du Chevaleret, 75013 Paris",
         show: false
       }
     ];
