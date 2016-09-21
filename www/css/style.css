@@ -292,3 +292,52 @@ height: 80px;
 width: 80%;
 
 }
+
+/* quick search css */
+.search-header{
+  margin: 10%;
+}
+.close-modal{
+  margin-right: 8%;
+  float: right;
+  font-size: 30px;
+}
+.icon-search{
+  float: left;
+  font-size: 25px;
+}
+.quicksearch-bar{
+  float: left;
+  max-height: 20px ;
+  font-size: 25px;
+
+}
+.search-container{
+  margin: 0 auto;
+  margin-top: 20%;
+  height: 30px;
+  width: 60%;
+  border-bottom: 1px solid #aaa;
+}
+.form-container{
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 10%;
+}
+.form-container div{
+  height: 40px;
+
+}
+.form-container span{
+  float: left;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top:10px;
+
+
+}
+.form-container input{
+  float: left;
+  margin-left: 10px;
+}
+
