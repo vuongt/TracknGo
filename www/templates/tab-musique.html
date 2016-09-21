@@ -15,13 +15,12 @@
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider1">Auteur/Compositeur</ion-item>
       <ion-item ng-repeat="author in answer.composerAuthor"
-                ui-sref="tab.artist({name: author})">
+                ui-sref="tab.auteur({name: author})">
         {{author}}
       </ion-item>
     <ion-list>
-      <ion-item class="item-divider" id="page-list-item-divider1">Interprètes</ion-item>
-      <ion-item ng-repeat="artist in answer.performer"
-                ui-sref="tab.artist({name: artist})">
+      <ion-item class="item-divider" id="page-list-item-divider2">Interprètes</ion-item>
+      <ion-item ng-repeat="artist in answer.performer track by $index"  ui-sref="tab.artist({name: artist})">
         {{artist}}
       </ion-item>
     </ion-list>

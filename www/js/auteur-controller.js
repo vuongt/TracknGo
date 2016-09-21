@@ -1,5 +1,5 @@
-angular.module('starter.controllers').controller('AuteurCtrl', function($scope, $http) {
-$scope.name= "goldman";
+angular.module('starter.controllers').controller('AuteurCtrl', function($scope, $http,$ionicPopup,$stateParams) {
+$scope.name= $stateParams.name;
 $scope.isSong=true;
 
 $http({
@@ -16,7 +16,7 @@ $http({
       if ($scope.answer.length !== 0){
         $scope.isSong = true;
         for(var i = 0, len = $scope.answer.length; i < len; i++) {
-          var temp = $scope.answer[i].title;
+          var temp = $scope.answer[i].title.trim();
           $scope.answer[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
         }
       }

@@ -457,7 +457,7 @@ app.get('/work', function(req,res){
           var length = bodyObj['interested parties'].length;
           for (var i =0; i< length; i++){
             var party = bodyObj['interested parties'][i];
-            if (party.role == "Composer/Author"){
+            if (party.role == "Composer/Author" || party.role == "Composer" || party.role == "Author"){
               if (work.composerAuthor) work.composerAuthor.push(party['first name'] + ' ' + party['last name']);
               else work.composerAuthor= [party['first name'] + ' ' + party['last name']];
             } else if (party.role == "Performer"){

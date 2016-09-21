@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('MusiqueCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams){
+angular.module('starter.controllers').controller('MusiqueCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams,$ionicPopup){
   $scope.iswc = $stateParams.iswc;
   $scope.myGoBack = function() {
     window.history.back()  };
@@ -13,9 +13,10 @@ $http({
     if ($scope.answer.error ==""){
       $scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
       for(var i = 0, len = $scope.answer.performer.length; i < len; i++) {
-        var temp = $scope.answer.performer[i];
-        $scope.answer.performer[i] = temp.charAt(0).toUpperCase()+temp.substring(1).toLowerCase();
+        var temp = $scope.answer.performer[i].trim();
+        $scope.answer.performer[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
       }
+      console.log($scope.answer);
     } else {
       //Show an alert of the error
       var alertPopup = $ionicPopup.alert({
@@ -30,15 +31,13 @@ $http({
 // FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
   });
 
-  $scope.printMore = function() {
+/*  $scope.printMore = function() {
 $scope.numLimit=$scope.numLimit+5;
 $route.reload();
-  };
+  };*/
 
 
   $scope.myGoBack = function() {
 window.history.back()  };
-
-
 }]);
 
