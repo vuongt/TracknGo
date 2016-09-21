@@ -69,14 +69,14 @@ passport.use('local-signup', new LocalStrategy(
       if (!rows.length) {
         //If there is no user with that email
         // create the user
-        var newUser = new Object();
+        var newUser = {};
         newUser.email = email;
         newUser.password = password;
         newUser.name= req.body.name;
         var prep = mariaClient.prepare('INSERT INTO users (name,email,password) VALUES (:name,:email,:password)');
         mariaClient.query(prep({name:req.body.name, email: email, password: password}), function (err, rows) {
           if (err) {return done(err);}
-          console.log('row insert result: ')
+          console.log('row insert result: ');
           console.dir(rows);
           newUser.id = rows.info.insertId;
           console.log("newUser object: ");
@@ -148,7 +148,7 @@ app.use(function(req, res, next){
 //======================API oeuvres===================
 // Establish connection with API oeuvres
 //====================================================
-//Option to reserche by titles, authors, performers,...
+//Option to research by titles, authors, performers,...
 var optionSacem ={
   method:'GET',
   uri:config.sacem.uri,
@@ -156,7 +156,7 @@ var optionSacem ={
     token:config.sacem.token,
     query:'', //search criteria
     filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
-    pagesize:100, //Number of works per page
+    pagesize:15, //Number of works per page
     page:1, //Number of page to return,
     blankfield:true
   },
@@ -242,7 +242,7 @@ app.post('/login', passport.authenticate('local-login', {
 //logs user out of site, deleting them from the session, and returns to homepage
 app.get('/logout', function(req, res){
   var name = req.user.name;
-  console.log("LOG OUT " + req.user.name)
+  console.log("LOG OUT " + req.user.name);
   req.logout();
   res.redirect('/home');
   req.session.notice = "You have successfully been logged out " + name + "!";
@@ -250,6 +250,7 @@ app.get('/logout', function(req, res){
 
 //---------------research concert---------------
 app.get('/search/concerts', function(req,res){
+  res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
 
   //params : position, radius, start, end
@@ -259,112 +260,150 @@ app.get('/search/concerts', function(req,res){
 app.get('/search/works',function(req,res){
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
+  var results = {error:"",results:[]};
+  if (req.query.page) {
+    optionSacem.qs.page = req.query.page;
+  }
   optionSacem.qs.query=req.query.query;
-  optionSacem.qs.filters=req.query.filters;
-  if (req.query.page) optionSacem.qs.page = req.query.page;
-  var results = [];
-  request(optionSacem,function(err,response,body){
-    if(err) {
-      return console.log(err); //TODO handle no result
-    } else {
-      var bodyObj = JSON.parse(body);
-      if (bodyObj.error !== "no work"){
-        for (var i = 0, length = bodyObj.works.length;i<length; i++){
-          var result = {};
-          result.iswc = bodyObj.works[i].iswc;
-          result.title = bodyObj.works[i].title;
-          results.push(result);
+  if (req.query.filters && req.query.filters !==""){
+    optionSacem.qs.filters=req.query.filters;
+    request(optionSacem,function(err,response,body){
+      if(err) {
+        return console.log(err); //TODO send back error header
+      } else {
+        var bodyObj = JSON.parse(body);
+        if (bodyObj.error == ""){
+          for (var i = 0, length = bodyObj.works.length;i<length; i++){
+            var result = {};
+            result.iswc = bodyObj.works[i].iswc;
+            result.title = bodyObj.works[i].title;
+            results.results.push(result);
+          }
+        } else if (bodyObj.error == "no work"){
+          res.send(JSON.stringify(results));
         }
+        else {
+          results.error=bodyObj.error;
+        }
+        res.send(JSON.stringify(results));
       }
-      res.send(JSON.stringify(results));
-    }
-  });
+    });
+  } else {
+    results.error ="Please select a filter";
+    res.send(JSON.stringify(results));
+  }
 });
 
 //---------------artist------------------/
 //Get artist information from Bands In Town
 app.get('/artist',function(req,res){
-  //TODO  2 parties work list : API sacem, concert : Bands In town
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
   var detailsArtist ={
-    name:"",
+    error:"",
+    artist:"",
     concerts:[],
     works:[]
   };
-  artist = req.query.name;
-  detailsArtist.name = artist;
-  //TODO artist name with space
-  // Searching for concert of this artist from BandsInTown's API
-  optionBIT.uri='http://api.bandsintown.com/artists/'+ artist +'/events.json';
-  optionSacem.qs.query= artist;
-  optionSacem.qs.filters= "performers";
-  //TODO artist not found
-  //TODO how to make 2 independent requests
-  request(optionBIT,function(errBit,resBit,bodyBit){
-    if (errBit) {
-      return console.log(errBit); //TODO error handler
-    } else {
-      var objectBit = JSON.parse(bodyBit);
-      var lenBit = objectBit.length;
-      for (var i = 0; i < lenBit; i++) {
-        var concertBit = objectBit[i];
-        var concert = {};
-        concert.title = concertBit.title;
-        concert.datetime = concertBit.formatted_datetime;
-        concert.location = concertBit.formatted_location;
-        concert.venue = concertBit.venue.place;
-        concert.description = concertBit.description;
-        detailsArtist.concerts.push(concert);
-      }
-      request(optionSacem, function (errSacem, resSacem, bodySacem) {
-        if (errSacem) {
-          return console.log(errSacem); //TODO error handler
-        } else {
-          var objectSacem = JSON.parse(bodySacem);
-          if (objectSacem.error !== "no work"){
-            var lenSacem = objectSacem.works.length;
-            for (var i = 0; i < lenSacem; i++) {
-              var workSacem = objectSacem.works[i];
-              var work = {};
-              work.iswc = workSacem.iswc;
-              work.title = workSacem.title;
-              detailsArtist.works.push(work);
+  if (req.query.name && req.query.name !=="") {
+    artist = req.query.name;
+    detailsArtist.artist = artist;
+    //TODO artist name with space
+    // Searching for concert of this artist from BandsInTown's API
+    optionBIT.uri='http://api.bandsintown.com/artists/'+ artist +'/events.json';
+    optionSacem.qs.query= artist;
+    optionSacem.qs.filters= "performers";
+    //TODO artist not found
+    //TODO how to make 2 independent requests
+    request(optionBIT,function(errBit,resBit,bodyBit){
+      if (errBit) {
+        detailsArtist.error = "Error when retrieving data. Please try again later";
+        res.send(JSON.stringify(detailsArtist));
+        return console.log(errBit);
+      } else {
+        var objectBit = JSON.parse(bodyBit);
+        var lenBit = objectBit.length;
+        for (var i = 0; i < lenBit; i++) {
+          var concertBit = objectBit[i];
+          var concert = {};
+          concert.title = concertBit.title;
+          concert.datetime = concertBit.formatted_datetime;
+          concert.location = concertBit.formatted_location;
+          concert.venue = concertBit.venue.place;
+          concert.description = concertBit.description;
+          detailsArtist.concerts.push(concert);
+        }
+        request(optionSacem, function (errSacem, resSacem, bodySacem) {
+          if (errSacem) {
+            detailsArtist.error = "Error when retrieving data. Please try again later";
+            res.send(JSON.stringify(detailsArtist));
+            return console.log(errSacem);
+          } else {
+            var objectSacem = JSON.parse(bodySacem);
+            if (objectSacem.error == ""){
+              var lenSacem = objectSacem.works.length;
+              for (var i = 0; i < lenSacem; i++) {
+                var workSacem = objectSacem.works[i];
+                var work = {};
+                work.iswc = workSacem.iswc;
+                work.title = workSacem.title;
+                detailsArtist.works.push(work);
+              }
+              res.send(JSON.stringify(detailsArtist));
+            } else if (objectSacem.error == "no work"){
+              res.send(JSON.stringify(detailsArtist));
+            } else {
+              detailsArtist.error = objectSacem.error;
+              res.send(JSON.stringify(detailsArtist));
             }
           }
-          res.send(JSON.stringify(detailsArtist));
-        }
-      });
-    }
-  });
+        });
+      }
+    });
+  } else {
+    detailsArtist.error ="The name of artist is not defined";
+    res.send(JSON.stringify(detailsArtist));
+  }
 });
 //---------------author---------------
-//TODO : show result from API ouvres or Eliza ? Rather API oeuvres
+//TODO : show result from API oeuvres or Eliza ? Rather API oeuvres
 app.get('/author',function(req,res){
-  //params :id
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
-  optionSacem.qs.query= req.query.name;
-  if (req.query.page) optionSacem.qs.page = req.query.page;
-  optionSacem.qs.filters='parties';
-  var author = [];
-  request(optionSacem,function(err,response,body){
-    if(err) {
-      return console.log(err); //TODO Error Handler. No result found
-    } else {
-      var bodyObject = JSON.parse(body);
-      if (bodyObject.error !== 'no work'){
-        var length = bodyObject.works.length;
-        for (var i=0; i<length;i++){
-          var work = {};
-          work.iswc = bodyObject.works[i].iswc;
-          work.title = bodyObject.works[i].title;
-          author.push(work);
-        }
+  var author = {error:"", works:[]};
+  if (req.query.name && req.query.name !=="") {
+    optionSacem.qs.query= req.query.name;
+    if (req.query.page) optionSacem.qs.page = req.query.page;
+    optionSacem.qs.filters='parties';
+    request(optionSacem,function(err,response,body){
+      if(err) {
+        author.error = "Error when retrieving data. Please try again later";
         res.send(JSON.stringify(author));
+        return console.log(err);
+      } else {
+        var bodyObject = JSON.parse(body);
+        if (bodyObject.error == ""){
+          var length = bodyObject.works.length;
+          for (var i=0; i<length;i++){
+            var work = {};
+            work.iswc = bodyObject.works[i].iswc;
+            work.title = bodyObject.works[i].title;
+            author.works.push(work);
+          }
+          res.send(JSON.stringify(author));
+        } else if (bodyObject.error == "no work"){
+          res.send(JSON.stringify(author));
+        } else {
+          author.error = bodyObject.error;
+          res.send(JSON.stringify(author));
+        }
       }
-    }
-  });
+    });
+  } else {
+    author.error = "The name of the author is not defined";
+    res.send(JSON.stringify(author));
+  }
+
 });
 
 //---------------work details---------------
@@ -374,6 +413,7 @@ app.get('/work', function(req,res){
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
   var work = {
+    error:"",
     iswc:"",
     title:"",
     composerAuthor:[], // TODO is ipi code necessary ?
@@ -394,28 +434,40 @@ app.get('/work', function(req,res){
     ]*/
     //TODO retrieve information from Eliza
   };
-  optionSacemDetail.qs.iswc=req.query.iswc;
-  request(optionSacemDetail,function(err,response,body){
-    if(err) {
-      return console.log(err); //TODO Error Handler. No result found
-    } else {
-      var bodyObj = JSON.parse(body);
-      work.title = bodyObj.title;
-      work.iswc = bodyObj.iswc;
-      var length = bodyObj['interested parties'].length;
-      for (var i =0; i< length; i++){
-        var party = bodyObj['interested parties'][i];
-        if (party.role == "Composer/Author"){
-          if (work.composerAuthor) work.composerAuthor.push(party['first name'] + ' ' + party['last name']);
-          else work.composerAuthor= [party['first name'] + ' ' + party['last name']];
-        } else if (party.role == "Performer"){
-          if (work.performer) work.performer.push(party['first name'] + ' ' + party['last name']);
-          else work.performer= [party['first name'] + ' ' + party['last name']];
+  if (req.query.iswc && req.query.iswc !== ""){
+    optionSacemDetail.qs.iswc=req.query.iswc;
+    request(optionSacemDetail,function(err,response,body){
+      if(err) {
+        work.error = "Error when retrieving data. Please try again later";
+        res.send(JSON.stringify(work));
+        return console.log(err);
+      } else {
+        var bodyObj = JSON.parse(body);
+        if (bodyObj.error == ""){
+          work.title = bodyObj.title;
+          work.iswc = bodyObj.iswc;
+          var length = bodyObj['interested parties'].length;
+          for (var i =0; i< length; i++){
+            var party = bodyObj['interested parties'][i];
+            if (party.role == "Composer/Author"){
+              if (work.composerAuthor) work.composerAuthor.push(party['first name'] + ' ' + party['last name']);
+              else work.composerAuthor= [party['first name'] + ' ' + party['last name']];
+            } else if (party.role == "Performer"){
+              if (work.performer) work.performer.push(party['first name'] + ' ' + party['last name']);
+              else work.performer= [party['first name'] + ' ' + party['last name']];
+            }
+          }
+          res.send(JSON.stringify(work));
+        }else {
+          work.error = bodyObj.error;
+          res.send(JSON.stringify(work));
         }
       }
-      res.send(JSON.stringify(work));
-    }
-  });
+    });
+  } else {
+    work.error="Work's identifier undefined";
+    res.send(JSON.stringify(work));
+  }
 });
 
 //---------------profile---------------
