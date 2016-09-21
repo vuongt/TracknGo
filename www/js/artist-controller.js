@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('ArtistCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams, $ionicPopup){
+angular.module('starter.controllers').controller('ArtistCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup){
   $scope.name = $stateParams.name;
   //$scope.concerts=[];
   //$scope.songs=[];
@@ -13,10 +13,9 @@ $http({
 }).then(function successCallback(response) {
 
     $scope.answer = response.data;
-    $scope.error = $scope.answer.error;
     $scope.isSong = false;
     $scope.isConcert = false;
-    if ($scope.error==""){
+    if ($scope.answer.error==""){
       if ($scope.answer.works.length !== 0){
         $scope.isSong = true;
         for(var i = 0, len = $scope.answer.works.length; i < len; i++) {
@@ -31,7 +30,7 @@ $http({
       //Show an alert of the error
       var alertPopup = $ionicPopup.alert({
         title: "Error !",
-        template: $scope.error
+        template: $scope.answer.error
       });
       alertPopup.then(function(res) {
         console.log($scope.error);

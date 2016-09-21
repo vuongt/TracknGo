@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('MusiqueCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams,$ionicPopup){
+angular.module('starter.controllers').controller('MusiqueCtrl', ['$rootScope', '$scope', '$http', "$stateParams","$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup){
   $scope.iswc = $stateParams.iswc;
   $scope.myGoBack = function() {
     window.history.back()  };
@@ -10,7 +10,7 @@ $http({
   }
 }).then(function successCallback(response) {
     $scope.answer = response.data;
-    if ($scope.answer.error ==""){
+    if ($scope.answer.error == ""){
       $scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
       for(var i = 0, len = $scope.answer.performer.length; i < len; i++) {
         var temp = $scope.answer.performer[i].trim();
@@ -21,10 +21,10 @@ $http({
       //Show an alert of the error
       var alertPopup = $ionicPopup.alert({
         title: "Error !",
-        template: $scope.error
+        template: $scope.answer.error
       });
       alertPopup.then(function(res) {
-        console.log($scope.error);
+        console.log($scope.answer.error);
       });
     }
   }, function errorCallback(response) {
