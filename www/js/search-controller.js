@@ -30,25 +30,49 @@ angular.module('starter.controllers')
 
     $scope.authors = ["auteur 1", "auteur 2", "auteur 3"];
     $scope.artists = ["artist 1", "artist 2", "artist 3"];
-    $scope.songs = ["titre 1", "titre 2", "titre 3"];
+    $scope.songs = [];
 
 
-    $scope.submitSearch = function  () {
+    $scope.submitSearch = function(search, filter){
 
 
             $http({
               method: 'GET',
-              url: 'http://localhost:8080/search/works?query='+search+"&filters="+filter,
+              url: '/search/works?query='+search+'&filters='+filter+'&page=1',
               header:{
               Origin:'http://localhost:8100'
             }
-            })
 
-      }
+}).then(function successCallback(response) {
+
+    $scope.answer = response.data;
+
+    for(var i = 0, len = $scope.answer.works.length; i < len; i++)
+    {
+        $scope.songs.push({
+
+         name: $scope.answer.works[i].title,
+         iswc: $scope.answer.works[i].iswc
+        });
+    }
+
+     $scope.isSong = true;
+     $scope.isConcert = true;
+
+
+  }, function errorCallback(response) {
+
+// FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
+
+$scope.isSong=false;
+$scope.isConcert= false;
+
+})
+}
+ });
 
 
 
-  });
 
 
 
