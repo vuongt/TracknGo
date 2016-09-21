@@ -35,10 +35,6 @@ $http({
   $scope.isSong = false;
 });
 
-
-
-
-
   /*
    * if given group is the selected group, deselect it
    * else, select the given group

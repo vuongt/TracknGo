@@ -1,29 +1,28 @@
 
   <ion-content>
-
     <div class="artist-background">
-
-
     </div>
 
     <div class="special-artist-background">
       <span class="ion-ios-arrow-left" ng-click="myGoBack()"></span>
 
       <div class="rightheader" >
-
         <div class="titleBlack"> {{title}} </div> </br>
-        <div class="subtitleBlack"> {{author}} </div>
-
 
       </div>
     </div>
 
-
+    <ion-list>
+      <ion-item class="item-divider" id="page-list-item-divider1">Auteur/Compositeur</ion-item>
+      <ion-item ng-repeat="author in answer.composerAuthor"
+                ui-sref="tab.artist({name: author})">
+        {{author}}
+      </ion-item>
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider1">Interprètes</ion-item>
-      <ion-item ng-repeat="artist in artists"
-                ui-sref="tab.artist({name: artist.name})">
-        {{artist.name}}
+      <ion-item ng-repeat="artist in answer.performer"
+                ui-sref="tab.artist({name: artist})">
+        {{artist}}
       </ion-item>
     </ion-list>
 
