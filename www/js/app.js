@@ -108,11 +108,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 
       .state('tab.musique', {
-        url: '/musique/?iswc',
+        url: '/musique/?iswc&title',
         views: {
           'tab-search': {
             templateUrl: 'templates/tab-musique.html',
-            params: {iswc: null },
+            params: {iswc: "",title :""},
             controller: 'MusiqueCtrl'
           }
         }

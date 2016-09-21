@@ -22,7 +22,7 @@
     <ion-list ng-show="isSong">
       <ion-item class="item-divider" id="page-list-item-divider1">Morceaux</ion-item>
       <ion-item ng-repeat="song in answer.works | limitTo:numLimit"
-                ui-sref="tab.musique({iswc: song.iswc})">
+                ui-sref="tab.musique({iswc: song.iswc, title:song.title})">
         {{song.title}}
       </ion-item>
     </ion-list>

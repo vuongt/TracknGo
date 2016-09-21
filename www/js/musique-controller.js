@@ -1,5 +1,6 @@
 angular.module('starter.controllers').controller('MusiqueCtrl', ['$rootScope', '$scope', '$http', "$stateParams","$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup){
   $scope.iswc = $stateParams.iswc;
+  $scope.title = $stateParams.title;
   $scope.myGoBack = function() {
     window.history.back()  };
 $http({
@@ -26,6 +27,7 @@ $http({
       alertPopup.then(function(res) {
         console.log($scope.answer.error);
       });
+      console.log($scope.answer);
     }
   }, function errorCallback(response) {
 // FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
