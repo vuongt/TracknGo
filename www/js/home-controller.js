@@ -11,7 +11,7 @@ angular.module('starter.controllers')
 
       var mapOptions = {
         center: latLng,
-        zoom: 15,
+        zoom: 13,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
       var geocoder = new google.maps.Geocoder();
