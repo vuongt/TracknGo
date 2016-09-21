@@ -21,21 +21,19 @@
 
     <ion-list ng-show="isSong">
       <ion-item class="item-divider" id="page-list-item-divider1">Morceaux</ion-item>
-      <ion-item ng-repeat="song in songs | limitTo:numLimit"
+      <ion-item ng-repeat="song in answer.works | limitTo:numLimit"
                 ui-sref="tab.musique({iswc: song.iswc})">
-        {{song.titre}}
+        {{song.title}}
       </ion-item>
     </ion-list>
 
-    <button class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats </button>
+    <button ng-show="isSong" class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats </button>
 
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider1">Concerts</ion-item>
 
-      <ion-item ng-repeat="item in concerts"
-                item="item"
-                class="concertbackground">
-        <p><h3>{{item.titre}}</h3><span class="right">      {{item.date}}</span></p>
+      <ion-item ng-repeat="item in answer.concerts" item="item" class="concertbackground">
+        <p><h3>{{item.title}}</h3><span class="right">{{item.datetime}}</span> </p>
         <p>{{item.venue}}</p>
         <div>
           <button id="page-button1" class="button button-planning" ng-click="goConcert()"> J'y vais !

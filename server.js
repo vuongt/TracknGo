@@ -294,6 +294,8 @@ app.get('/search/works',function(req,res){
   }
 });
 
+
+
 //---------------artist------------------/
 //Get artist information from Bands In Town
 app.get('/artist',function(req,res){
@@ -317,7 +319,7 @@ app.get('/artist',function(req,res){
     //TODO how to make 2 independent requests
     request(optionBIT,function(errBit,resBit,bodyBit){
       if (errBit) {
-        detailsArtist.error = "Error when retrieving data. Please try again later";
+        detailsArtist.error = "Il y a un problème avec la connection internet. Veuillez réessayer plus tard";
         res.send(JSON.stringify(detailsArtist));
         return console.log(errBit);
       } else {
@@ -335,7 +337,7 @@ app.get('/artist',function(req,res){
         }
         request(optionSacem, function (errSacem, resSacem, bodySacem) {
           if (errSacem) {
-            detailsArtist.error = "Error when retrieving data. Please try again later";
+            detailsArtist.error = "Il y a un problème avec la connection internet. Veuillez réessayer plus tard";
             res.send(JSON.stringify(detailsArtist));
             return console.log(errSacem);
           } else {
@@ -365,6 +367,9 @@ app.get('/artist',function(req,res){
     res.send(JSON.stringify(detailsArtist));
   }
 });
+
+
+
 //---------------author---------------
 //TODO : show result from API oeuvres or Eliza ? Rather API oeuvres
 app.get('/author',function(req,res){
@@ -405,6 +410,9 @@ app.get('/author',function(req,res){
   }
 
 });
+
+
+
 
 //---------------work details---------------
 //Song details from API Sacem
@@ -470,6 +478,9 @@ app.get('/work', function(req,res){
   }
 });
 
+
+
+
 //---------------profile---------------
 app.get('/profile', function(req, res){ //TODO get or post ?
   res.setHeader('Content-Type','application/json');
@@ -509,12 +520,16 @@ app.get('/profile', function(req, res){ //TODO get or post ?
 
 });
 
+
+
 //---------------planning---------------
 app.get('/planning', function(req, res){
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
 
 });
+
+
 
 //---------------action favorite---------------
 app.get('/action/addfavorite',function(req,res){
