@@ -1,21 +1,23 @@
 angular.module('starter.controllers')
 
 
-.controller('SearchCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup){
+.controller('SearchCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup, $route){
   //$scope.isConcert = false;
   $scope.isSong = false;
+
   $scope.filter= "performers";
   //$scope.concerts == [];
     $scope.submitSearch = function(search, filter){
+
             $http({
               method: 'GET',
-              url: 'http://localhost:8080/search/works?query='+search+'&filters='+filter+'&page=1',
+              url: 'http://localhost:8080/search/works?query='+search+'&filters='+filter+'&page='+$scope.nbrPage,
               header:{
               Origin:'http://localhost:8100'
             }
 }).then(function successCallback(response) {
     $scope.answer = response.data.results;
-
+   $scope.numLimit=5;
     if (response.data.error ==""){
       console.log($scope.answer);
       for(var i = 0, len = $scope.answer.length; i < len; i++)
@@ -46,6 +48,14 @@ angular.module('starter.controllers')
 
   });
   }
+
+
+  $scope.printMore = function() {
+$scope.numLimit=$scope.numLimit+5;
+
+  };
+
+
   }]);
 
 
