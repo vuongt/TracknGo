@@ -35,7 +35,7 @@
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider1">Concerts</ion-item>
 
-      <ion-item ng-repeat="item in answer.concerts" item="item" class="concertbackground">
+      <ion-item ng-repeat="item in answer.concerts" item="item" ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'">
         <p><h3>{{item.title}}</h3><span class="right">{{item.datetime}}</span> </p>
         <p>{{item.venue}}</p>
         <div>

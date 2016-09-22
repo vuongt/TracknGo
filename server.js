@@ -279,13 +279,15 @@ app.get('/search/works',function(req,res){
             result.title = bodyObj.works[i].title;
             results.results.push(result);
           }
+          res.send(JSON.stringify(results));
         } else if (bodyObj.error == "no work"){
           res.send(JSON.stringify(results));
         }
         else {
           results.error=bodyObj.error;
+          res.send(JSON.stringify(results));
         }
-        res.send(JSON.stringify(results));
+
       }
     });
   } else {
