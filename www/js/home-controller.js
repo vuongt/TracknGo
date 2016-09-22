@@ -17,6 +17,12 @@ angular.module('starter.controllers')
       var geocoder = new google.maps.Geocoder();
       $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
+      //creation de la fonction isOpen a infowindow
+      function isInfoWindowOpen(infoWindow){
+        var map = infoWindow.getMap();
+        return (map !== null && typeof map !== "undefined");
+      }
+
       google.maps.event.addListenerOnce($scope.map, 'idle', function () {
         for(var i = 0; i < $scope.concerts.length;i++){
           (function(){
@@ -37,7 +43,14 @@ angular.module('starter.controllers')
                 });
 
                 google.maps.event.addListener(marker, 'click', function () {
-                  infoWindow.open($scope.map, marker);
+                  if(isInfoWindowOpen(infoWindow)){
+                    infoWindow.close();
+                  }
+                  else{
+                    infoWindow.open($scope.map, marker);
+
+                  }
+
                 });
 
 
@@ -86,7 +99,7 @@ angular.module('starter.controllers')
     //for the quicksearch modal
     $ionicModal.fromTemplateUrl('templates/quicksearch.html', {
       scope: $scope,
-      animation: 'slide-in-up',
+      animation: 'slide-in-up'
     }).then(function(modal) {
       $scope.modal = modal;
     });

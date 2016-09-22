@@ -8,8 +8,9 @@
 
     <div class="search-container">
       <i class="ion-ios-search-strong icon-search"></i>
-      <input id="search" type="text" placeholder="   Rechercher un Lieu..." class="quicksearch-bar">
+      <input id="search" type="text" placeholder="Rechercher un Lieu..." class="quicksearch-bar">
     </div>
+
 
     <div class="form-container">
       <h3>Date</h3>
@@ -22,6 +23,17 @@
         <input type="date" placeholder="au">
 
       </div>
+      <div class="geolocalabel">
+        <label>
+          <input type="checkbox" ng-model="string">
+          <span>Me géolocaliser</span>
+        </label>
+      </div>
+    </div>
+    <div class="button-container">
+      <button id="page-button1" class="button button-validate">
+        Valider
+      </button>
     </div>
   </ion-content>
 </ion-modal-view>
