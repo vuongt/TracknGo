@@ -1,11 +1,14 @@
 angular.module('starter.controllers')
-  .controller('SearchCtrl', function($scope, $http) {
+
+
+.controller('SearchCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams){
 
   $scope.isConcert = true;
   $scope.isArtist = true;
   $scope.isAuthor = true;
   $scope.isSong = true;
 
+  $scope.filter= "performers";
     $scope.concerts = [
       {
         titre : "titre 1",
@@ -36,23 +39,25 @@ angular.module('starter.controllers')
     $scope.submitSearch = function(search, filter){
 
 
+
             $http({
               method: 'GET',
-              url: '/search/works?query='+search+'&filters='+filter+'&page=1',
+              url: 'http://localhost:8080/search/works?query='+search+'&filters='+filter+'&page=1',
               header:{
               Origin:'http://localhost:8100'
             }
 
 }).then(function successCallback(response) {
 
-    $scope.answer = response.data;
-
-    for(var i = 0, len = $scope.answer.works.length; i < len; i++)
+    $scope.answer = response.data.results;
+    console.log($scope.answer);
+    for(var i = 0, len = $scope.answer.length; i < len; i++)
     {
         $scope.songs.push({
 
-         name: $scope.answer.works[i].title,
-         iswc: $scope.answer.works[i].iswc
+         iswc: $scope.answer[i].iswc,
+         name: $scope.answer[i].title.charAt(0).toUpperCase()+$scope.answer[i].title.substring(1).toLowerCase()
+
         });
     }
 
@@ -60,21 +65,20 @@ angular.module('starter.controllers')
      $scope.isConcert = true;
 
 
+
+
+
+
   }, function errorCallback(response) {
 
 // FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
 
-$scope.isSong=false;
-$scope.isConcert= false;
 
-})
-}
- });
+  });
 
+  }
 
-
-
-
+  }]);
 
 
 

@@ -1,4 +1,8 @@
-angular.module('starter.controllers').controller('ArtistCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams, $ionicPopup){
+angular.module('starter.controllers').controller('ArtistCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams,$state, $ionicPopup){
+
+
+
+
   $scope.name = $stateParams.name;
   //$scope.concerts=[];
   //$scope.songs=[];
