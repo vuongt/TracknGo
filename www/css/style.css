@@ -306,6 +306,7 @@ width: 80%;
   float: left;
   max-height: 20px ;
   font-size: 25px;
+  margin-left: 3%;
 
 }
 .search-container{
@@ -332,16 +333,44 @@ width: 80%;
 
 
 }
+
+.geolocalabel{
+  margin-top: 15%;
+  font-size: 18px;
+}
 .form-container input{
   float: left;
   margin-left: 10px;
 }
+.geolocalabel span{
+  font-size: 16px;
+  padding-top: 0;
+  margin-bottom: 10px;
+  margin-left: 5px;
 
+}
+.geolocalabel input{
+  margin-top: 5px;
+  margin-left: 0;
+}
 
 
 
 .searchbar{
-width: 50%px;
+width: 50%;
+}
+.button-container{
+  margin: 0 auto;
+  width: 100px;
+  margin-top: 15%;
+}
+
+.button-validate {
+  text-align: center;
+  border-radius: 42px 42px 42px 42px;
+  background: rgba(54, 56, 74, 0.9);
+  width: 100px;
+  color: rgba(256, 256, 256, 1);
 }
 
 .info{
