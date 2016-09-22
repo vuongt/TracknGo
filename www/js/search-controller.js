@@ -3,37 +3,18 @@ angular.module('starter.controllers')
 
 .controller('SearchCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams){
 
-  $scope.isConcert = true;
-  $scope.isArtist = true;
-  $scope.isAuthor = true;
-  $scope.isSong = true;
+  $scope.isConcert = false;
+  $scope.isArtist = false;
+  $scope.isAuthor = false;
+  $scope.isSong = false;
 
   $scope.filter= "performers";
-    $scope.concerts = [
-      {
-        titre : "titre 1",
-        date : "date 1",
-        adresse: "adresse 1",
-        show: false
-      }
-      ,
-      {
-        titre : "titre 2",
-        date : "date 2",
-        adresse: "adresse 2",
-        show: false
-      },
-      {
-        titre : "titre 3",
-        date : "date 3",
-        adresse: "adresse 3",
-        show: false
-      }
-    ];
 
-    $scope.authors = ["auteur 1", "auteur 2", "auteur 3"];
-    $scope.artists = ["artist 1", "artist 2", "artist 3"];
+
     $scope.songs = [];
+    $scope.authors == [];
+    $scope.artists == [];
+   $scope.concerts == [];
 
 
     $scope.submitSearch = function(search, filter){
@@ -61,8 +42,25 @@ angular.module('starter.controllers')
         });
     }
 
-     $scope.isSong = true;
-     $scope.isConcert = true;
+
+      if ($scope.authors == [])
+        $scope.isAuthor = false;
+
+      else
+
+        $scope.isAuthor = true;
+
+
+      if ($scope.songs != []){
+              $scope.isSong = true;
+            }
+      if ($scope.artists != []){
+              $scope.isArtist = true;
+           }
+      if ($scope.concerts != []){
+            $scope.isConcert = true;
+          }
+
 
 
 
