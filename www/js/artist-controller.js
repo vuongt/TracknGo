@@ -12,6 +12,7 @@ $http({
   }
 }).then(function successCallback(response) {
     $scope.answer = response.data;
+    console.log($scope.answer);
     $scope.error = $scope.answer.error;
     $scope.isSong = false;
     $scope.isConcert = false;
@@ -21,6 +22,9 @@ $http({
         for(var i = 0, len = $scope.answer.works.length; i < len; i++) {
           var temp = $scope.answer.works[i].title.trim();
           $scope.answer.works[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+          if ($scope.answer.works[i].iswc.length != 0){
+                        $scope.answer.works[i].isInfo = true;
+                   }
         }
       }
       if ($scope.answer.concerts.length !==0){
@@ -28,6 +32,8 @@ $http({
       }
     } else {
       //Show an alert of the error
+           $scope.answer.works[i].isInfo= false;
+
       var alertPopup = $ionicPopup.alert({
         title: "Error !",
         template: $scope.error

@@ -90,12 +90,7 @@
 
                 }
 
-.star {
-                 font-size: 25px;
-                 text-align:left;
-                 float:right;
 
-                }
 
 .ion-ios-arrow-left{
 
@@ -346,4 +341,29 @@ width: 80%;
 
 .searchbar{
 width: 50%px;
+}
+
+.info{
+                font-size: 25px;
+               text-align:left;
+                 float:right;
+                 padding-right: 20%;
+
+
+}
+
+
+.star {
+                 font-size: 25px;
+                 text-align:left;
+                 float:right;
+                }
+
+
+.elipse{
+ width : 60%;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  height: 100%;
+
 }

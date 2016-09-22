@@ -6,10 +6,10 @@ angular.module('starter.controllers')
   var authors=[];
   var songs=[];
 
-  $scope.authors = [{name:"indochine"}, {name:"black m"}, {name:"coldplay"}];
+  $scope.authors = [{name:"Indochine"}, {name:"Black m"}, {name:"Coldplay"}];
 
   // Les morceaux favoris
-  $scope.songs = [{name: "Comme Toi", iswc:"T-003.040.646.2"}, {name:"All she wants", iswc:"T-003.040.646.2"}];
+  $scope.songs = [{name: "Comme Toi", iswc:"T-003.040.646.2", isInfo: true}, {name:"All she wants", iswc:"T-003.040.646.2", isInfo: true}];
 
   $scope.nbrTitres= $scope.songs.length;
   $scope.nbrAuteurs= $scope.authors.length;

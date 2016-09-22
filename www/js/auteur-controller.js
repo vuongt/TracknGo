@@ -18,10 +18,16 @@ $http({
         for(var i = 0, len = $scope.answer.length; i < len; i++) {
           var temp = $scope.answer[i].title.trim();
           $scope.answer[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+             if ($scope.answer.works[i].iswc.length != 0){
+                        $scope.answer.works[i].isInfo = true;
+                   }
+
+
         }
       }
     } else {
       //Show an alert of the error
+       $scope.answer.works[i].isInfo = false;
       var alertPopup = $ionicPopup.alert({
         title: "Error !",
         template: $scope.error

@@ -15,17 +15,25 @@ angular.module('starter.controllers')
             }
 }).then(function successCallback(response) {
     $scope.answer = response.data.results;
+
     if (response.data.error ==""){
       console.log($scope.answer);
       for(var i = 0, len = $scope.answer.length; i < len; i++)
       {
         var temp = $scope.answer[i].title.trim();
         $scope.answer[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+         if ($scope.answer[i].iswc.length != 0){
+              $scope.answer[i].isInfo = true;
+         }
+
       }
       if ($scope.answer.length!=0)
         $scope.isSong=true;
+
+
     }else {
       //Show an alert of the error
+     $scope.answer[i].isInfo= false;
       var alertPopup = $ionicPopup.alert({
         title: "Error !",
         template: $scope.error
@@ -36,7 +44,6 @@ angular.module('starter.controllers')
     }
   }, function errorCallback(response) {
 
-// FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
   });
   }
   }]);
