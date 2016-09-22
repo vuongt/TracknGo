@@ -132,7 +132,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.signup', {
         url: '/signup',
         views: {
-          'tab-signup': {
+          'tab-profil': {
             templateUrl: 'templates/tab-signup.html',
             controller: 'SignupCtrl'
           }

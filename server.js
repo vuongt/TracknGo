@@ -2,14 +2,15 @@ var express = require('express'),
 	// logger = require('morgan'),
 	cookieParser = require('cookie-parser'),
 	session = require('express-session'),
+  // TOD0 session not necessary
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy,
   request =require('request'),
-	bodyParser = require('body-parser');
-//funct = require('./server/function.js'); // funct file contains helper functions for Passport and database work
-
+	bodyParser = require('body-parser'),
+  token = require('./server/token.controller.js');
 var app = express();
 var config = require('./config-dev.js'); //config file contains all tokens and other private info
+var authentication = require('./server/authentication.controller.js');
 
 //=======================MARIADB======================
 /*Mariasql client to connect to the mariaDB*/
@@ -40,6 +41,7 @@ var mariaClient = new Client({
 //===================PASSPORT======================
 /*Sign in/up strategy using passport.js*/
 //=================================================
+
 //Put user.id in session
 passport.serializeUser(function(user, done) {
   console.log("serializing user id : " + user.id);
@@ -48,7 +50,7 @@ passport.serializeUser(function(user, done) {
 //Retrieve user's information from session cookie.
 passport.deserializeUser(function(id, done) {
   console.log("deserializing user with id: " + id);
-  mariaClient.query("SELECT id, name FROM users WHERE id="+id,function(err,rows){
+  mariaClient.query("SELECT id, name, email FROM users WHERE id="+id,function(err,rows){
     return done(err,rows[0]);
   });
 });
@@ -63,6 +65,7 @@ passport.use('local-signup', new LocalStrategy(
   function(req,email,password,done){
     // find a user whose email is the same as the forms email
     // we are checking to see if the user trying to sign up already exists
+    console.log('starting signup strategy' + req.body);
     mariaClient.query("SELECT * FROM users WHERE email='"+email+"'" ,function(err,rows){
       console.log("rows object when checking email: " + rows);
       if (err) return done(err);
@@ -145,6 +148,16 @@ app.use(function(req, res, next){
   next();
 });
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", config.accessControl);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.end();
+  } else {
+    next();
+  }
+});
 //======================API oeuvres===================
 // Establish connection with API oeuvres
 //====================================================
@@ -156,7 +169,7 @@ var optionSacem ={
     token:config.sacem.token,
     query:'', //search criteria
     filters:'', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
-    pagesize:15, //Number of works per page
+    pagesize:config.sacem.pagesize, //Number of works per page
     page:1, //Number of page to return,
     blankfield:true
   },
@@ -219,6 +232,8 @@ app.get("/home", function(req, res){
 });
 
 //---------------Sign in, log out---------------
+
+//TODO disable session, delete redirect
 app.get("/signin",function(req,res){
 	res.setHeader('Content-Type','text/html');
 	res.render('signin.ejs',{});
@@ -226,27 +241,48 @@ app.get("/signin",function(req,res){
 
 //sends the request through our local signup strategy, and if successful takes user to homepage,
 // otherwise returns then to signin page
-app.post("/local-reg", passport.authenticate('local-signup',{
-  successRedirect: '/home',
-  failureRedirect: '/signin'
-  })
-);
+//Token created with email
+app.post("/signup",passport.authenticate('local-signup'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    // Remove sensitive data before login
+    res.setHeader('Content-Type','application/json');
+    //res.setHeader('Access-Control-Allow-Origin',config.accessControl);
+    console.log('Authentication succeeded');
+    token.createToken({email:req.user.email}, function(res, err, token) {
+      if (err) {
+        return res.status(400).send(err);
+      }
+      res.status(201).send({token: token});
+      console.log('token sent');
+    }.bind(null, res));
+});
+
 //sends the request through our local signin strategy, and if successful takes user to homepage,
-// otherwise returns then to signin page
-app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/home',
-    failureRedirect: '/signin'
-  })
-);
+app.post('/signin', passport.authenticate('local-signin'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    // Remove sensitive data before login
+    res.setHeader('Content-Type','application/json');
+    res.setHeader('Access-Control-Allow-Origin',config.accessControl);
+    token.createToken({email:req.user.email}, function(res, err, token) {
+      if (err) {
+        return res.status(400).send(err);
+      }
+      res.status(201).json({token: token});
+    }.bind(null, res));
+  });
 
 //logs user out of site, deleting them from the session, and returns to homepage
-app.get('/logout', function(req, res){
-  var name = req.user.name;
-  console.log("LOG OUT " + req.user.name);
-  req.logout();
-  res.redirect('/home');
-  req.session.notice = "You have successfully been logged out " + name + "!";
-});
+app.get('/signout', authentication.signout);/*function(req, res) {
+  /*var name = req.user.name;
+   console.log("LOG OUT " + req.user.name);
+   req.logout();
+   res.redirect('/home');
+   req.session.notice = "You have successfully been logged out " + name + "!";
+});*/
 
 //---------------research concert---------------
 app.get('/search/concerts', function(req,res){
@@ -257,6 +293,7 @@ app.get('/search/concerts', function(req,res){
 });
 
 //----------------research work------------------
+//TODO l'espace dans le nom de la chanson
 app.get('/search/works',function(req,res){
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);

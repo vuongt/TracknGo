@@ -19,7 +19,7 @@ CREATE OR REPLACE TABLE favorite_works (
 
 CREATE OR REPLACE TABLE favorite_authors (
   id_user MEDIUMINT NOT NULL,
-  name_author INT NOT NULL,
+  name_author INT NOT NULL
 );
 
 CREATE OR REPLACE TABLE comment (
@@ -32,7 +32,15 @@ CREATE OR REPLACE TABLE comment (
 );
 
 CREATE OR REPLACE TABLE planning (
-  id_user MEDIUMINT NOT NULL
-  id_prog INT NOT NULL
+  id_user MEDIUMINT NOT NULL,
+  id_prog INT NOT NULL,
   prog_date DATE
   );
+
+CREATE OR REPLACE TABLE users_token (
+  id_token MEDIUMINT NOT NULL AUTO_INCREMENT,
+  email VARCHAR(30) NOT NULL,
+  token VARCHAR(100) NOT NULL,
+  expire_date DATETIME,
+  PRIMARY KEY (id_token)
+)
