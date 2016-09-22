@@ -261,6 +261,7 @@ body {
 
 .titleBlack{
     font-size: xx-large;
+    line-height: 90%;
     ;
 
 
@@ -365,5 +366,18 @@ width: 50%px;
   overflow:hidden;
   text-overflow: ellipsis;
   height: 100%;
+
+}
+
+.elipse-titre{
+ width : 20%;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  height: 100%;
+
+}
+
+.large-select{
+width: 50%;
 
 }
