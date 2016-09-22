@@ -1,25 +1,29 @@
   <ion-content>
-    <label class = "item item-input item-select">
-      <div class = "input-label large">
 
-          <input id="search" type="text" placeholder="What do you want to listen" ng-model="search">
+    <div class="row">
 
-          <select name="filter" form="search">
-            <option value="all">Toutes catégories</option>
-            <option value="concert">Concerts</option>
-            <option value="parties">Auteurs</option>
-            <option value="titles,subtitles">Chansons</option>
+
+      <div class="col">
+        <label class="item item-select">
+
+          <div class="col">
+            <form  class="col" ng-submit="submitSearch(search, filter)">
+              <input   class="item item-input" type="text" placeholder="Que recherchez vous?" ng-model="search">
+            </form>
+          </div>
+
+          <select ng-model="filter">
+            <option value="concert">Concerts </option>
+            <option value="parties">Auteurs </option>
+            <option  value="titles,subtitles">Chansons</option>
             <option value="performers">Interprètes</option>
           </select>
-
-
-
-
-      <input type="submit" value="search" ng-submit="submitSearch(search, filter)">
+        </label>
 
       </div>
 
-    </label>
+    </div>
+
 
     <ion-list ng-show="isSong">
       <ion-item class="item-divider" id="page-list-item-divider1">Songs</ion-item>
