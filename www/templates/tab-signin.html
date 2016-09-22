@@ -1,17 +1,15 @@
-<ion-view view-title="Dashboard">
+<ion-view view-title="Sign In">
   <ion-content class="padding">
 
-
-    <div class="list">
+    <div class="list list-inset">
       <label class="item item-input">
-        <input type="email" placeholder="Email">
+        <input type="email" placeholder="Email" ng.model=""data.email>
       </label>
       <label class="item item-input">
-        <input type="password" placeholder="Mot de Pase">
+        <input type="password" placeholder="Password" ng-model="data.password">
       </label>
-
     </div>
-
+    <button class="button button-block button-positive" ng-click="login(data)">Login</button>
 
   </ion-content>
 </ion-view>

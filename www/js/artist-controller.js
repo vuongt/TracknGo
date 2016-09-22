@@ -1,8 +1,4 @@
 angular.module('starter.controllers').controller('ArtistCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams,$state, $ionicPopup){
-
-
-
-
   $scope.name = $stateParams.name;
   //$scope.concerts=[];
   //$scope.songs=[];
@@ -15,7 +11,6 @@ $http({
     Origin:'http://localhost:8100'
   }
 }).then(function successCallback(response) {
-
     $scope.answer = response.data;
     $scope.error = $scope.answer.error;
     $scope.isSong = false;
@@ -50,13 +45,6 @@ $scope.isConcert= false;
 
   });
 
-
-
-
-
-
-
-
   /*
    * if given group is the selected group, deselect it
    * else, select the given group
@@ -76,13 +64,8 @@ $scope.isConcert= false;
 $scope.numLimit=$scope.numLimit+5;
 $route.reload();
 
-
   };
-
-
   $scope.myGoBack = function() {
 window.history.back()  };
-
-
 }]);
 

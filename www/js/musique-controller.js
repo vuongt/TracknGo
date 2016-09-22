@@ -1,8 +1,7 @@
 angular.module('starter.controllers').controller('MusiqueCtrl', ['$rootScope', '$scope', '$http', "$stateParams","$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup){
   $scope.iswc = $stateParams.iswc;
   $scope.title = $stateParams.title;
-  $scope.myGoBack = function() {
-    window.history.back()  };
+  $scope.myGoBack = function() {window.history.back()  };
 $http({
   method: 'GET',
   url: 'http://localhost:8080/work?iswc='+$scope.iswc,
@@ -13,6 +12,10 @@ $http({
     $scope.answer = response.data;
     if ($scope.answer.error == ""){
       $scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
+      for(var i = 0, len = $scope.answer.composerAuthor.length; i < len; i++) {
+        var temp = $scope.answer.composerAuthor[i].trim();
+        $scope.answer.composerAuthor[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+      }
       for(var i = 0, len = $scope.answer.performer.length; i < len; i++) {
         var temp = $scope.answer.performer[i].trim();
         $scope.answer.performer[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();

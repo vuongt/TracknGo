@@ -121,7 +121,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.signin', {
         url: '/signin',
         views: {
-          'tab-signin': {
+          'tab-profil': {
             templateUrl: 'templates/tab-signin.html',
             controller: 'SigninCtrl'
           }
