@@ -43,26 +43,8 @@ angular.module('starter.controllers')
     }
 
 
-      if ($scope.authors == [])
-        $scope.isAuthor = false;
-
-      else
-
-        $scope.isAuthor = true;
-
-
-      if ($scope.songs != []){
-              $scope.isSong = true;
-            }
-      if ($scope.artists != []){
-              $scope.isArtist = true;
-           }
-      if ($scope.concerts != []){
-            $scope.isConcert = true;
-          }
-
-
-
+    if ($scope.songs.length!=0)
+        $scope.isSong=true;
 
 
 
