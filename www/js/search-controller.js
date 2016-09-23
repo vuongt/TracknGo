@@ -55,6 +55,23 @@ $scope.numLimit=$scope.numLimit+5;
 
   };
 
+  $scope.addFavorites = function(iswc, name) {
+        $http({
+              method: 'GET',
+              url: 'http://localhost:8080/action/addfavorite?type=work&iswc='+iswc+'+&title='+name,
+              header:{
+              Origin:'http://localhost:8100'
+            }
+            }).then(function successCallback(response) {
+
+                console.log("This song has been added");
+
+              }, function errorCallback(response) {
+
+              });
+
+  };
+
 
   }]);
 

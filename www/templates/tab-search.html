@@ -25,10 +25,17 @@
       <ion-item class="item-divider" id="page-list-item-divider1">Songs</ion-item>
       <ion-item ng-repeat="song in answer  | limitTo:numLimit">
         <i id="liked" class="star" ng-class="{'ion-ios-star': liked, 'ion-ios-star-outline': !liked}"
-           ng-click="liked=!liked"></i> <i id="info" class="info ion-ios-information-outline"  ui-sref="tab.musique({iswc: song.iswc, title:song.title})" ng-show="song.isInfo"></i>
-        <div  class="elipse">
+           ng-click="liked=!liked; addFavorites(song.iswc, song.title)"></i> <i id="info" class="info ion-ios-information-outline"  ng-show="song.isInfo"></i>
+        <div  id="link" class="elipse" ui-sref= "tab.musique({iswc: song.iswc, title:song.title})" ng-if="song.isInfo">
         {{song.title}}
+
         </div>
+
+        <div  id="link" class="elipse" ng-if="!song.isInfo">
+          {{song.title}}
+
+        </div>
+
       </ion-item>
     </ion-list>
 
