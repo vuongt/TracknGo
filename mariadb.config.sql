@@ -74,3 +74,7 @@ VALUES ('1','Goldman'),
 
 
 
+INSERT INTO comment (id_prog, id_user, creation_date, content)
+VALUES ('2', '1', '2016-09-24', 'ceci est mon commentaire' );
+
+
