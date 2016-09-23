@@ -11,22 +11,23 @@ $http({
 }).then(function successCallback(response) {
     $scope.answer = response.data.works;
     $scope.error= response.data.error;
+    console.log($scope.answer);
     $scope.isSong = false;
     if ($scope.error==""){
       if ($scope.answer.length !== 0){
         $scope.isSong = true;
         for(var i = 0, len = $scope.answer.length; i < len; i++) {
           var temp = $scope.answer[i].title.trim();
-          $scope.answer.works[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
-             if ($scope.answer.works[i].iswc.length != 0){
-                        $scope.answer.works[i].isInfo = true;
+          $scope.answer[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+             if ($scope.answer[i].iswc.length != 0){
+                        $scope.answer[i].isInfo = true;
                    }
 
 
         }
       }
 
-     $scope.answer.works.sort(compare);
+     $scope.answer.sort(compare);
 
 
     } else {
