@@ -2,7 +2,9 @@ angular.module('starter.controllers')
 
 
 .controller('SearchCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup, $route, AuthService, FavoriteService){
-  //$scope.isConcert = false;
+
+
+
   $scope.isSong = false;
   $scope.isPlus = false;
 

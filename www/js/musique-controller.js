@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('MusiqueCtrl', ['$rootScope', '$scope', '$http', "$stateParams","$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup){
+angular.module('starter.controllers').controller('MusiqueCtrl', function($scope, $http, $stateParams,$state, $ionicPopup, $ionicHistory){
   $scope.iswc = $stateParams.iswc;
   $scope.title = $stateParams.title;
   $scope.myGoBack = function() {window.history.back()  };
@@ -43,6 +43,7 @@ $route.reload();
 
 
   $scope.myGoBack = function() {
-window.history.back()  };
-}]);
+$ionicHistory.goBack();
+  };
+});
 

@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('AuteurCtrl', function($scope, $http, $ionicPopup, $stateParams) {
+angular.module('starter.controllers').controller('AuteurCtrl', function($scope, $http, $ionicPopup, $stateParams, $ionicHistory) {
 $scope.name= $stateParams.name;
 $scope.isSong=true;
 $scope.isPlus = false;
@@ -71,7 +71,8 @@ $http({
 
 
   $scope.myGoBack = function() {
-window.history.back()  };
+  $ionicHistory.goBack();
+ };
 
 
 

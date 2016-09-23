@@ -1,10 +1,11 @@
-angular.module('starter.controllers').controller('ArtistCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$state", function($rootScope, $scope, $http, $stateParams,$state, $ionicPopup){
+angular.module('starter.controllers').controller('ArtistCtrl', function($scope, $http, $stateParams,$state, $ionicPopup, $ionicHistory){
   $scope.name = $stateParams.name;
   //$scope.concerts=[];
   //$scope.songs=[];
   $scope.numLimit=5;
     $scope.isPlus = false;
 
+console.log($ionicHistory.currentView());
 
 $http({
   method: 'GET',
@@ -83,7 +84,10 @@ $scope.isConcert= false;
 
 
   $scope.myGoBack = function() {
-window.history.back()  };
+  $ionicHistory.goBack();
+  };
+
+
 
   $scope.printMore = function() {
 $scope.numLimit=$scope.numLimit+5;
@@ -94,7 +98,7 @@ $scope.numLimit=$scope.numLimit+5;
 
   };
 
-}]);
+});
 
 
 
