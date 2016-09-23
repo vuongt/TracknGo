@@ -213,8 +213,11 @@ position: relative;
 }
 
 .bottom-concert{
+  height: 10%;
+  padding-left:20px;
+}
 
-padding-left:20px;
+.bottom-concert input{
 }
 
 
@@ -412,6 +415,9 @@ width: 50%;
 }
 
 .link{
+ion-modal-view{
+  opacity: .93;
+}
 
 width: 100%;
 
