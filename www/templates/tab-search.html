@@ -25,7 +25,7 @@
     <ion-list ng-show="isSong">
       <ion-item class="item-divider" id="page-list-item-divider1">Songs</ion-item>
       <ion-item ng-repeat="song in answer | limitTo:numLimit">
-        <i id="liked" class="star" ng-class="{'ion-ios-star': song.isLiked, 'ion-ios-star-outline': !song.isLiked}"
+        <i id="liked" class="star" ng-class="{'ion-ios-star': isLiked(song.iswc, song.name), 'ion-ios-star-outline': !isLiked(song.iswc, song.name)}"
            ng-click="changeFavorites(song.iswc, song.title, song.isLiked)"></i>
        <i id="info" class="info ion-ios-information-outline"  ng-show="song.isInfo"></i>
 

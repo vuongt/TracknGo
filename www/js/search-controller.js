@@ -1,14 +1,18 @@
 angular.module('starter.controllers')
 
 
-.controller('SearchCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup, $route, AuthService, $filter){
+.controller('SearchCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup, $route, AuthService, FavoriteService){
   //$scope.isConcert = false;
   $scope.isSong = false;
   $scope.isPlus = false;
-  $scope.userinfo=["T-904.824.279.1", "T-904.795.074.3"];
-  $scope.filter= "parties,titles,subtitles,performers";
+
+  $scope.filter= "all";
   $scope.nbrPage=1;
   //$scope.concerts == [];
+
+
+
+
     $scope.submitSearch = function(search, filter){
 
 
@@ -46,16 +50,7 @@ angular.module('starter.controllers')
 
                       }
 
-              if ($scope.userinfo.length!=0){
 
-                   if (inArray($scope.answer[i].iswc,$scope.userinfo) && $scope.answer[i].isInfo==true)
-                      {$scope.answer[i].isLiked=true;}
-
-                   else
-                    {$scope.answer[i].isLiked=false;}
-
-
-              }
         }
 
         if ($scope.answer.length<100){
@@ -98,59 +93,11 @@ $scope.numLimit=$scope.numLimit+5;
 
   };
 
-  $scope.changeFavorites = function(iswc, name, isLiked) {
 
-      if (isLiked==true){
-        $http({
-              method: 'GET',
-              url: 'http://localhost:8080/action/addfavorite?type=work&iswc='+iswc+'+&title='+name,
-              header:{
-              Origin:'http://localhost:8100'
-            }
-            }).then(function successCallback(response) {
-
-                console.log("This song has been added");
-
-
-              }, function errorCallback(response) {
-
-              });
-
-
-              }
-
-      if (isLiked=false){
-
-         $http({
-                       method: 'GET',
-                       url: 'http://localhost:8080/action/removefavorite?type=work&iswc='+iswc+'&title'+name,
-                       header:{
-                       Origin:'http://localhost:8100'
-                     }
-                     }).then(function successCallback(response) {
-
-                         console.log("This song has been deleted");
-
-                       }, function errorCallback(response) {
-
-                       });
-
-      }
-
-  };
 
 
   }]);
 
-  function inArray(needle,haystack)
-  {
-      var count=haystack.length;
-      for(var i=0;i<count;i++)
-      {
-          if(haystack[i]===needle){return true;}
-      }
-      return false;
-  }
 
 
 function compare(a,b) {
@@ -160,3 +107,4 @@ function compare(a,b) {
     return 1;
   return 0;
 }
+
