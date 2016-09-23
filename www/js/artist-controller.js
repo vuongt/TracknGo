@@ -30,6 +30,11 @@ $http({
       if ($scope.answer.concerts.length !==0){
         $scope.isConcert = true;
       }
+
+
+       $scope.answer.works.sort(compare);
+
+
     } else {
       //Show an alert of the error
            $scope.answer.works[i].isInfo= false;
@@ -68,10 +73,19 @@ $scope.isConcert= false;
 
   $scope.printMore = function() {
 $scope.numLimit=$scope.numLimit+5;
-$route.reload();
+
 
   };
   $scope.myGoBack = function() {
 window.history.back()  };
 }]);
+
+
+function compare(a,b) {
+  if (a.title < b.title)
+    return -1;
+  if (a.title > b.title)
+    return 1;
+  return 0;
+}
 

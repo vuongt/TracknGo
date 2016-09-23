@@ -25,6 +25,10 @@ $http({
 
         }
       }
+
+     $scope.answer.works.sort(compare);
+
+
     } else {
       //Show an alert of the error
        $scope.answer.works[i].isInfo = false;
@@ -62,4 +66,13 @@ window.history.back()  };
 
 
 });
+
+
+function compare(a,b) {
+  if (a.title < b.title)
+    return -1;
+  if (a.title > b.title)
+    return 1;
+  return 0;
+}
 

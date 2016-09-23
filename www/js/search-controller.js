@@ -10,9 +10,6 @@ angular.module('starter.controllers')
   $scope.nbrPage=1;
   //$scope.concerts == [];
 
-
-
-
     $scope.submitSearch = function(search, filter){
 
 
