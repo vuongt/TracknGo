@@ -92,7 +92,6 @@ function signup(req, res) {
 function isAuthenticated(req, res, next) {
   token.verifyToken(req.headers, function(next, err, data) {
     if (err) {
-      logger.error(err.message);
       return res.status(401).send(err.message);
     }
     req.user = data;

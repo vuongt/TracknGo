@@ -12,9 +12,7 @@ var mariaClient = new Client({
   password: config.mariasql.password,
   db: config.mariasql.db
 });
-/*
 
- */
 //===================TOKEN CONTROLLER==============
 //Token controller is responsible for creating,
 // deleting and verifying token
@@ -38,16 +36,15 @@ function extractTokenFromHeader(headers) {
 }
 
 function createToken(payload, cb) {
-  var ttl = config.token.expiration;
-
+  var expire = config.token.expiration;
+  console.log('creating token...');
+  console.log(payload);
   if(payload != null && typeof payload !== 'object') { return cb(new Error('payload is not an Object')) }
-  if(ttl != null && typeof ttl !== 'number') { return cb(new Error('ttl is not a valid Number')) }
-
   var token = jwt.sign(payload, config.token.secret, { expiresIn: config.token.expiration_string });
-  var string_expire = config.token.expiration;
   // stores a token with payload data for a ttl period of time
+  console.log('token created');
   var prep = mariaClient.prepare('INSERT INTO users_token (email,token,expire_date) VALUES (:email,:token,ADDTIME(NOW(),:expire_date))');
-  mariaClient.query(prep({email:payload.email,token:token,expire_date:string_expire}),function(err,rows){
+  mariaClient.query(prep({email:payload.email,token:token,expire_date:expire}),function(err,rows){
     if (err) { return cb(err); }
     if(rows) {
       cb(null, token);
@@ -57,6 +54,13 @@ function createToken(payload, cb) {
   });
 }
 
+function refreshToken(payload,cb){
+  var expire = config.token.expiration;
+  if(payload != null && typeof payload !== 'object') { return cb(new Error('payload is not an Object')) }
+  var token = jwt.sign(payload, config.token.secret, { expiresIn: config.token.expiration_string });
+  // replace the old token
+
+}
 //Expires a token
 function expireToken(headers, cb) {
   try {
@@ -68,7 +72,6 @@ function expireToken(headers, cb) {
     mariaClient.query("DELETE FROM users_token WHERE token = '"+token+"'",function(err,rows){
       if (err){ return cb(err);}
       if(!rows) {return cb(new Error('Token not found'));}
-
       return cb(null, true);
     });
   } catch (err) {

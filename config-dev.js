@@ -17,7 +17,7 @@ module.exports = {
 	accessControl:"http://localhost:8100",
   token: {
 	  secret: "Track&Go",
-    expiration:"24:00:00",
+    expiration:"00:03:00",
     expiration_string :"24h"
 	}
 }

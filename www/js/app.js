@@ -8,6 +8,13 @@
 angular.module('starter.controllers', []);
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
+  .constant('AUTH_EVENTS', {
+    notAuthenticated: 'auth-not-authenticated'
+  })
+
+  .constant('API_ENDPOINT', {
+    url: 'http://localhost:8080'
+  })
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -162,4 +169,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/home');
 
-  });
+  })
+  /*.run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
+    $rootScope.$on('$stateChangeStart', function (event,next, nextParams, fromState) {
+      if (!AuthService.isAuthenticated()) {
+        console.log(next.name);
+        if (next.name !== 'tab.home' && next.name !== 'tab.home') {
+          event.preventDefault();
+          $state.go('tab.signin');
+        }
+      }
+    });
+  })*/;

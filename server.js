@@ -94,7 +94,7 @@ passport.use('local-signup', new LocalStrategy(
 ));
 
 //---------------Sign in strategy----------------
-passport.use('local-login', new LocalStrategy({
+passport.use('local-signin', new LocalStrategy({
   usernameField : 'email',
   passwordField : 'password',
   passReqToCallback:true
@@ -242,36 +242,35 @@ app.get("/signin",function(req,res){
 //sends the request through our local signup strategy, and if successful takes user to homepage,
 // otherwise returns then to signin page
 //Token created with email
-app.post("/signup",passport.authenticate('local-signup'),
+app.post("/signup",passport.authenticate('local-signup',{ session: false}),
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
     // Remove sensitive data before login
     res.setHeader('Content-Type','application/json');
-    //res.setHeader('Access-Control-Allow-Origin',config.accessControl);
     console.log('Authentication succeeded');
     token.createToken({email:req.user.email}, function(res, err, token) {
       if (err) {
         return res.status(400).send(err);
       }
-      res.status(201).send({token: token});
+      res.status(201).json({success: true, token: token});
       console.log('token sent');
     }.bind(null, res));
 });
 
 //sends the request through our local signin strategy, and if successful takes user to homepage,
-app.post('/signin', passport.authenticate('local-signin'),
+app.post('/signin', passport.authenticate('local-signin',{ session: false}),
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
     // Remove sensitive data before login
     res.setHeader('Content-Type','application/json');
-    res.setHeader('Access-Control-Allow-Origin',config.accessControl);
     token.createToken({email:req.user.email}, function(res, err, token) {
       if (err) {
         return res.status(400).send(err);
       }
-      res.status(201).json({token: token});
+      res.status(201).json({success: true, token: token});
+      console.log('token sent');
     }.bind(null, res));
   });
 
@@ -524,6 +523,7 @@ app.get('/work', function(req,res){
 app.get('/profile', function(req, res){ //TODO get or post ?
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
+
   if(req.user){
     var id = req.user.id;
     var user = {
@@ -554,12 +554,10 @@ app.get('/profile', function(req, res){ //TODO get or post ?
     });
     res.send(JSON.stringify(user));
   }else{
-    res.redirect("/signin");
+    res.send("Profile");
   }
 
 });
-
-
 
 //---------------planning---------------
 app.get('/planning', function(req, res){

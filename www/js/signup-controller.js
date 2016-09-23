@@ -1,32 +1,21 @@
-angular.module('starter.controllers').controller('SignupCtrl', function($scope,$http) {
+angular.module('starter.controllers').controller('SignupCtrl', function($scope,$ionicPopup,$state,AuthService) {
   $scope.data={
     name: "",
     email:"",
     password:""
   }
-
-
-  $scope.signup = function(data){
-    console.log(data);
-    $http({
-      method: 'POST',
-      url:'http://localhost:8080/signup',
-      /*header:{
-        Origin:'http://localhost:8100'
-      },*/
-      data:data
-    }).then(function successCallback(response) {
-      $scope.answer = response.data;
-      console.log($scope.answer);
-
-    }, function errorCallback(response) {
-
-// FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
-
-      $scope.isSong=false;
-      $scope.isConcert= false;
-
+  $scope.signup = function(){
+    AuthService.register($scope.data).then(function(msg) {
+      $state.go('tab.profil');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Register success!',
+        template: msg
+      });
+    }, function(errMsg) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Register failed!',
+        template: errMsg
+      });
     });
   }
-
 });

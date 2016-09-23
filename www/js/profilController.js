@@ -1,6 +1,19 @@
 angular.module('starter.controllers')
-  .controller('ProfilCtrl', function($scope) {
+  .controller('ProfilCtrl', function($scope,AuthService,API_ENDPOINT,$http,$state) {
+    $scope.destroySession = function() {
+      AuthService.logout();
+    };
 
+    $scope.getInfo = function() {
+      $http.get(API_ENDPOINT.url + '/profile').then(function(response) {
+        $scope.userdata = response.data;
+      });
+    };
+
+    $scope.logout = function() {
+      AuthService.logout();
+      $state.go('tab.home');
+    };
 
  $scope.name = "Louise Legall";
   var authors=[];
