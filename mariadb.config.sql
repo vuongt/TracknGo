@@ -19,7 +19,7 @@ CREATE OR REPLACE TABLE favorite_works (
 
 CREATE OR REPLACE TABLE favorite_authors (
   id_user MEDIUMINT NOT NULL,
-  name_author INT NOT NULL
+  name_author VARCHAR(30) NOT NULL
 );
 
 CREATE OR REPLACE TABLE comment (
@@ -43,4 +43,34 @@ CREATE OR REPLACE TABLE users_token (
   token VARCHAR(100) NOT NULL,
   expire_date DATETIME,
   PRIMARY KEY (id_token)
-)
+);
+
+INSERT INTO users (name, email, password)
+VALUES ('aaa','aaa@aaa.com','aaa'),
+       ('bbb','bbb@bbb.com','bbb'),
+       ('ccc','ccc@ccc.com','ccc'),
+       ('ddd','ddd@ddd.com','ddd'),
+       ('fff','fff@fff.com','fff'),
+       ('ggg','ggg@ggg.com','ggg');
+
+INSERT INTO favorite_works (id_user,iswc,title)
+VALUES ('1','T-913.015.597.4', 'Tous les meme'),
+      ('1','T-703.284.149.1', 'LA VIE EN ROSE'),
+      ('2','T-703.149.807.6', 'Quand c est'),
+      ('2','T-003.582.360.9', 'CONTRE COURANT'),
+      ('2','T-702.990.343.5', 'J AI 20 ANS'),
+      ('3','T-070.139.886.8', 'SWEET SWEET BABY');
+
+INSERT INTO favorite_authors (id_user,name_author)
+VALUES ('1','Goldman'),
+       ('2','Coldplay'),
+       ('2','Celine Dion'),
+       ('3','Zazie'),
+       ('3','Florent Pagny'),
+       ('4','Mika'),
+       ('4','Zazie'),
+       ('1','Garou'),
+       ('5','Black M');
+
+
+

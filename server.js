@@ -7,7 +7,8 @@ var express = require('express'),
 	LocalStrategy = require('passport-local').Strategy,
   request =require('request'),
 	bodyParser = require('body-parser'),
-  token = require('./server/token.controller.js');
+  token = require('./server/token.controller.js'),
+  jwt = require('jsonwebtoken');
 var app = express();
 var config = require('./config-dev.js'); //config file contains all tokens and other private info
 var authentication = require('./server/authentication.controller.js');
@@ -249,11 +250,11 @@ app.post("/signup",passport.authenticate('local-signup',{ session: false}),
     // Remove sensitive data before login
     res.setHeader('Content-Type','application/json');
     console.log('Authentication succeeded');
-    token.createToken({email:req.user.email}, function(res, err, token) {
+    token.createToken({email:req.user.email, id:req.user.id, name:req.user.name}, function(res, err, token) {
       if (err) {
         return res.status(400).send(err);
       }
-      res.status(201).json({success: true, token: token});
+      res.status(201).json({success: true, token: 'JWT ' +token});
       console.log('token sent');
     }.bind(null, res));
 });
@@ -265,11 +266,11 @@ app.post('/signin', passport.authenticate('local-signin',{ session: false}),
     // `req.user` contains the authenticated user.
     // Remove sensitive data before login
     res.setHeader('Content-Type','application/json');
-    token.createToken({email:req.user.email}, function(res, err, token) {
+    token.createToken({email:req.user.email, id:req.user.id, name:req.user.name}, function(res, err, token) {
       if (err) {
         return res.status(400).send(err);
       }
-      res.status(201).json({success: true, token: token});
+      res.status(201).json({success: true, token: 'JWT ' +token});
       console.log('token sent');
     }.bind(null, res));
   });
@@ -523,16 +524,23 @@ app.get('/work', function(req,res){
 app.get('/profile', function(req, res){ //TODO get or post ?
   res.setHeader('Content-Type','application/json');
   res.setHeader('Access-Control-Allow-Origin',config.accessControl);
-
-  if(req.user){
-    var id = req.user.id;
+  // TODO verify token
+  console.log(req.headers);
+  var requestToken = token.extractToken(req.headers);
+  if (requestToken){
+    try {
+      var decoded = jwt.decode(requestToken, config.token.secret);
+    } catch (err) {
+      return res.send({authorized:false});
+    }
     var user = {
-      'name':req.user.name,
+      'email':decoded.email,
+      'name':decoded.name,
       'works':[],
       'authors':[]
     };
-    mariaClient.query("SELECT * FROM favorite_works WHERE id_user='"+id+"'",function(err,rows){
-      if (err) return done(err);
+    mariaClient.query("SELECT * FROM favorite_works WHERE id_user='"+ decoded.id+"'",function(err,rows){
+      if (err) return console.log(err);
       else {
         for (var i=0, length = rows.length;i<length; i++){
           var work = {};
@@ -540,23 +548,24 @@ app.get('/profile', function(req, res){ //TODO get or post ?
           work.title = rows[i].title;
           user.works.push(work); //TODO Attention works may be empty outside this scope
         }
+        mariaClient.query("SELECT * FROM favorite_authors WHERE id_user='"+decoded.id+"'", function(err, rows){
+          if (err) console.log(err);
+          else {
+            for (var i=0, length = rows.length;i<length; i++){
+              var author = {};
+              author.name = rows[i].name_author;
+              user.authors.push(author); //TODO Attention works may be empty outside this scope
+            }
+            console.log ("user object to send:");
+            console.log(user);
+            res.send(JSON.stringify(user));
+          }
+        });
       }
     });
-    mariaClient.query("SELECT * FROM favorite_authors WHERE iser_id='"+id+"'", function(err, rows){
-      if (err) return done(err);
-      else {
-        for (var i=0, length = rows.length;i<length; i++){
-          var author = {};
-          author.name = rows[i].name_author;
-          user.authors.push(author); //TODO Attention works may be empty outside this scope
-        }
-      }
-    });
-    res.send(JSON.stringify(user));
-  }else{
-    res.send("Profile");
+  } else{
+    res.send(JSON.stringify({authorized:false}));
   }
-
 });
 
 //---------------planning---------------

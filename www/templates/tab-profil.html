@@ -30,7 +30,7 @@
         </ion-item>
     </ion-list>
     <ion-list>
-      <ion-item class="item-divider" id="page-list-item-divider1">Musiques favorites</ion-item>
+      <ion-item class="item-divider" id="page-list-item-divider2">Musiques favorites</ion-item>
       <ion-item ng-repeat="song in songs" >
         <i id="liked" class="star" ng-class="{'ion-ios-star': liked, 'ion-ios-star-outline': !liked}"
            ng-click="liked=!liked"></i> <i id="info" class="info ion-ios-information-outline"  ui-sref="tab.musique({iswc: song.iswc, title:song.title})" ng-show="song.isInfo"></i>
@@ -41,7 +41,8 @@
     </ion-list>
     <button class="button button-block button-positive" ui-sref="tab.signin">Sign In</button>
     <button class="button button-block button-positive" ui-sref="tab.signup">Sign Up</button>
-
+    <button class="button button-block button-positive" ng-click="getInfo()">Get Info</button>
+  <p>{{userdata}}</p>
 
   </ion-content>
 </ion-view>

@@ -58,8 +58,7 @@ function refreshToken(payload,cb){
   var expire = config.token.expiration;
   if(payload != null && typeof payload !== 'object') { return cb(new Error('payload is not an Object')) }
   var token = jwt.sign(payload, config.token.secret, { expiresIn: config.token.expiration_string });
-  // replace the old token
-
+  // TODO replace the old token
 }
 //Expires a token
 function expireToken(headers, cb) {
@@ -114,5 +113,6 @@ function verifyToken(headers, cb) {
 module.exports = {
   createToken: createToken,
   expireToken: expireToken,
-  verifyToken: verifyToken
+  verifyToken: verifyToken,
+  extractToken: extractTokenFromHeader
 };
