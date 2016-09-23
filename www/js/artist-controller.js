@@ -3,6 +3,8 @@ angular.module('starter.controllers').controller('ArtistCtrl', ['$rootScope', '$
   //$scope.concerts=[];
   //$scope.songs=[];
   $scope.numLimit=5;
+    $scope.isPlus = false;
+
 
 $http({
   method: 'GET',
@@ -13,9 +15,12 @@ $http({
 }).then(function successCallback(response) {
     $scope.answer = response.data;
     console.log($scope.answer);
+    $scope.numLimit=5;
     $scope.error = $scope.answer.error;
     $scope.isSong = false;
     $scope.isConcert = false;
+    $scope.isPlus = false;
+
     if ($scope.error==""){
       if ($scope.answer.works.length !== 0){
         $scope.isSong = true;
@@ -26,6 +31,9 @@ $http({
                         $scope.answer.works[i].isInfo = true;
                    }
         }
+
+     if ($scope.numLimit<=len){$scope.isPlus = true;}
+
       }
       if ($scope.answer.concerts.length !==0){
         $scope.isConcert = true;
@@ -33,6 +41,8 @@ $http({
 
 
        $scope.answer.works.sort(compare);
+        $scope.maxResults=$scope.answer.works.length;
+
 
 
     } else {
@@ -71,14 +81,21 @@ $scope.isConcert= false;
     return $scope.shownGroup === group;
   };
 
+
+  $scope.myGoBack = function() {
+window.history.back()  };
+
   $scope.printMore = function() {
 $scope.numLimit=$scope.numLimit+5;
 
 
+  if ($scope.numLimit>=$scope.maxResults){$scope.isPlus = false;}
+
+
   };
-  $scope.myGoBack = function() {
-window.history.back()  };
+
 }]);
+
 
 
 function compare(a,b) {
@@ -88,4 +105,6 @@ function compare(a,b) {
     return 1;
   return 0;
 }
+
+
 

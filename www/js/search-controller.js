@@ -24,8 +24,6 @@ angular.module('starter.controllers')
     $scope.error = response.data.error;
      $scope.isSong = false;
      $scope.isPlus= false;
-
-
    $scope.numLimit=5;
 
 

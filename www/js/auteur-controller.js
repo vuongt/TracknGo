@@ -1,6 +1,7 @@
 angular.module('starter.controllers').controller('AuteurCtrl', function($scope, $http, $ionicPopup, $stateParams) {
 $scope.name= $stateParams.name;
 $scope.isSong=true;
+$scope.isPlus = false;
 
 $http({
   method: 'GET',
@@ -13,6 +14,9 @@ $http({
     $scope.error= response.data.error;
     console.log($scope.answer);
     $scope.isSong = false;
+    $scope.isPlus= false;
+       $scope.numLimit=5;
+
     if ($scope.error==""){
       if ($scope.answer.length !== 0){
         $scope.isSong = true;
@@ -25,9 +29,13 @@ $http({
 
 
         }
+        if ($scope.numLimit<=len){$scope.isPlus = true;}
+
       }
 
      $scope.answer.sort(compare);
+     $scope.maxResults=$scope.answer.length;
+
 
 
     } else {
@@ -64,6 +72,22 @@ $http({
 
   $scope.myGoBack = function() {
 window.history.back()  };
+
+
+
+  $scope.printMore = function() {
+$scope.numLimit=$scope.numLimit+5;
+
+  if ($scope.numLimit>95){
+
+  $scope.nbrPage =  $scope.nbrPage+1;
+  }
+
+  if ($scope.numLimit>=$scope.maxResults){$scope.isPlus = false;}
+
+
+  };
+
 
 
 });
