@@ -1,7 +1,37 @@
-angular.module('starter.controllers').controller('AuteurCtrl', function($scope, $http, $ionicPopup, $stateParams, $ionicHistory) {
+angular.module('starter.controllers').controller('AuteurCtrl', function(AuthService, $scope, $http, $ionicPopup, $stateParams, $ionicHistory) {
 $scope.name= $stateParams.name;
 $scope.isSong=true;
 $scope.isPlus = false;
+
+
+$scope.userdata = AuthService.getUserInfo();
+
+
+
+    $scope.isLiked = function(iswc){
+
+ return(AuthService.isLiked(iswc, $scope.userdata));    };
+
+
+
+
+
+
+
+        $scope.delFavorites = function(iswc, name){
+            AuthService.delFavorites(iswc, name);
+            $scope.userdata = AuthService.getUserInfo();
+
+
+            };
+        $scope.addFavorites = function(iswc, name){
+             AuthService.addFavorites(iswc, name);
+             $scope.userdata = AuthService.getUserInfo();
+
+            };
+
+
+
 
 $http({
   method: 'GET',
