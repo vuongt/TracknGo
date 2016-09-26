@@ -607,6 +607,7 @@ app.get('/planning', function (req, res) {
 app.get('/action/addfavorite', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
+  //TODO revised try and catch blocks
   //params: type, id of the content, title
   var action ={authorized:false, actionSucceed: false};
   try {
@@ -648,6 +649,7 @@ app.get('/action/addfavorite', function (req, res) {
 });
 app.get('/action/removefavorite', function (req, res) {
   //params: type, id
+  //TODO revised try and catch blocks
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
 
@@ -691,18 +693,35 @@ app.get('/action/removefavorite', function (req, res) {
 
 //---------------comment---------------
 app.post('/comment', function (req, res) {
-  //params: date, content
-  console.log("ok");
-  res.send("ok")
-
+  //params: cdeprog, date, content
+  res.setHeader('Content-Type', 'application/json');
+  var action ={authorized:false, actionSucceed: false};
+  try {
+    var requestToken = token.extractToken(req.headers);
+    var decoded = jwt.decode(requestToken, config.token.secret);
+    var userid = decoded.id;
+  } catch (err){
+    res.send (JSON.stringify(action));
+  }
+  action.authorized =true;
+  console.log ('Before writing to DB : ');
+  console.log(req.body);
+  var prep= mariaClient.prepare("INSERT INTO comment (cdeprog, id_user,creation_date,content) VALUES (:cdeprog,:userid,:date,:content);");
+  mariaClient.query(prep({cdeprog:req.body.cdeprog,userid:userid,date:req.body.date, content:req.body.content}),function(err,rows){
+    if (err) {
+      console.log(err);
+      return res.send({error:"Error when reading from database"}); // TODO Error Handler
+    } else {
+      action.actionSucceed =true;
+      console.log("posting comment succeeded");
+      res.send (JSON.stringify(action));
+    }
+  });
 });
 app.get('/comment', function (req, res) {
-
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', config.accessControl);
   var cdeprog = req.query.cdeprog;
   var comments = [];
-
   mariaClient.query("SELECT * FROM comment INNER JOIN users ON comment.id_user = users.id where comment.cdeprog='"+cdeprog+"';", function (err, rows) {
     if (err) {
       console.log(err);
