@@ -523,8 +523,12 @@ app.get('/profile', function (req, res) { //TODO get or post ?
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
   // TODO verify token
   console.log(req.headers);
-  var requestToken = token.extractToken(req.headers);
-  if (requestToken) {
+  try {
+    var requestToken = token.extractToken(req.headers);
+  } catch (err){
+    return res.send({authorized : false});
+  }
+  if (requestToken){
     try {
       var decoded = jwt.decode(requestToken, config.token.secret);
     } catch (err) {
