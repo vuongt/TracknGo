@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
 
 
-.controller('SearchCtrl', ['$rootScope', '$scope', '$http', "$stateParams", "$ionicPopup", function($rootScope, $scope, $http, $stateParams, $ionicPopup, $route, AuthService, FavoriteService){
+.controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", function($rootScope,$scope,$http, AuthService,$stateParams, $ionicPopup,$route){
 
 
 
@@ -10,7 +10,51 @@ angular.module('starter.controllers')
 
   $scope.filter= "all";
   $scope.nbrPage=1;
+
   //$scope.concerts == [];
+
+$scope.userdata = AuthService.getUserInfo();
+
+
+
+    $scope.isLiked = function(iswc){
+
+ return(AuthService.isLiked(iswc, $scope.userdata));    };
+
+
+
+
+
+
+
+        $scope.delFavorites = function(iswc, name){
+            AuthService.delFavorites(iswc, name);
+            $scope.userdata = AuthService.getUserInfo();
+
+
+            };
+        $scope.addFavorites = function(iswc, name){
+             AuthService.addFavorites(iswc, name);
+             $scope.userdata = AuthService.getUserInfo();
+
+            };
+
+
+
+        $scope.delFavoritesAuth = function(name){
+            AuthService.delFavoritesAuth(name);
+            $scope.userdata = AuthService.getUserInfo();
+
+
+            };
+        $scope.addFavoritesAuth = function(name){
+             AuthService.addFavoritesAuth(name);
+             $scope.userdata = AuthService.getUserInfo();
+
+            };
+
+
+
 
     $scope.submitSearch = function(search, filter){
 

@@ -1,11 +1,32 @@
-angular.module('starter.controllers').controller('ArtistCtrl', function($scope, $http, $stateParams,$state, $ionicPopup, $ionicHistory){
+angular.module('starter.controllers').controller('ArtistCtrl', function($scope, $http, $stateParams,$state, $ionicPopup, $ionicHistory,AuthService){
   $scope.name = $stateParams.name;
   //$scope.concerts=[];
   //$scope.songs=[];
   $scope.numLimit=5;
     $scope.isPlus = false;
 
-console.log($ionicHistory.currentView());
+
+
+    $scope.userdata = AuthService.getUserInfo();
+
+    $scope.isLiked = function(iswc){
+
+       return(AuthService.isLiked(iswc, $scope.userdata));
+
+       };
+
+    $scope.delFavorites = function(iswc, name,type){
+        AuthService.delFavorites(iswc, name,type);
+        $scope.userdata = AuthService.getUserInfo();
+
+
+        };
+    $scope.addFavorites = function(iswc, name,type){
+         AuthService.addFavorites(iswc, name, type);
+         $scope.userdata = AuthService.getUserInfo();
+
+        };
+
 
 $http({
   method: 'GET',

@@ -1,7 +1,33 @@
-angular.module('starter.controllers').controller('MusiqueCtrl', function($scope, $http, $stateParams,$state, $ionicPopup, $ionicHistory){
+angular.module('starter.controllers').controller('MusiqueCtrl', function($scope, $http, $stateParams,$state, $ionicPopup, $ionicHistory,AuthService){
   $scope.iswc = $stateParams.iswc;
   $scope.title = $stateParams.title;
   $scope.myGoBack = function() {window.history.back()  };
+
+
+$scope.userdata = AuthService.getUserInfo();
+
+        $scope.delFavoritesAuth = function(name){
+            AuthService.delFavoritesAuth(name);
+            $scope.userdata = AuthService.getUserInfo();
+            console.log("deleting author");
+
+
+            };
+        $scope.addFavoritesAuth = function(name){
+             AuthService.addFavoritesAuth(name);
+             $scope.userdata = AuthService.getUserInfo();
+             console.log("adding author");
+
+            };
+
+
+
+    $scope.isLikedAuth = function(name){
+
+ return(AuthService.isLikedAuth(name, $scope.userdata));    };
+
+
+
 $http({
   method: 'GET',
   url: 'http://localhost:8080/work?iswc='+$scope.iswc,

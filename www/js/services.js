@@ -83,15 +83,8 @@ angular.module('starter.services', [])
 
     console.log('favorites services fonctionne');
 
-    // Charger les chansons préférées ici à parir de la BDD
-
-
-    var favoris=["T-904.824.279.1", "T-904.795.074.3"];
-
-
-
     //Ajouter une chanson aux favoris
-    this.addFavorites = function(iswc, name) {
+    var addFavorites = function(iswc, name) {
 
 
                 $http({
@@ -114,19 +107,79 @@ angular.module('starter.services', [])
 
 
     //Supprimer une chanson des favoris
-    this.delFavorites = function(iswc, name) {
+    var delFavorites = function(iswc, name) {
 
-                 $http({
+
+    console.log('cette chanson '+name+' va être supprimée de vos favoris');
+
+
+                      $http({
                                method: 'GET',
-                               url: 'http://localhost:8080/action/removefavorite?type=work&iswc='+iswc+'&title'+name,
+                               url: 'http://localhost:8080/action/removefavorite?type=work&iswc='+iswc+'&title='+name,
                                header:{
                                Origin:'http://localhost:8100'
                              }
                              }).then(function successCallback(response) {
 
-                                 console.log("This song has been deleted");
+                                return({action: response.data.actionSucceed, auth: response.data.authorized});
+
 
                                }, function errorCallback(response) {
+
+                                 console.log("! failed to delete this song from your favorites !");
+
+                               });
+
+
+
+          };
+
+
+//Ajouter un auteur aux favoris
+
+    var addFavoritesAuth = function(name) {
+console.log("BOUM");
+
+                $http({
+                      method: 'GET',
+                      url: 'http://localhost:8080/action/addfavorite?type=author&name='+name,
+                      header:{
+                      Origin:'http://localhost:8100'
+                    }
+                    }).then(function successCallback(response) {
+
+
+
+
+                      }, function errorCallback(response) {
+
+                      });
+
+
+                 };
+
+
+    //Supprimer une chanson des favoris
+    var delFavoritesAuth = function(name) {
+
+
+    console.log('cet auteur '+name+' va être supprimée de vos favoris');
+
+
+                      $http({
+                               method: 'GET',
+                               url: 'http://localhost:8080/action/removefavorite?type=author&name='+name,
+                               header:{
+                               Origin:'http://localhost:8100'
+                             }
+                             }).then(function successCallback(response) {
+
+                                return({action: response.data.actionSucceed, auth: response.data.authorized});
+
+
+                               }, function errorCallback(response) {
+
+
 
                                });
 
@@ -137,7 +190,34 @@ angular.module('starter.services', [])
 
 
 
+    var isLiked = function (iswc, userdata) {
 
+
+
+      for (var l=0;l<userdata.works.length;l++){
+          if (iswc == userdata.works[l].iswc){
+                return true;
+                }
+      }
+    return false;
+    };
+
+
+
+    var isLikedAuth = function (name, userdata) {
+
+
+
+          for (var k=0;k<userdata.authors.length;k++){
+              if (name == userdata.authors[k].name){
+                    return true;
+                    }
+          }
+        return false;
+    };
+
+
+//Add an interprete to your favorites
 
 
 
@@ -146,6 +226,12 @@ angular.module('starter.services', [])
       login: login,
       register: register,
       logout: logout,
+      isLiked: isLiked,
+      isLikedAuth: isLikedAuth,
+      delFavorites: delFavorites,
+      addFavorites: addFavorites,
+      delFavoritesAuth: delFavoritesAuth,
+      addFavoritesAuth: addFavoritesAuth,
       getUserInfo : function() {
       storeUserInfo();
       return userInfo;},
