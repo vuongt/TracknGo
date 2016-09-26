@@ -32,19 +32,19 @@
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider2">Musiques favorites</ion-item>
       <ion-item ng-repeat="song in userdata.works" >
-        <i id="liked" class="star" ng-class="{'ion-ios-star': isLiked(song.iswc, song.name), 'ion-ios-star-outline': !isLiked(song.iswc, song.name)}"
-           ng-click="addFavorites(song.iswc, song.name)" ng-show="!isLiked"></i>
-        <i id="liked" class="star" ng-class="{'ion-ios-star': isLiked(song.iswc, song.name), 'ion-ios-star-outline': !isLiked(song.iswc, song.name)}"
-           ng-click="delFavorites(song.iswc, song.name)" ng-show="isLiked"></i>
+        <i id="liked" class="star" ng-class="{'ion-ios-star': isLiked(song.iswc, song.title), 'ion-ios-star-outline': !isLiked(song.iswc, song.title)}"
+           ng-click="addFavorites(song.iswc, song.title)" ng-show="!isLiked"></i>
+        <i id="liked" class="star" ng-class="{'ion-ios-star': isLiked(song.iswc, song.title), 'ion-ios-star-outline': !isLiked(song.iswc, song.title)}"
+           ng-click="delFavorites(song.iswc, song.title)" ng-show="isLiked"></i>
         <i id="info" class="info ion-ios-information-outline"  ng-show="song.isInfo"></i>
 
-        <div  id="link" class="elipse" ui-sref= "tab.musique({iswc: song.iswc, title:song.name})" ng-if="song.isInfo">
-          {{song.name}}
+        <div  id="link" class="elipse" ui-sref= "tab.musique({iswc: song.iswc, title:song.title})" ng-if="song.isInfo">
+          {{song.title}}
 
         </div>
 
         <div  id="link" class="elipse" ng-if="!song.isInfo">
-          {{song.name}}
+          {{song.title}}
 
         </div>
         </ion-item>

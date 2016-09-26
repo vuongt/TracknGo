@@ -85,6 +85,7 @@ angular.module('starter.services', [])
 
     // Charger les chansons préférées ici à parir de la BDD
 
+
     var favoris=["T-904.824.279.1", "T-904.795.074.3"];
 
 
@@ -145,7 +146,9 @@ angular.module('starter.services', [])
       login: login,
       register: register,
       logout: logout,
-      getUserInfo : function() {return userInfo;},
+      getUserInfo : function() {
+      storeUserInfo();
+      return userInfo;},
       isAuthenticated: function() {return isAuthenticated;}
     };
   })
