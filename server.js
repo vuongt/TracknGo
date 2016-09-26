@@ -595,6 +595,7 @@ app.get('/planning', function (req, res) {
         event.prog_date = rows[i].prog_date;
         event.location = rows[i].location;
         event.cdeprog = rows[i].cdeprog;
+        event.id = rows[i].id_event;
         planning.events.push(event);
       }
       res.send(JSON.stringify(planning));
@@ -603,10 +604,61 @@ app.get('/planning', function (req, res) {
 
 });
 
+//---------------action add event---------------
+app.get('/action/addevent',function(req,res){
+  res.setHeader('Content-Type','application/json');
+  var action ={authorized:false, actionSucceed: false};
+  try {
+    var requestToken = token.extractToken(req.headers);
+    if (requestToken){
+      var decoded = jwt.decode(requestToken, config.token.secret); //TODO decode or verify ?
+      var userid = decoded.id;
+      action.authorized = true;
+      var cdeprog = "";
+      if (req.query.cdeprog) {cdeprog=req.query.cdeprog;}
+      var prep = mariaClient.prepare("INSERT INTO planning (id_user, cdeprog, prog_date, location, title) VALUES (:userid, :cdeprog, :prog_date, :location, :title);");
+      mariaClient.query(prep({userid:userid, cdeprog:cdeprog, prog_date:req.query.date, location:req.query.location, title:req.query.title}),function(err,rows){
+        if (err){return res.send (JSON.stringify(action));}
+        action.actionSucceed= true;
+        res.send (JSON.stringify(action));
+      });
+    } else {
+      res.send (JSON.stringify(action));
+    }
+  } catch (err) {
+    console.log(err);
+    res.send (JSON.stringify(action));
+  }
+});
+
+//---------------action remove event--------------
+app.get('/action/removeevent',function(req,res){
+  res.setHeader('Content-Type','application/json');
+  var action ={authorized:false, actionSucceed: false};
+  try {
+    var requestToken = token.extractToken(req.headers);
+    if (requestToken){
+      var decoded = jwt.decode(requestToken, config.token.secret); //TODO decode or verify ?
+      var userid = decoded.id;
+      action.authorized = true;
+      var prep = mariaClient.prepare("DELETE FROM planning WHERE id_event = :id");
+      mariaClient.query(prep({id:req.query.id}),function(err,rows){
+        if (err){return res.send (JSON.stringify(action));}
+        action.actionSucceed= true;
+        res.send (JSON.stringify(action));
+      });
+    } else {
+      res.send (JSON.stringify(action));
+    }
+  } catch (err) {
+    console.log(err);
+    res.send (JSON.stringify(action));
+  }
+});
+
 //---------------action favorite---------------
 app.get('/action/addfavorite', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', config.accessControl);
   //TODO revised try and catch blocks
   //params: type, id of the content, title
   var action ={authorized:false, actionSucceed: false};

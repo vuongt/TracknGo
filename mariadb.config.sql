@@ -24,7 +24,7 @@ CREATE OR REPLACE TABLE favorite_authors (
 
 CREATE OR REPLACE TABLE comment (
   id_comment INT NOT NULL AUTO_INCREMENT,
-  cdeprog INT NOT NULL,
+  cdeprog VARCHAR(10) NOT NULL,
   id_user MEDIUMINT NOT NULL,
   creation_date DATE,
   content VARCHAR(2000),
@@ -32,12 +32,14 @@ CREATE OR REPLACE TABLE comment (
 );
 
 CREATE OR REPLACE TABLE planning (
+  id_event INT NOT NULL AUTO_INCREMENT,
   id_user MEDIUMINT NOT NULL,
-  cdeprog INT NOT NULL,
+  cdeprog VARCHAR(10),
   prog_date DATE,
   location VARCHAR(100),
-  title VARCHAR(100)
-  );
+  title VARCHAR(100),
+  PRIMARY KEY (id_event)
+ );
 
 CREATE OR REPLACE TABLE users_token (
   id_token MEDIUMINT NOT NULL AUTO_INCREMENT,
