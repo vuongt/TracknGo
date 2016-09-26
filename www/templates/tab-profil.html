@@ -2,7 +2,7 @@
   <ion-content>
 
     <div class="big-header">
-      <h3 id="page-heading1">{{name}}</h3>
+      <h3 id="page-heading1">{{userdata.name}}</h3>
       <div id="page-markdown1">
         <p>2 concerts cette semaine</p>
       </div>
@@ -13,11 +13,11 @@
       </div>
       <div class="container">
         <div class="left">
-          <h3>{{nbrAuteurs}}</h3>
+          <h3>{{userdata.authors.length}}</h3>
           <p>Auteurs suivi</p>
         </div>
         <div class="right">
-          <h3> {{nbrTitres}} </h3>
+          <h3> {{userdata.works.length}} </h3>
           <p>Titres favoris</p>
         </div>
       </div>
@@ -25,13 +25,13 @@
 
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider1">Artistes favoris</ion-item>
-      <ion-item  ng-repeat="author in authors"
+      <ion-item  ng-repeat="author in userdata.authors"
                    ui-sref="tab.artist({name: author.name})"> {{author.name}}
         </ion-item>
     </ion-list>
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider2">Musiques favorites</ion-item>
-      <ion-item ng-repeat="song in songs" >
+      <ion-item ng-repeat="song in userdata.works" >
         <i id="liked" class="star" ng-class="{'ion-ios-star': isLiked(song.iswc, song.name), 'ion-ios-star-outline': !isLiked(song.iswc, song.name)}"
            ng-click="changeFavorites(song.iswc, song.name, song.isLiked)"></i>
         <i id="info" class="info ion-ios-information-outline"  ng-show="song.isInfo"></i>
@@ -49,8 +49,8 @@
     </ion-list>
     <button class="button button-block button-positive" ui-sref="tab.signin">Sign In</button>
     <button class="button button-block button-positive" ui-sref="tab.signup">Sign Up</button>
-    <button class="button button-block button-positive" ng-click="getInfo()">Get Info</button>
-  <p>{{userdata}}</p>
+    <button class="button button-block button-positive" ng-click="logout()">Log out</button>
+<p>{{userdata}}</p>
 
   </ion-content>
 </ion-view>

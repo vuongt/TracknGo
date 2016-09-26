@@ -4,6 +4,7 @@ angular.module('starter.services', [])
     var LOCAL_TOKEN_KEY = 'yourTokenKey';
     var isAuthenticated = false;
     var authToken;
+    var userInfo={};
 
     function loadUserCredentials() {
       var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
@@ -32,11 +33,24 @@ angular.module('starter.services', [])
       window.localStorage.removeItem(LOCAL_TOKEN_KEY);
     }
 
+    function storeUserInfo(){
+      $http.get(API_ENDPOINT.url + '/profile').then(function (response) {
+          console.log('response');
+          userInfo.name = response.data.name;
+          userInfo.works = response.data.works;
+          userInfo.authors = response.data.authors;
+          console.log('get info of user : ' + userInfo.name)
+          console.log(userInfo);
+      });
+    }
+
     var register = function(user) {
       return $q(function(resolve, reject) {
         $http.post(API_ENDPOINT.url + '/signup', user, {header: {Origin:"http://localhost:8100"}}).then(function(result) {
           if (result.data.success) {
             storeUserCredentials(result.data.token);
+            storeUserInfo();
+            console.log('info stored');
             resolve(result.data.msg);
           } else {
             reject(result.data.msg);
@@ -50,6 +64,7 @@ angular.module('starter.services', [])
         $http.post(API_ENDPOINT.url + '/signin', user).then(function(result) {
           if (result.data.success) {
             storeUserCredentials(result.data.token);
+            storeUserInfo();
             resolve(result.data.msg);
           } else {
             reject(result.data.msg);
@@ -68,7 +83,8 @@ angular.module('starter.services', [])
       login: login,
       register: register,
       logout: logout,
-      isAuthenticated: function() {return isAuthenticated;},
+      getUserInfo : function() {return userInfo;},
+      isAuthenticated: function() {return isAuthenticated;}
     };
   })
 /*AuthInterceptor to broadcast a global event if we encounter a 401 response,

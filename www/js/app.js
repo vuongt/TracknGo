@@ -129,7 +129,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.signin', {
         url: '/signin',
         views: {
-          'tab-profil': {
+          'tab-home': {
             templateUrl: 'templates/tab-signin.html',
             controller: 'SigninCtrl'
           }
@@ -171,14 +171,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     $urlRouterProvider.otherwise('/tab/home');
 
   })
-  /*.run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
+  .controller('AppCtrl', function($scope, $state, $ionicPopup, AuthService, AUTH_EVENTS) {
+    $scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
+      AuthService.logout();
+      $state.go('outside.login');
+      var alertPopup = $ionicPopup.alert({
+        title: 'Session Lost!',
+        template: 'Sorry, You have to login again.'
+      });
+    });
+  })
+  .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
     $rootScope.$on('$stateChangeStart', function (event,next, nextParams, fromState) {
       if (!AuthService.isAuthenticated()) {
         console.log(next.name);
-        if (next.name !== 'tab.home' && next.name !== 'tab.home') {
-          event.preventDefault();
-          $state.go('tab.signin');
+        if (next.name !== 'tab.home' && next.name !== 'tab.search') {
+          //event.preventDefault();
+          //$state.go('tab.signin');
         }
       }
     });
-  })*/;
+  });
