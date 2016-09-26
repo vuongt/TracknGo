@@ -82,6 +82,6 @@ VALUES ('2', '1', '2016-09-24', 'ceci est mon commentaire' );
 
 INSERT INTO planning (id_user, cdeprog, prog_date, location, title)
 VALUES ('1', '2', '2016-09-28', '13 Passage du Moulinet, 75013 Paris ', 'concert de Mika'),
-       ('1', '3', '2016-10-05', '7 Rue Louise Weiss, 75013 Paris', 'Théatre Dunois');
+       ('1', '3', '2016-10-05', '7 Rue Louise Weiss, 75013 Paris', 'Theatre Dunois');
 
 

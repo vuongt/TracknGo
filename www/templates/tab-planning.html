@@ -4,22 +4,20 @@
       <span class="ion-ios-arrow-left" ng-click="myGoBack()"></span>
       <h3>Mon planning</h3>
 
-      <select class="item button-planning">
-        <option>Septembre 2016</option>
-        <option>Octobre</option>
-        <option>Novembre</option>
-        <option>Décembre</option>
-      </select>
+      <label class="item item-input">
+        <input type="month" ng-model="month" required>
+      </label>
 
     </div>
     <ion-item class="item-divider">Septembre</ion-item>
 
-    <ion-item ng-repeat="item in concerts"
+    <ion-item ng-repeat="item in results"
               item="item"
-              class="concertbackground">
+              class="concertbackground"
+              ng-show="item.prog_date.getMonth() == month.getMonth()">
       <p>
-      <h3>{{item.titre}}</h3><span class="right">      {{item.date}}</span></p>
-      <p>{{item.adresse}}</p>
+      <h3>{{item.title}}</h3><span class="right">      {{item.prog_date.toDateString()}}</span></p>
+      <p>{{item.location}}</p>
       <div>
         <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome">
           J'y vais !

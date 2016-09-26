@@ -592,10 +592,10 @@ app.get('/planning', function (req, res) {
       for (var i = 0, length = rows.length; i < length; i++) {
         var event = {};
         event.title = rows[i].title;
-        event.prog_date = rows[i].date;
+        event.prog_date = rows[i].prog_date;
         event.location = rows[i].location;
-        event.cdeprog = rows[i].cdeprog
-        planning.push(event);
+        event.cdeprog = rows[i].cdeprog;
+        planning.events.push(event);
       }
       res.send(JSON.stringify(planning));
     }

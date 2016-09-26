@@ -1,244 +1,245 @@
 /*CSS A regarder: http://ionicframework.com/docs/components/#outlined-buttons */
 
-
 .left {
   float: left;
   text-align: left;
   margin: 2px 10px;
   display: inline-block;
 }
+
 .right {
   float: right;
   text-align: left;
   margin: 2px 10px;
   display: inline-block;
 }
-.dropdrow-left{
+
+.dropdrow-left {
   width: 50%;
   height: 30px;
-  float:left;
+  float: left;
   display: inline-block;
 
 }
-.search-right{
+
+.search-right {
   float: right;
   text-align: left;
   width: 50%;
   display: inline-block;
   background-color: white;
-  border-radius:5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
 }
 
+.platform-android .tabs {
+  top: 0 !important;
+}
 
-
-.platform-android .tabs { top: 0 !important; }
 .has-tabs-top {
   top: 49px !important; /*  height of the tabs */
 }
 
 .big-header {
-  background: linear-gradient(-90deg, #C8503C , #FA654C);
+  background: linear-gradient(-90deg, #C8503C, #FA654C);
   color: white;
   padding: 20px;
 }
-.big-header h3{
+
+.big-header h3 {
   color: white;
 }
 
-.button-planning{
-  text-align:left;
-  border-radius:42px 42px 42px 42px;
-  background: rgba(256,256,256,0.4);;
-  color:rgba(256,256,256,1);
+.button-planning {
+  text-align: left;
+  border-radius: 42px 42px 42px 42px;
+  background: rgba(256, 256, 256, 0.4);;
+  color: rgba(256, 256, 256, 1);
 }
-.concertbackground{
+
+.concertbackground {
   background-image: url('../img/concerta.jpg');
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   padding-bottom: 10px;
-  padding-left:10px;
+  padding-left: 10px;
 }
 
-.concertbackground p{  color: white;  }
-.concertbackground span{  color: white;  }
-.concertbackground h3 {  color: white;  }
+.concertbackground p {
+  color: white;
+}
 
-.concertbackground-odd{
+.concertbackground span {
+  color: white;
+}
+
+.concertbackground h3 {
+  color: white;
+}
+
+.concertbackground-odd {
   background-image: url('../img/concertb.jpg');
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   padding-bottom: 10px;
-  padding-left:10px;
+  padding-left: 10px;
 }
 
-.concertbackground-odd p{  color: white;  }
-.concertbackground-odd span{  color: white;  }
-.concertbackground-odd h3 {  color: white;  }
+.concertbackground-odd p {
+  color: white;
+}
+
+.concertbackground-odd span {
+  color: white;
+}
+
+.concertbackground-odd h3 {
+  color: white;
+}
+
 /* CSS de la page "Concert" */
 
 .concert-background {
-                    background-image: url('../img/concertab.jpg');
+  background-image: url('../img/concertab.jpg');
 
-
-                   background-size: cover;
-                   -webkit-background-size: cover;
-                       -moz-background-size: cover;
-                   height: 350px;
-                    padding: 30px;
-
-                }
-
-
-
-.ion-ios-arrow-left{
-
-              font-size: 40px;
-              float:left;
-              color: #000000;
-
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  height: 350px;
+  padding: 30px;
 
 }
 
-.white{
+.ion-ios-arrow-left {
 
-color: white;
-font-size: 40px;
-
-}
-
-h1{
-
-color: #FFFFFF;
+  font-size: 40px;
+  float: left;
+  color: #000000;
 
 }
 
-.rightheader{
+.white {
 
-             padding-left:50px;
-             padding-top: -20px;
+  color: white;
+  font-size: 40px;
 
 }
 
+h1 {
 
-.ion-location{
+  color: #FFFFFF;
 
+}
 
-            font-size: 28px;
-              float:left;
+.rightheader {
 
+  padding-left: 50px;
+  padding-top: -20px;
+
+}
+
+.ion-location {
+
+  font-size: 28px;
+  float: left;
 
 }
 
 /*CSS de la page Auteur*/
 
 .artist-background {
-                    background-image: url('../img/thedumplings.jpg');
+  background-image: url('../img/thedumplings.jpg');
 
-                   background-size: cover;
-                   left: 0;
-                   right: 0;
-                   z-index: 1;
-                   display: block;
+  background-size: cover;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: block;
 
-                   height: 120px;
-                    padding: 30px;
-                    -webkit-filter: blur(5px);
-                    -moz-filter: blur(5px);
-                    -o-filter: blur(5px);
-                    -ms-filter: blur(5px);
+  height: 120px;
+  padding: 30px;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
 
+  z-index: 1;
 
-                  z-index: 1;
-
-                }
-
+}
 
 .special-artist-background {
 
-                        position: fixed;
-                        left: 0;
-                        right: 0;
-                        z-index: 9999;
-                        top: 40px;
-                         color: #000000;
-                         left: 15px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  top: 40px;
+  color: #000000;
+  left: 15px;
 
-
-
-                }
-
+}
 
 .colored-black {
-        color: #000000;
-        font-size: 30px;
-
-
+  color: #000000;
+  font-size: 30px;
 
 }
 
-.item-divider{
+.item-divider {
 
-position: relative;
+  position: relative;
 
 }
 
-
-.list-concert{
+.list-concert {
   display: block;
 
-
 }
 
-.position-button{
-  float:right;
-  font-weight:lighter;
- background-color: Transparent;
-            background-repeat:no-repeat;
-            border: none;
-            cursor:pointer;
-            overflow: hidden;
+.position-button {
+  float: right;
+  font-weight: lighter;
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
   padding-top: 5px;
 
 }
 
-.myform{
-  float:left;
+.myform {
+  float: left;
   width: 80%;
-  padding-top:20px;
-
-
+  padding-top: 20px;
 
 }
 
-.bottom-concert{
+.bottom-concert {
   height: 10%;
-  padding-left:20px;
+  padding-left: 20px;
 }
 
-.bottom-concert input{
+.bottom-concert input {
 }
 
+.iconeperso {
 
-.iconeperso{
-
-border-radius: 50%;
-background-color: #B22222;
-font-weight: bold;
-color: white;
-padding: 12px;
-padding-right:15px;
-padding-left:15px;
-
-}
-
-
-.lighter{
-font-weight: lighter;
+  border-radius: 50%;
+  background-color: #B22222;
+  font-weight: bold;
+  color: white;
+  padding: 12px;
+  padding-right: 15px;
+  padding-left: 15px;
 
 }
 
+.lighter {
+  font-weight: lighter;
+
+}
 
 body {
   cursor: url('http://ionicframework.com/img/finger.png'), auto;
@@ -253,20 +254,19 @@ body {
   padding-bottom: 0;
   transition: 0.09s all linear;
 }
+
 .list .item.item-accordion.ng-hide {
   line-height: 0px;
 }
+
 .list .item.item-accordion.ng-hide-add,
 .list .item.item-accordion.ng-hide-remove {
   display: block !important;
 }
 
-
-.titleBlack{
-    font-size: xx-large;
-    line-height: 90%;
-    ;
-
+.titleBlack {
+  font-size: xx-large;
+  line-height: 90%;;
 
 }
 
@@ -281,88 +281,95 @@ body {
   height: 50%;
 }
 
-
-.container{
-height: 80px;
+.container {
+  height: 80px;
 
 }
 
-.large{
-width: 80%;
+.large {
+  width: 80%;
 
 }
 
 /* quick search css */
-.search-header{
+.search-header {
   margin: 10%;
 }
-.close-modal{
+
+.close-modal {
   margin-right: 8%;
   float: right;
   font-size: 30px;
 }
-.icon-search{
+
+.icon-search {
   float: left;
   font-size: 25px;
 }
-.quicksearch-bar{
+
+.quicksearch-bar {
   float: left;
-  max-height: 20px ;
+  max-height: 20px;
   font-size: 25px;
   margin-left: 3%;
 
 }
-.search-container{
+
+.search-container {
   margin: 0 auto;
   margin-top: 20%;
   height: 30px;
   width: 60%;
   border-bottom: 1px solid #aaa;
 }
-.form-container{
+
+.form-container {
   width: 60%;
   margin: 0 auto;
   margin-top: 10%;
 }
-.form-container div{
+
+.form-container div {
   height: 40px;
 
 }
-.form-container span{
+
+.form-container span {
   float: left;
   font-size: 20px;
   font-weight: bold;
-  padding-top:10px;
-
+  padding-top: 10px;
 
 }
 
-.geolocalabel{
+.geolocalabel {
   margin-top: 15%;
   font-size: 18px;
 }
-.form-container input{
+
+.form-container input {
   float: left;
   margin-left: 10px;
 }
-.geolocalabel span{
+
+.geolocalabel span {
   font-size: 16px;
   padding-top: 0;
   margin-bottom: 10px;
   margin-left: 5px;
 
 }
-.geolocalabel input{
+
+.geolocalabel input {
   margin-top: 5px;
   margin-left: 0;
 }
 
-
-
-.searchbar{
-width: 50%;
+.searchbar {
+  width: 50%;
 }
-.button-container{
+
+.button-container {
   margin: 0 auto;
   width: 100px;
   margin-top: 15%;
@@ -376,51 +383,50 @@ width: 50%;
   color: rgba(256, 256, 256, 1);
 }
 
-.info{
-                font-size: 25px;
-               text-align:left;
-                 float:right;
-                 padding-right: 20%;
-
+.info {
+  font-size: 25px;
+  text-align: left;
+  float: right;
+  padding-right: 20%;
 
 }
-
 
 .star {
-                 font-size: 25px;
-                 text-align:left;
-                 float:right;
-                }
+  font-size: 25px;
+  text-align: left;
+  float: right;
+}
 
-
-.elipse{
- width : 60%;
-  overflow:hidden;
+.elipse {
+  width: 60%;
+  overflow: hidden;
   text-overflow: ellipsis;
   height: 100%;
 
 }
 
-.elipse-titre{
- width : 20%;
-  overflow:hidden;
+.elipse-titre {
+  width: 20%;
+  overflow: hidden;
   text-overflow: ellipsis;
   height: 100%;
 
 }
 
-.large-select{
-width: 50%;
+.large-select {
+  width: 50%;
 
 }
 
-.link{
-ion-modal-view{
+.link {
+
+ion-modal-view {
   opacity: .93;
 }
 
-width: 100%;
-
-height: 100%
-
+label.month-select {
+  width: 50px;
+  border-radius: 42px 42px 42px 42px;
+  background: rgba(256, 256, 256, 0.4);;
+  color: rgba(256, 256, 256, 1);
 }
