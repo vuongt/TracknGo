@@ -621,12 +621,13 @@ app.get('/comment', function (req, res) {
 
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
-
+  var cdeprog = req.query.cdeprog;
   var comments = [];
 
-  mariaClient.query("SELECT * FROM comment INNER JOIN users ON comment.id_user = users.id", function (err, rows) {
+  mariaClient.query("SELECT * FROM comment INNER JOIN users ON comment.id_user = users.id where comment.cdeprog='"+cdeprog+"';", function (err, rows) {
     if (err) {
-      return done(err);
+      console.log(err);
+      return res.send({error:"Error when reading from database"}) // TODO Error Handler
     }
     else {
       for (var i = 0, length = rows.length; i < length; i++) {
@@ -634,14 +635,11 @@ app.get('/comment', function (req, res) {
         comment.sender = rows[i].name;
         comment.date = rows[i].creation_date;
         comment.content = rows[i].content;
-        comments.push(comment); //TODO Attention works may be empty outside this scope
+        comments.push(comment);
       }
     }
-    var work = {error:"", result: comments}
-    res.send(JSON.stringify(work));
+    res.send(JSON.stringify(comments));
   });
-
-
 });
 
 // TODO error handling

@@ -24,7 +24,7 @@ CREATE OR REPLACE TABLE favorite_authors (
 
 CREATE OR REPLACE TABLE comment (
   id_comment INT NOT NULL AUTO_INCREMENT,
-  id_prog INT NOT NULL,
+  cdeprog INT NOT NULL,
   id_user MEDIUMINT NOT NULL,
   creation_date DATE,
   content VARCHAR(2000),
@@ -33,8 +33,9 @@ CREATE OR REPLACE TABLE comment (
 
 CREATE OR REPLACE TABLE planning (
   id_user MEDIUMINT NOT NULL,
-  id_prog INT NOT NULL,
+  cdeprog INT NOT NULL,
   prog_date DATE
+  location VARCHAR(100),
   );
 
 CREATE OR REPLACE TABLE users_token (
@@ -74,7 +75,7 @@ VALUES ('1','Goldman'),
 
 
 
-INSERT INTO comment (id_prog, id_user, creation_date, content)
+INSERT INTO comment (cdeprog, id_user, creation_date, content)
 VALUES ('2', '1', '2016-09-24', 'ceci est mon commentaire' );
 
 
