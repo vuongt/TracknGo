@@ -200,6 +200,15 @@ var optionSacemDetail = {
  //TODO Handle Error
  });*/
 
+//======================API Eliza===================
+// Retrieve data from Eliza API
+//===================================================
+var optionEliza = {
+  method: 'GET',
+  uri: config.eliza.uri
+};
+
+
 //=======================API BandsInTown===============
 //Connect to BandsInTown V2 API
 //=====================================================
@@ -304,31 +313,36 @@ app.get('/search/works', function (req, res) {
     optionSacem.qs.page = req.query.page;
   }
   optionSacem.qs.query = req.query.query;
-  if (req.query.filters && req.query.filters !== "") {
-    optionSacem.qs.filters = req.query.filters;
-    request(optionSacem, function (err, response, body) {
-      if (err) {
-        return console.log(err); //TODO send back error header
-      } else {
-        var bodyObj = JSON.parse(body);
-        if (bodyObj.error == "") {
-          for (var i = 0, length = bodyObj.works.length; i < length; i++) {
-            var result = {};
-            result.iswc = bodyObj.works[i].iswc;
-            result.title = bodyObj.works[i].title;
-            results.results.push(result);
+  var filters= req.query.filters;
+  if (filters && filters !== "") {
+    if (filters !== "all"){
+      optionSacem.qs.filters = req.query.filters;
+      request(optionSacem, function (err, response, body) {
+        if (err) {
+          return console.log(err); //TODO send back error header
+        } else {
+          var bodyObj = JSON.parse(body);
+          if (bodyObj.error == "") {
+            for (var i = 0, length = bodyObj.works.length; i < length; i++) {
+              var result = {};
+              result.iswc = bodyObj.works[i].iswc;
+              result.title = bodyObj.works[i].title;
+              results.results.push(result);
+            }
+            res.send(JSON.stringify(results));
+          } else if (bodyObj.error == "no work") { // If there is no work found, the response doesn't counted as error, so results.error =""
+            res.send(JSON.stringify(results));
           }
-          res.send(JSON.stringify(results));
-        } else if (bodyObj.error == "no work") {
-          res.send(JSON.stringify(results));
+          else {
+            results.error = bodyObj.error;
+            res.send(JSON.stringify(results));
+          }
         }
-        else {
-          results.error = bodyObj.error;
-          res.send(JSON.stringify(results));
-        }
+      });
+    } else {
+      // TODO search with all filters
 
-      }
-    });
+    }
   } else {
     results.error = "Please select a filter";
     res.send(JSON.stringify(results));
@@ -452,6 +466,7 @@ app.get('/author', function (req, res) {
 
 
 //---------------work details---------------
+//Information fromAPI oeuvre and Eliza
 //Song details from API Sacem
 app.get('/work', function (req, res) {
   //params :iswc
@@ -462,23 +477,11 @@ app.get('/work', function (req, res) {
     iswc: "",
     title: "",
     composerAuthor: [], // TODO is ipi code necessary ?
-    performer: []/*,
-     Concerts:[
-     {
-     title:"cnjdif",
-     date:"bxuhezf",
-     code:"cnjg",
-     location:{"address":"cjsdf", "hall":"ncjdg"}
-     },
-     {
-     title:"cnjdcerdif",
-     date:"bxuhezf",
-     code:"cnjg",
-     location:{"address":"cjsdf", "hall":"ncjdg"}
-     }
-     ]*/
+    performer: [],
+    concerts:[]
     //TODO retrieve information from Eliza
   };
+  //Get information from API oeuvres and then Eliza
   if (req.query.iswc && req.query.iswc !== "") {
     optionSacemDetail.qs.iswc = req.query.iswc;
     request(optionSacemDetail, function (err, response, body) {
@@ -502,7 +505,30 @@ app.get('/work', function (req, res) {
               else work.performer = [party['first name'] + ' ' + party['last name']];
             }
           }
-          res.send(JSON.stringify(work));
+          var iswc_trimed = "T"+ req.query.iswc.replace(new RegExp("[^(0-9)]", "g"), '');
+          optionEliza.uri = config.eliza.uri + "/song/" +iswc_trimed;
+          request(optionEliza, function (errEliza,resEliza,bodyEliza){
+            if (err) {
+              work.error = "Error when retrieving data. Please try again later";
+              res.send(JSON.stringify(work));
+              return console.log(err);
+            } else {
+              var objEliza = JSON.parse(bodyEliza);
+              var length= objEliza.length;
+              if (length){
+                for (var i =0; i< length;i++){
+                  var concert = {};
+                  var elizaConcert = objEliza[i];
+                  concert.title = elizaConcert.TITRPROG;
+                  concert.cdeprog= elizaConcert.CDEPROG;
+                  concert.date= elizaConcert.DATDBDIF.replace(/T/, ' ').replace(/\..+/, '');
+                  concert.location= elizaConcert.ADR + elizaConcert.VILLE;
+                  work.concerts.push(concert);
+                }
+              }
+              res.send(JSON.stringify(work));
+            }
+          });
         } else {
           work.error = bodyObj.error;
           res.send(JSON.stringify(work));
@@ -514,7 +540,6 @@ app.get('/work', function (req, res) {
     res.send(JSON.stringify(work));
   }
 });
-
 
 //---------------profile---------------
 app.get('/profile', function (req, res) { //TODO get or post ?

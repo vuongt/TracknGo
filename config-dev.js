@@ -14,6 +14,10 @@ module.exports = {
     headerOrigin:"http//dty.sacem.fr",
     pagesize:100
 	},
+  eliza:{
+	  uri: "http://149.202.167.34:3000",
+
+  },
 	accessControl:"http://localhost:8100",
   token: {
 	  secret: "Track&Go",
