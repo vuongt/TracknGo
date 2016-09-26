@@ -584,7 +584,7 @@ app.get('/planning', function (req, res) {
       return res.send({authorized: false});
     }
     var userid = decoded.id;
-    var planning =[];
+    var planning ={authorized:true, events: []};
   }
   mariaClient.query("SELECT * FROM planning WHERE id_user ='"+userid+"';", function(err,rows){
     if(err) {console.log(err); return res.send({error: "reading database error"});}
