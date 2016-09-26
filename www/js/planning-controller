@@ -1,27 +1,9 @@
 angular.module('starter.controllers').controller('PlanningCtrl', function($scope, $http) {
 
 //templates concerts
-  $scope.concerts = [
-    {
-      titre: "le Mood's",
-      date: "date 1",
-      adresse: "13 Passage du Moulinet, 75013 Paris ",
-      show: false
-    }
-    ,
-    {
-      titre: "Théatre Dunois",
-      date: "date 2",
-      adresse: "7 Rue Louise Weiss, 75013 Paris",
-      show: false
-    },
-    {
-      titre: "Théâtre13-Seine",
-      date: "date 3",
-      adresse: "30 Rue du Chevaleret, 75013 Paris",
-      show: false
-    }
-  ];
+
+
+
 
   $scope.myGoBack = function() {
     window.history.back()  };

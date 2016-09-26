@@ -34,8 +34,9 @@ CREATE OR REPLACE TABLE comment (
 CREATE OR REPLACE TABLE planning (
   id_user MEDIUMINT NOT NULL,
   cdeprog INT NOT NULL,
-  prog_date DATE
+  prog_date DATE,
   location VARCHAR(100),
+  title VARCHAR(100)
   );
 
 CREATE OR REPLACE TABLE users_token (
@@ -77,5 +78,10 @@ VALUES ('1','Goldman'),
 
 INSERT INTO comment (cdeprog, id_user, creation_date, content)
 VALUES ('2', '1', '2016-09-24', 'ceci est mon commentaire' );
+
+
+INSERT INTO planning (id_user, cdeprog, prog_date, location, title)
+VALUES ('1', '2', '2016-09-28', '13 Passage du Moulinet, 75013 Paris ', 'concert de Mika'),
+       ('1', '3', '2016-10-05', '7 Rue Louise Weiss, 75013 Paris', 'Théatre Dunois');
 
 
