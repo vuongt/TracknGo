@@ -33,7 +33,9 @@
       <ion-item class="item-divider" id="page-list-item-divider2">Musiques favorites</ion-item>
       <ion-item ng-repeat="song in songs" >
         <i id="liked" class="star" ng-class="{'ion-ios-star': isLiked(song.iswc, song.name), 'ion-ios-star-outline': !isLiked(song.iswc, song.name)}"
-           ng-click="changeFavorites(song.iswc, song.name, song.isLiked)"></i>
+           ng-click="addFavorites(song.iswc, song.name)" ng-show="!isLiked"></i>
+        <i id="liked" class="star" ng-class="{'ion-ios-star': isLiked(song.iswc, song.name), 'ion-ios-star-outline': !isLiked(song.iswc, song.name)}"
+           ng-click="delFavorites(song.iswc, song.name)" ng-show="isLiked"></i>
         <i id="info" class="info ion-ios-information-outline"  ng-show="song.isInfo"></i>
 
         <div  id="link" class="elipse" ui-sref= "tab.musique({iswc: song.iswc, title:song.name})" ng-if="song.isInfo">

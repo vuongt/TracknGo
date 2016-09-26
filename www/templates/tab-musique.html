@@ -19,10 +19,11 @@
         {{author}}
       </ion-item>
     <ion-list>
-      <ion-item class="item-divider" id="page-list-item-divider2">Interprètes</ion-item>
+      <ion-item ng-show="isArtist" class="item-divider" id="page-list-item-divider2">Interprètes</ion-item>
       <ion-item ng-repeat="artist in answer.performer track by $index"  ui-sref="tab.artist({name: artist})">
         {{artist}}
       </ion-item>
+
     </ion-list>
 
 

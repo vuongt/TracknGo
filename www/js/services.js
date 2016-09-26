@@ -64,6 +64,68 @@ angular.module('starter.services', [])
 
     loadUserCredentials();
 
+    //FAVORITES SERVICE
+
+    console.log('favorites services fonctionne');
+
+    // Charger les chansons préférées ici à parir de la BDD
+
+    var favoris=["T-904.824.279.1", "T-904.795.074.3"];
+
+
+
+    //Ajouter une chanson aux favoris
+    this.addFavorites = function(iswc, name) {
+
+
+                $http({
+                      method: 'GET',
+                      url: 'http://localhost:8080/action/addfavorite?type=work&iswc='+iswc+'+&title='+name,
+                      header:{
+                      Origin:'http://localhost:8100'
+                    }
+                    }).then(function successCallback(response) {
+
+                        console.log("This song has been added");
+
+
+                      }, function errorCallback(response) {
+
+                      });
+
+
+                 };
+
+
+    //Supprimer une chanson des favoris
+    this.delFavorites = function(iswc, name) {
+
+                 $http({
+                               method: 'GET',
+                               url: 'http://localhost:8080/action/removefavorite?type=work&iswc='+iswc+'&title'+name,
+                               header:{
+                               Origin:'http://localhost:8100'
+                             }
+                             }).then(function successCallback(response) {
+
+                                 console.log("This song has been deleted");
+
+                               }, function errorCallback(response) {
+
+                               });
+
+
+
+          };
+
+
+
+
+
+
+
+
+
     return {
       login: login,
       register: register,

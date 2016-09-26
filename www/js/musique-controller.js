@@ -16,6 +16,11 @@ $http({
         var temp = $scope.answer.composerAuthor[i].trim();
         $scope.answer.composerAuthor[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
       }
+      $scope.isArtist=false;
+      if ($scope.answer.performer.length != 0)
+          {
+          $scope.isArtist=true;
+          }
       for(var i = 0, len = $scope.answer.performer.length; i < len; i++) {
         var temp = $scope.answer.performer[i].trim();
         $scope.answer.performer[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();

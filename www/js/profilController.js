@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('ProfilCtrl', function($scope,AuthService,API_ENDPOINT,$http,$state) {
+  .controller('ProfilCtrl', ['AuthService', function($scope,$http,$state,AuthService,FavoriteService,API_ENDPOINT) {
     $scope.destroySession = function() {
       AuthService.logout();
     };
@@ -44,4 +44,4 @@ window.history.back()  };
   $scope.isGroupShown = function(group) {
     return $scope.shownGroup === group;
   };
-  });
+  }]);

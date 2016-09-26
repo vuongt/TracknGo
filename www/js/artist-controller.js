@@ -60,7 +60,6 @@ $http({
     }
   }, function errorCallback(response) {
 
-// FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
 
 $scope.isSong=false;
 $scope.isConcert= false;
@@ -85,6 +84,17 @@ $scope.isConcert= false;
 
   $scope.myGoBack = function() {
   $ionicHistory.goBack();
+  console.log($ionicHistory.viewHistory());
+
+  if ($ionicHistory.viewHistory().backViewId.length==1){
+   $ionicHistory.clearHistory();
+   $route.reload();
+
+  }
+
+
+  console.log($ionicHistory.viewHistory());
+
   };
 
 
