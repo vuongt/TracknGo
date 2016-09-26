@@ -468,10 +468,10 @@ app.get('/author', function (req, res) {
 //---------------work details---------------
 //Information fromAPI oeuvre and Eliza
 //Song details from API Sacem
+//List of concert from Eliza
 app.get('/work', function (req, res) {
   //params :iswc
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', config.accessControl);
   var work = {
     error: "",
     iswc: "",
@@ -508,10 +508,10 @@ app.get('/work', function (req, res) {
           var iswc_trimed = "T"+ req.query.iswc.replace(new RegExp("[^(0-9)]", "g"), '');
           optionEliza.uri = config.eliza.uri + "/song/" +iswc_trimed;
           request(optionEliza, function (errEliza,resEliza,bodyEliza){
-            if (err) {
+            if (errEliza) {
               work.error = "Error when retrieving data. Please try again later";
               res.send(JSON.stringify(work));
-              return console.log(err);
+              return console.log(errEliza);
             } else {
               var objEliza = JSON.parse(bodyEliza);
               var length= objEliza.length;
@@ -540,6 +540,47 @@ app.get('/work', function (req, res) {
     res.send(JSON.stringify(work));
   }
 });
+
+//----------------program details------------
+//Information about a concert from Eliza
+app.get('/program', function(req,res){
+  res.setHeader('Content-Type','application/json');
+  var program = {
+    error:"",
+    cdeprog:"",
+    title:"",
+    date:"",
+    location:"",
+    setList:[]
+  };
+  program.cdeprog = req.query.cdeprog;
+  optionEliza.uri = config.eliza.uri + "/program/" +program.cdeprog;
+  request(optionEliza, function (errEliza,resEliza,bodyEliza) {
+    if (errEliza) {
+      program.error = "Error when retrieving data. Please try again later";
+      res.send(JSON.stringify(program));
+      return console.log(errEliza);
+    } else {
+      var objEliza = JSON.parse(bodyEliza);
+      /*program.title = bodyEliza.TITR;
+      program.date = bodyEliza.DATDBDIF.replace(/T/, ' ').replace(/\..+/, '');
+      program.location = bodyEliza.ADR ; */
+      var length = objEliza.length;
+      if (length) {
+        for (var i = 0; i < length; i++) {
+          var oeuvre = {};
+          oeuvre.title = objEliza[i].TITR;
+          var iswcEliza = objEliza[i].ISWC;
+          oeuvre.iswc = iswcEliza.substring(0,1) + "-" + iswcEliza.substring(1,4) + "."+ iswcEliza.substring(4,7) + "."+ iswcEliza.substring(7,10) + "."+ iswcEliza.substring(10);
+          program.setList.push(oeuvre);
+        }
+      }
+      res.send(JSON.stringify(program));
+    }
+  });
+});
+
+
 
 //---------------profile---------------
 app.get('/profile', function (req, res) { //TODO get or post ?
