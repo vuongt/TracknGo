@@ -580,12 +580,12 @@ app.get('/planning', function (req, res) {
   if (requestToken) {
     try {
       var decoded = jwt.decode(requestToken, config.token.secret);
+      var userid = decoded.id;
     } catch (err) {
       return res.send({authorized: false});
     }
-    var userid = decoded.id;
-    var planning ={authorized:true, events: []};
   }
+  var planning ={authorized:true, events: []};
   mariaClient.query("SELECT * FROM planning WHERE id_user ='"+userid+"';", function(err,rows){
     if(err) {console.log(err); return res.send({error: "reading database error"});}
     else {
@@ -608,32 +608,85 @@ app.get('/action/addfavorite', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
   //params: type, id of the content, title
-  if (req.user) {
-    if (req.query.type === "work") {
-      mariaClient.query("INSERT INTO favorite_works (id_user, iswc, title) VALUES (" + req.user.id + "," + req.query.iswc + "," + req.query.title, function (err, rows) {
-        if (err) return done(err);
-        else {
-          console.log('Add favorite ' + req.query.iswc + ' succeeded');
-        }
-      });
-    } else if (req.query.type === "author") {
-      mariaClient.query("INSERT INTO favorite_authors (id_user, name_author) VALUES (" + req.user.id + "," + req.query.name, function (err, rows) {
-        if (err) return done(err);
-        else {
-          console.log('Add favorite ' + req.query.name + ' succeeded');
-        }
-      });
-    } else {
-      //TODO Error handling
+  var action ={authorized:false, actionSucceed: false};
+  try {
+    var requestToken = token.extractToken(req.headers);
+  } catch (err){
+    console.log(err);//res.send (JSON.stringify(action));
+  }
+  if (requestToken) {
+    try {
+      var decoded = jwt.decode(requestToken, config.token.secret);
+      var userid = decoded.id;
+    } catch (err) {
+      console.log(err);//res.send (JSON.stringify(action));    }
     }
-    //TODO no redirect after action
-  } else res.redirect("/signin");
-
+    action.authorized = true;
+    if (req.query.type === "work") {
+      var prep = mariaClient.prepare("INSERT INTO favorite_works (id_user, iswc, title) VALUES (:userid,:iswc,:title);")
+      mariaClient.query(prep({userid:userid,iswc:req.query.iswc,title:req.query.title}), function (err, rows) {
+        if (err) console.log(err); // return res.send(JSON.stringify(action));
+        else {
+          action.actionSucceed = true;
+          console.log('Add favorite ' + req.query.title + ' succeeded');
+          res.send(JSON.stringify(action));
+        }
+      });
+    }
+    else if (req.query.type === "author") {
+      var prep = mariaClient.prepare("INSERT INTO favorite_authors (id_user, name_author) VALUES (:userid ,:name_author)");
+      mariaClient.query(prep({userid:userid, name_author:req.query.name}), function (err, rows) {
+        if (err) res.send(JSON.stringify(action));
+        else {
+          action.actionSucceed = true;
+          console.log('Add favorite ' + req.query.name + ' succeeded');
+          res.send(JSON.stringify(action));
+        }
+      });
+    }
+  }
 });
 app.get('/action/removefavorite', function (req, res) {
   //params: type, id
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
+
+  var action ={authorized:false, actionSucceed: false};
+  try {
+    var requestToken = token.extractToken(req.headers);
+  } catch (err){
+    res.send (JSON.stringify(action));
+  }
+  if (requestToken) {
+    try {
+      var decoded = jwt.decode(requestToken, config.token.secret);
+      var userid = decoded.id;
+    } catch (err) {
+      res.send (JSON.stringify(action));    }
+  }
+  action.authorized =true;
+  if (req.query.type === "work") {
+    var prep = mariaClient.prepare("DELETE FROM favorite_works WHERE id_user=:userid AND iswc =:iswc");
+    mariaClient.query(prep({userid:userid,iswc:req.query.iswc}), function (err, rows) {
+      if (err) return res.send (JSON.stringify(action));
+      else {
+        action.actionSucceed = true;
+        console.log('Remove favorite ' + req.query.iswc+ ' succeeded');
+        res.send (JSON.stringify(action));
+      }
+    });
+  }
+  if (req.query.type === "author") {
+    var prep = mariaClient.prepare("DELETE FROM favorite_authors WHERE id_user=:userid AND name_author =:name_author");
+    mariaClient.query(prep({userid:userid,name_author:req.query.name}), function (err, rows) {
+      if (err) res.send (JSON.stringify(action));
+      else {
+        action.actionSucceed = true;
+        console.log('Remove favorite ' + req.query.name + ' succeeded');
+        res.send (JSON.stringify(action));
+      }
+    });
+  }
 });
 
 //---------------comment---------------
