@@ -249,7 +249,6 @@ app.post("/signup", passport.authenticate('local-signup', {session: false}),
   function (req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
-    // Remove sensitive data before login
     res.setHeader('Content-Type', 'application/json');
     console.log('Authentication succeeded');
     token.createToken({email: req.user.email, id: req.user.id, name: req.user.name}, function (res, err, token) {
@@ -573,9 +572,36 @@ app.get('/profile', function (req, res) { //TODO get or post ?
 app.get('/planning', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
+  try {
+    var requestToken = token.extractToken(req.headers);
+  } catch (err){
+    return res.send({authorized : false});
+  }
+  if (requestToken) {
+    try {
+      var decoded = jwt.decode(requestToken, config.token.secret);
+    } catch (err) {
+      return res.send({authorized: false});
+    }
+    var userid = decoded.id;
+    var planning =[];
+  }
+  mariaClient.query("SELECT * FROM planning WHERE id_user ='"+userid+"';", function(err,rows){
+    if(err) {console.log(err); return res.send({error: "reading database error"});}
+    else {
+      for (var i = 0, length = rows.length; i < length; i++) {
+        var event = {};
+        event.title = rows[i].title;
+        event.prog_date = rows[i].date;
+        event.location = rows[i].location;
+        event.cdeprog = rows[i].cdeprog
+        planning.push(event);
+      }
+      res.send(JSON.stringify(planning));
+    }
+  });
 
 });
-
 
 //---------------action favorite---------------
 app.get('/action/addfavorite', function (req, res) {
