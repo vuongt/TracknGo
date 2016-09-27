@@ -1,5 +1,32 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $ionicModal) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal) {
+
+//Chargement des concerts
+$scope.cdeprog="0008201463";
+
+$http({
+  method: 'GET',
+  url: 'http://localhost:8080/program?cdeprog='+$scope.cdeprog,
+  header:{
+    Origin:'http://localhost:8100'
+  }
+}).then(function successCallback(response) {
+$scope.answer=response.data;
+    if ($scope.answer.error == ""){
+
+        $scope.answer = response.data;
+
+
+
+    }
+  }, function errorCallback(response) {
+  });
+
+
+
+$scope.concerts=[$scope.answer];
+
+
 
     //initialisation google maps
 
@@ -26,8 +53,8 @@ angular.module('starter.controllers')
       google.maps.event.addListenerOnce($scope.map, 'idle', function () {
         for(var i = 0; i < $scope.concerts.length;i++){
           (function(){
-            var concert = $scope.concerts[i];
-            var address = concert.adresse;
+            var concert = $scope.answer;
+            var address = $scope.answer.location;
             geocoder.geocode({'address': address}, function (results, status) {
               if (status === google.maps.GeocoderStatus.OK) {
 
@@ -73,28 +100,8 @@ angular.module('starter.controllers')
     });
 
 
-    //templates concerts
-    $scope.concerts = [
-      {
-        titre: "le Mood's",
-        date: "date 1",
-        adresse: "13 Passage du Moulinet, 75013 Paris ",
-        show: false
-      }
-      ,
-      {
-        titre: "Théatre Dunois",
-        date: "date 2",
-        adresse: "7 Rue Louise Weiss, 75013 Paris",
-        show: false
-      },
-      {
-        titre: "Théâtre13-Seine",
-        date: "date 3",
-        adresse: "30 Rue du Chevaleret, 75013 Paris",
-        show: false
-      }
-    ];
+
+
 
     //for the quicksearch modal
     $ionicModal.fromTemplateUrl('templates/quicksearch.html', {

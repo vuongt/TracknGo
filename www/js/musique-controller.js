@@ -52,6 +52,16 @@ $http({
         $scope.answer.performer[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
       }
       console.log($scope.answer);
+
+      $scope.isConcert=false;
+      $scope.isCharged=false;
+     if ($scope.answer.concerts.length!=0){
+     $scope.isConcert=true;
+     }
+
+
+
+
     } else {
       //Show an alert of the error
       var alertPopup = $ionicPopup.alert({
@@ -64,7 +74,6 @@ $http({
       console.log($scope.answer);
     }
   }, function errorCallback(response) {
-// FAIRE UNE DISTINCTION ICI EN FONCTION DU TYPE DERREUR RECUE
   });
 
 /*  $scope.printMore = function() {
@@ -76,5 +85,36 @@ $route.reload();
   $scope.myGoBack = function() {
 $ionicHistory.goBack();
   };
+
+
+  $scope.chargeConcerts = function(iswc){
+        $http({
+          method: 'GET',
+          url: 'http://localhost:8080/work/program?iswc='+iswc,
+          header:{
+            Origin:'http://localhost:8100'
+          }
+        }).then(function successCallback(response) {
+            $scope.concerts = response.data;
+            if ($scope.answer.error == ""){
+
+
+             for(var i = 0, len = $scope.concerts.length; i < len; i++) {
+                      $scope.isCharged=true;
+                      $scope.concerts[i].title = $scope.answer.concerts[i].title.charAt(0).toUpperCase()+ $scope.concerts[i].title.substring(1).toLowerCase();
+
+
+
+                    }
+
+
+            } else {
+
+            }
+          }, function errorCallback(response) {
+          });
+
+
+  }
 });
 

@@ -31,12 +31,29 @@
       <ion-item ng-repeat="artist in answer.performer track by $index"  ui-sref="tab.artist({name: artist})">
         {{artist}}
       </ion-item>
+      <button ng-show="isConcert" class="button button-large button-stable" ng-click="chargeConcerts(iswc)">Afficher les concerts où cette musique est annoncée</button>
 
     </ion-list>
 
 
 
 
+      <ion-list ng-show="isConcert && isCharged">
+      <ion-item class="item item-divider"> Concerts autour de vous
+        <i class="ion-ios-search-strong icon-right" ng-click="openModal()" style="float: right; font-size: 130%"></i>
+      </ion-item>
+      <ion-item ng-repeat="item in concerts"
+                ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'">
+        <h3>{{item.title}}</h3><p><span class="right">      {{item.date}}</span></p>
+        <p>{{item.location}}</p>
+        <div>
+          <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome">
+            J'y vais !
+          </button>
+        </div>
+      </ion-item>
+
+    </ion-list>
 
 
 

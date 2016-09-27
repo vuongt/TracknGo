@@ -23,10 +23,10 @@
       <ion-item class="item-divider" id="page-list-item-divider1">Morceaux</ion-item>
       <ion-item ng-repeat="song in answer.works | limitTo:numLimit">
 
-        <i id="liked" class="ion-ios-star star" ng-click= "delFavorites(song.iswc, song.title, 'work')"
+        <i id="liked" class="ion-ios-star star" ng-click= "delFavorites(song.iswc, song.title)"
             ng-show="isLiked(song.iswc)"></i>
 
-        <i id="liked" ng-click= "addFavorites(song.iswc, song.title, 'work')"
+        <i id="liked" ng-click= "addFavorites(song.iswc, song.title)"
            class="ion-ios-star-outline star" ng-show="!isLiked(song.iswc)"></i>
 
         <i id="info" class="info ion-ios-information-outline"  ng-show="song.isInfo"></i>

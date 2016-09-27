@@ -62,7 +62,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.search', {
         url: '/search',
         views: {
-        
+
           'tab-search': {
             templateUrl: 'templates/tab-search.html',
             controller: 'SearchCtrl'
@@ -72,10 +72,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 
       .state('tab.concertHome', {
-        url: '/concert',
+        url: '/concert/?cdeprog',
         views: {
           'tab-home': {
             templateUrl: 'templates/tab-concert.html',
+            params: {cdeprog: null },
             controller: 'ConcertCtrl'
           }
         }

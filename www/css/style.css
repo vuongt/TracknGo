@@ -430,3 +430,8 @@ label.month-select {
   background: rgba(256, 256, 256, 0.4);;
   color: rgba(256, 256, 256, 1);
 }
+
+.buttoncenter{
+    position: center;
+
+}

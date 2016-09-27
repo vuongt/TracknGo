@@ -35,11 +35,9 @@ angular.module('starter.services', [])
 
     function storeUserInfo(){
       $http.get(API_ENDPOINT.url + '/profile').then(function (response) {
-          console.log('response');
           userInfo.name = response.data.name;
           userInfo.works = response.data.works;
           userInfo.authors = response.data.authors;
-          console.log('get info of user : ' + userInfo.name)
           console.log(userInfo);
       });
     }

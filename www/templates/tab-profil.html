@@ -27,12 +27,10 @@
       <ion-item class="item-divider" id="page-list-item-divider1">Auteurs/compositeurs favoris</ion-item>
       <ion-item  ng-repeat="author in userdata.authors">
         <i id="liked" class="ion-ios-star star" ng-click= "delFavoritesAuth(author.name)"
-           ng-show="isLikedAuth(author.name)"></i>
+           ng-show="!isLikedAuth(author.name)"></i>
 
-        <i id="liked" ng-click= "addFavoritesAuth(author.name)"
-           class="ion-ios-star-outline star" ng-show="!isLikedAuth(author.name)"></i>
 
-        <div  id="link" class="elipse" ui-sref="tab.author({name: author.name})">
+        <div  id="link" class="elipse" ui-sref="tab.auteur({name: auteur.name})">
           {{author.name}}
 
         </div>
@@ -60,7 +58,7 @@
     <button class="button button-block button-positive" ui-sref="tab.signin">Sign In</button>
     <button class="button button-block button-positive" ui-sref="tab.signup">Sign Up</button>
     <button class="button button-block button-positive" ng-click="logout()">Log out</button>
-<p>{{userdata}}</p>
+
 
   </ion-content>
 </ion-view>
