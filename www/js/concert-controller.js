@@ -42,8 +42,6 @@ $http({
     $scope.answer = response.data;
     console.log(response.data);
     if ($scope.answer.error == ""){
-      $scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
-      $scope.location=$scope.answer.location.charAt(0).toUpperCase()+ $scope.answer.location.substring(1).toLowerCase();
       $scope.setList=$scope.answer.setList;
       $scope.isSong=false;
       for(var i = 0, len = $scope.setList.length; i < len; i++) {
