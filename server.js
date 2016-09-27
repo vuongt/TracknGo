@@ -604,21 +604,29 @@ app.get('/program', function(req,res){
       return console.log(errEliza);
     } else {
       var objEliza = JSON.parse(bodyEliza);
-      program.title = objEliza.TITRPROG;
-      program.date = objEliza.DATDBTDIF.replace(/T/, ' ').replace(/\..+/, '');
-      program.location = objEliza.ADR ;
-      var list = objEliza.SETLIST;
-      var length = list.length;
-      if (length) {
-        for (var i = 0; i < length; i++) {
-          var oeuvre = {};
-          oeuvre.title = list[i].TITR;
-          var iswcEliza = list[i].ISWC;
-          oeuvre.iswc = iswcEliza.substring(0,1) + "-" + iswcEliza.substring(1,4) + "."+ iswcEliza.substring(4,7) + "."+ iswcEliza.substring(7,10) + "."+ iswcEliza.substring(10);
-          program.setList.push(oeuvre);
+      console.log(objEliza);
+      if (objEliza.error){
+        program.error =objEliza.error;
+        res.send(JSON.stringify(program));
+      } else {
+        program.title = objEliza.TITRPROG;
+        program.date = objEliza.DATDBTDIF.replace(/T/, ' ').replace(/\..+/, '');
+        program.location = objEliza.ADR +objEliza.VILLE;
+        var list = objEliza.SETLIST;
+        var length = list.length;
+        if (length) {
+          for (var i = 0; i < length; i++) {
+            var oeuvre = {};
+            oeuvre.title = list[i].TITR;
+            var iswcEliza = list[i].ISWC;
+            oeuvre.iswc = iswcEliza.substring(0,1) + "-" + iswcEliza.substring(1,4) + "."+ iswcEliza.substring(4,7) + "."+ iswcEliza.substring(7,10) + "."+ iswcEliza.substring(10);
+            program.setList.push(oeuvre);
+          }
         }
+        console.log("Program to sent: ");
+        console.log(program);
+        res.send(JSON.stringify(program));
       }
-      res.send(JSON.stringify(program));
     }
   });
 });

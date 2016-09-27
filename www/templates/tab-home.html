@@ -10,11 +10,12 @@
       <h3>{{item.title}}</h3><p><span class="right">      {{item.date}}</span></p>
       <p>{{item.location}}</p>
       <div>
-        <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: cdeprog})">
+        <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title,date:item.date,location:item.date})">
           J'y vais !
         </button>
       </div>
     </ion-item>
+
 
   </ion-content>
 </ion-view>
