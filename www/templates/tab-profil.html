@@ -37,10 +37,10 @@
         </ion-item>
     </ion-list>
     <ion-list>
-      <ion-item class="item-divider" id="page-list-item-divider1">Artist favoris</ion-item>
+      <ion-item class="item-divider" id="page-list-item-divider1">Artistes favoris</ion-item>
       <ion-item  ng-repeat="artist in userdata.artists">
-        <i class="ion-ios-star star" ng-click= "delFavoritesAuth(artist.name)"
-           ng-show="isLikedAuth(artist.name)"></i>
+        <i class="ion-ios-star star" ng-click= "delFavoritesArt(artist.name)"
+           ng-show="isLikedArt(artist.name)"></i>
 
 
         <div class="elipse" ui-sref="tab.artist({name: artist.name})">

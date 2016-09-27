@@ -14,6 +14,8 @@
       </div>
     </div>
 
+
+
     <ion-list ng-show="isSong">
       <ion-item class="item-divider" id="page-list-item-divider1">Morceaux</ion-item>
       <ion-item ng-repeat="song in answer | limitTo:numLimit">
@@ -25,13 +27,19 @@
 
         <i id="info" class="info ion-ios-information-outline"  ng-show="song.isInfo"></i>
 
-        <div  id="link" class="elipse" ui-sref= "tab.musique({iswc: song.iswc, title:song.title})">
+        <div  id="link" class="elipse" ui-sref= "tab.musique({iswc: song.iswc, title:song.title})" ng-show="song.isInfo">
+          {{song.title}}
+
+        </div>
+
+        <div  id="link" class="elipse" ng-show="!song.isInfo">
           {{song.title}}
 
         </div>
       </ion-item>
     </ion-list>
     <button ng-show="isPlus" class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats... </button>
+    <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
 
 
   </ion-content>

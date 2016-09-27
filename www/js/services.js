@@ -186,6 +186,59 @@ console.log("BOUM");
           };
 
 
+//Ajouter un artiste aux favoris
+
+    var addFavoritesArt = function(name) {
+
+
+                $http({
+                      method: 'GET',
+                      url: 'http://localhost:8080/action/addfavorite?type=artist&name='+name,
+                      header:{
+                      Origin:'http://localhost:8100'
+                    }
+                    }).then(function successCallback(response) {
+
+
+
+
+                      }, function errorCallback(response) {
+
+                      });
+
+
+                 };
+
+
+    //Supprimer une chanson des favoris
+    var delFavoritesArt = function(name) {
+
+
+    console.log('cet auteur '+name+' va être supprimée de vos favoris');
+
+
+                      $http({
+                               method: 'GET',
+                               url: 'http://localhost:8080/action/removefavorite?type=artist&name='+name,
+                               header:{
+                               Origin:'http://localhost:8100'
+                             }
+                             }).then(function successCallback(response) {
+
+                                return({action: response.data.actionSucceed, auth: response.data.authorized});
+
+
+                               }, function errorCallback(response) {
+
+
+
+                               });
+
+
+
+          };
+
+
 
 
     var isLiked = function (iswc, userdata) {
@@ -214,6 +267,17 @@ console.log("BOUM");
         return false;
     };
 
+    var isLikedArt = function (name, userdata) {
+
+
+
+          for (var k=0;k<userdata.artists.length;k++){
+              if (name == userdata.artists[k].name){
+                    return true;
+                    }
+          }
+        return false;
+    };
 
 //Add an interprete to your favorites
 
@@ -230,6 +294,9 @@ console.log("BOUM");
       addFavorites: addFavorites,
       delFavoritesAuth: delFavoritesAuth,
       addFavoritesAuth: addFavoritesAuth,
+       delFavoritesArt: delFavoritesArt,
+      addFavoritesArt: addFavoritesArt,
+      isLikedArt: isLikedArt,
       getUserInfo : function() {
       storeUserInfo();
       return userInfo;},
