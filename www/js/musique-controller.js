@@ -53,14 +53,7 @@ $http({
       }
       console.log($scope.answer);
 
-      $scope.isConcert=false;
       $scope.isCharged=false;
-     if ($scope.answer.concerts.length!=0){
-     $scope.isConcert=true;
-     }
-
-
-
 
     } else {
       //Show an alert of the error
@@ -88,6 +81,7 @@ $ionicHistory.goBack();
 
 
   $scope.chargeConcerts = function(iswc){
+  console.log('system retrieving concerts where'+iswc+'is announced');
         $http({
           method: 'GET',
           url: 'http://localhost:8080/work/program?iswc='+iswc,
@@ -95,12 +89,12 @@ $ionicHistory.goBack();
             Origin:'http://localhost:8100'
           }
         }).then(function successCallback(response) {
-            $scope.concerts = response.data;
+            $scope.concerts = response.data.concerts;
+            console.log(response.data);
             if ($scope.answer.error == ""){
-
+             $scope.isCharged=true;
 
              for(var i = 0, len = $scope.concerts.length; i < len; i++) {
-                      $scope.isCharged=true;
                       $scope.concerts[i].title = $scope.answer.concerts[i].title.charAt(0).toUpperCase()+ $scope.concerts[i].title.substring(1).toLowerCase();
 
 
@@ -109,9 +103,10 @@ $ionicHistory.goBack();
 
 
             } else {
-
+            $scope.isCharged=false;
             }
           }, function errorCallback(response) {
+           $scope.isCharged=false;
           });
 
 
