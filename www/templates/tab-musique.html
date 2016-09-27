@@ -32,15 +32,19 @@
       <ion-item ng-repeat="artist in answer.performer track by $index"  ui-sref="tab.artist({name: artist})">
         {{artist}}
       </ion-item>
-      <button ng-show="!isCharged" class="button button-full button-stable" ng-click="chargeConcerts(iswc)">Chercher des concerts avec ce morceau</button>
+
 
     </ion-list>
 
+    <button ng-show="!isCharged" class="button button-full button-stable" ng-click="chargeConcerts(iswc)"> <span class="ion-ios-search"></span> &nbsp;&nbsp;Chercher des concerts
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <ion-spinner style="padding-left: 50%; float: center;" ng-show="!isCharged && charging" icon="spiral"></ion-spinner>
+    </button>
 
 
 
       <ion-list ng-show="isCharged">
-      <ion-item ng-show="isCharged" class="item item-divider"> Concerts autour de vous
+      <ion-item class="item item-divider"> Concerts où ce morceau est annoncé
         <i class="ion-ios-search-strong icon-right" ng-click="openModal()" style="float: right; font-size: 130%"></i>
       </ion-item>
       <ion-item ng-repeat="item in concerts"
@@ -56,6 +60,7 @@
 
     </ion-list>
 
+    <p ng-show="!isConcert && isCharged" style="text-align: center; font-size: large; padding-top: 10%;" class="charging lighter">&nbsp;&nbsp;&nbsp;&nbsp; Aucun résultat</p>
 
 
 

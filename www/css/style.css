@@ -447,3 +447,18 @@ label.month-select {
     position: center;
 
 }
+
+.charging{
+
+    float: center;
+    text-align: center;
+    font-weight: lighter;
+    width:100%;
+}
+
+.searchloupe{
+     font-size: 25px;
+     text-align: left;
+     float: right;
+
+}

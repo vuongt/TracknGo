@@ -10,7 +10,7 @@ angular.module('starter.controllers')
 
   $scope.filter= "all";
   $scope.nbrPage=1;
-
+  $scope.charging=false;
   //$scope.concerts == [];
 
 $scope.userdata = AuthService.getUserInfo();
@@ -57,7 +57,7 @@ $scope.userdata = AuthService.getUserInfo();
 
 
     $scope.submitSearch = function(search, filter){
-
+        $scope.charging=true;
 
             $http({
               method: 'GET',
@@ -66,6 +66,7 @@ $scope.userdata = AuthService.getUserInfo();
               Origin:'http://localhost:8100'
             }
 }).then(function successCallback(response) {
+     $scope.charging=false;
     $scope.answer = response.data.results;
     $scope.error = response.data.error;
      $scope.isSong = false;
@@ -121,18 +122,7 @@ $scope.userdata = AuthService.getUserInfo();
   }
 
 
-  $scope.printMore = function() {
-$scope.numLimit=$scope.numLimit+5;
 
-  if ($scope.numLimit>95){
-
-  $scope.nbrPage =  $scope.nbrPage+1;
-  }
-
-  if ($scope.numLimit>=$scope.maxResults){$scope.isPlus = false;}
-
-
-  };
 
 
 

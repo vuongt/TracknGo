@@ -26,7 +26,7 @@ $scope.userdata = AuthService.getUserInfo();
 
  return(AuthService.isLikedAuth(name, $scope.userdata));    };
 
-
+$scope.charging=false;
 
 $http({
   method: 'GET',
@@ -47,6 +47,7 @@ $http({
           {
           $scope.isArtist=true;
           }
+
       for(var i = 0, len = $scope.answer.performer.length; i < len; i++) {
         var temp = $scope.answer.performer[i].trim();
         $scope.answer.performer[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
@@ -82,6 +83,7 @@ $ionicHistory.goBack();
 
   $scope.chargeConcerts = function(iswc){
   console.log('system retrieving concerts where'+iswc+'is announced');
+  $scope.charging=true;
         $http({
           method: 'GET',
           url: 'http://localhost:8080/work/program?iswc='+iswc,
@@ -93,14 +95,16 @@ $ionicHistory.goBack();
             console.log(response.data);
             if ($scope.answer.error == ""){
              $scope.isCharged=true;
+              if ($scope.concerts.length!=0){
+                   $scope.isConcert=true;
+                   for(var i = 0, len = $scope.concerts.length; i < len; i++) {
+                            $scope.concerts[i].title = $scope.answer.concerts[i].title.charAt(0).toUpperCase()+ $scope.concerts[i].title.substring(1).toLowerCase();
+                          }
+               }
+               else{
+               $scope.isConcert=false;
 
-             for(var i = 0, len = $scope.concerts.length; i < len; i++) {
-                      $scope.concerts[i].title = $scope.answer.concerts[i].title.charAt(0).toUpperCase()+ $scope.concerts[i].title.substring(1).toLowerCase();
-
-
-
-                    }
-
+               }
 
             } else {
             $scope.isCharged=false;
