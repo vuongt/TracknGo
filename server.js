@@ -94,7 +94,7 @@ passport.use('local-signin', new LocalStrategy({
     mariaClient.query("SELECT * FROM users WHERE email='" + email + "'", function (err, rows) {
       if (err) return done(err);
       if (!rows.length) {
-        return (done(null, false, {msg: 'No user found'}));
+        return (done(null, false, {msg: 'No account has been registered with this email yet !'}));
       }
       //if the user is found but the password is wrong
       if (rows[0].password !== password)
@@ -788,7 +788,7 @@ app.get('/action/addfavorite', function (req, res) {
   //params: type, id of the content, title
   var action ={authorized:false, actionSucceed: false};
   try {
-    var requestToken = token.extractToken(req.headers);
+    var requestToken = token.extractToken(req.headers); //token has been verified here
   } catch (err){
     console.log(err);//res.send (JSON.stringify(action));
   }
@@ -814,6 +814,16 @@ app.get('/action/addfavorite', function (req, res) {
     else if (req.query.type === "author") {
       var prepAuth = mariaClient.prepare("INSERT INTO favorite_authors (id_user, name_author) VALUES (:userid ,:name_author)");
       mariaClient.query(prepAuth({userid:userid, name_author:req.query.name}), function (err, rows) {
+        if (err) res.send(JSON.stringify(action));
+        else {
+          action.actionSucceed = true;
+          console.log('Add favorite ' + req.query.name + ' succeeded');
+          res.send(JSON.stringify(action));
+        }
+      });
+    } else if (req.query.type === "artist") {
+      var prepArt = mariaClient.prepare("INSERT INTO favorite_artists (id_user, name_artist) VALUES (:userid ,:name_artist)");
+      mariaClient.query(prepArt({userid:userid, name_artist:req.query.name}), function (err, rows) {
         if (err) res.send(JSON.stringify(action));
         else {
           action.actionSucceed = true;
@@ -858,6 +868,17 @@ app.get('/action/removefavorite', function (req, res) {
   if (req.query.type === "author") {
     var prepAuth = mariaClient.prepare("DELETE FROM favorite_authors WHERE id_user=:userid AND name_author =:name_author");
     mariaClient.query(prepAuth({userid:userid,name_author:req.query.name}), function (err, rows) {
+      if (err) res.send (JSON.stringify(action));
+      else {
+        action.actionSucceed = true;
+        console.log('Remove favorite ' + req.query.name + ' succeeded');
+        res.send (JSON.stringify(action));
+      }
+    });
+  }
+  if (req.query.type === "artist") {
+    var prepArt = mariaClient.prepare("DELETE FROM favorite_artists WHERE id_user=:userid AND name_artist =:name_artist");
+    mariaClient.query(prepArt({userid:userid,name_artist:req.query.name}), function (err, rows) {
       if (err) res.send (JSON.stringify(action));
       else {
         action.actionSucceed = true;

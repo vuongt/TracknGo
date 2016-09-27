@@ -22,6 +22,11 @@ CREATE OR REPLACE TABLE favorite_authors (
   name_author VARCHAR(30) NOT NULL
 );
 
+CREATE OR REPLACE TABLE favorite_artists (
+  id_user MEDIUMINT NOT NULL,
+  name_artist VARCHAR(30) NOT NULL
+);
+
 CREATE OR REPLACE TABLE comment (
   id_comment INT NOT NULL AUTO_INCREMENT,
   cdeprog VARCHAR(10) NOT NULL,
@@ -75,15 +80,27 @@ VALUES ('1','Goldman'),
        ('4','Zazie'),
        ('1','Garou'),
        ('5','Black M');
-
+INSERT INTO favorite_artists (id_user,name_artist)
+VALUES ('1','Katy Perry'),
+      ('2','Imagine Dragon'),
+      ('2','Tokio Hotel'),
+      ('3','Christine and the Queen'),
+      ('3','Claude Francois'),
+      ('4','Vanessa Paradis'),
+      ('4','Zazie'),
+      ('1','Garou'),
+      ('5','Black M');
 
 
 INSERT INTO comment (cdeprog, id_user, creation_date, content)
-VALUES ('2', '1', '2016-09-24', 'ceci est mon commentaire' );
+VALUES ('0008201463', '1', '2016-09-24', 'ceci est mon commentaire' ),
+       ('0008201463', '2', '2016-09-24', 'another comment, in English' ),
+       ('0008201496', '2', '2016-09-24', 'another comment, in English' ),
+       ('0008201496', '1', '2016-09-24', 'another another comment, in English' );
 
 
 INSERT INTO planning (id_user, cdeprog, prog_date, location, title)
-VALUES ('1', '2', '2016-09-28', '13 Passage du Moulinet, 75013 Paris ', 'concert de Mika'),
-       ('1', '3', '2016-10-05', '7 Rue Louise Weiss, 75013 Paris', 'Theatre Dunois');
+VALUES ('1', '0008201463', '2016-09-16T22:00:00.000Z', '13 Passage du Moulinet, 75013 Paris ', 'Concert Tribute to Balavoine'),
+       ('1', '0008201496', '2016-09-17T22:00:00.000Z', 'SOUFFLENHEIM', 'Concert Tribute to Balavoine');
 
 
