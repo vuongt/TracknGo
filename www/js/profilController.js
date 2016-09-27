@@ -13,10 +13,10 @@ angular.module('starter.controllers')
     },function errorCallback(response){
       console.log(response);
     });*/
-    $scope.userdata = AuthService.getUserInfo();
 
 
-
+    $scope.userdata=AuthService.getUserInfo();
+    console.log($scope.userdata)
     $scope.isLikedAuth = function(name){
 
  return(AuthService.isLikedAuth(name, $scope.userdata));    };
@@ -29,7 +29,9 @@ angular.module('starter.controllers')
 
 
 
+     $scope.isLikedArt = function(name){
 
+  return(AuthService.isLikedArt(name, $scope.userdata));    };
 
 
 
@@ -55,6 +57,19 @@ angular.module('starter.controllers')
             };
         $scope.addFavoritesAuth = function(name){
              AuthService.addFavoritesAuth(name);
+             $scope.userdata = AuthService.getUserInfo();
+
+            };
+
+
+        $scope.delFavoritesArt = function(name){
+            AuthService.delFavoritesArt(name);
+            $scope.userdata = AuthService.getUserInfo();
+
+
+            };
+        $scope.addFavoritesArt = function(name){
+             AuthService.addFavoritesArt(name);
              $scope.userdata = AuthService.getUserInfo();
 
             };

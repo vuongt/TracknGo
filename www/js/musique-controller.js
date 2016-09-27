@@ -2,7 +2,7 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function($scope,
   $scope.iswc = $stateParams.iswc;
   $scope.title = $stateParams.title;
   $scope.myGoBack = function() {window.history.back()  };
-
+  $scope.chargingbeg=true;
 
 $scope.userdata = AuthService.getUserInfo();
 
@@ -20,11 +20,27 @@ $scope.userdata = AuthService.getUserInfo();
 
             };
 
+                    $scope.delFavoritesArt = function(name){
+                        AuthService.delFavoritesArt(name);
+                        $scope.userdata = AuthService.getUserInfo();
+
+
+                        };
+                    $scope.addFavoritesArt = function(name){
+                         AuthService.addFavoritesArt(name);
+                         $scope.userdata = AuthService.getUserInfo();
+
+                        };
+
 
 
     $scope.isLikedAuth = function(name){
 
  return(AuthService.isLikedAuth(name, $scope.userdata));    };
+      $scope.isLikedArt = function(name){
+
+   return(AuthService.isLiked(name, $scope.userdata));    };
+
 
 $scope.charging=false;
 
@@ -35,6 +51,8 @@ $http({
     Origin:'http://localhost:8100'
   }
 }).then(function successCallback(response) {
+$scope.chargingbeg=false;
+
     $scope.answer = response.data;
     if ($scope.answer.error == ""){
       $scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
@@ -115,5 +133,7 @@ $ionicHistory.goBack();
 
 
   }
+
+
 });
 

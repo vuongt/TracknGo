@@ -5,7 +5,7 @@ angular.module('starter.controllers').controller('ArtistCtrl', function($scope, 
   $scope.numLimit=5;
     $scope.isPlus = false;
 
-
+ $scope.charging=true;
 
     $scope.userdata = AuthService.getUserInfo();
 
@@ -33,6 +33,7 @@ $http({
     Origin:'http://localhost:8100'
   }
 }).then(function successCallback(response) {
+$scope.charging=false;
     $scope.answer = response.data;
     console.log($scope.answer);
     $scope.numLimit=5;

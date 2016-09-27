@@ -6,7 +6,7 @@ $scope.isPlus = false;
 
 $scope.userdata = AuthService.getUserInfo();
 
-
+$scope.charging=true;
 
     $scope.isLiked = function(iswc){
 
@@ -40,6 +40,7 @@ $http({
   Origin:'http://localhost:8100'
   }
 }).then(function successCallback(response) {
+    $scope.charging=false;
     $scope.answer = response.data.works;
     $scope.error= response.data.error;
     console.log($scope.answer);
