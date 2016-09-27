@@ -158,7 +158,7 @@ var optionSacem = {
   qs: {
     token: config.sacem.token,
     query: '', //search criteria
-    filters: '', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
+    //filters: '', // data on which the query applies : titles, subtitles, parties, performers. Those parameters can be added to each other
     pagesize: config.sacem.pagesize, //Number of works per page
     page: 1, //Number of page to return,
     blankfield: true
@@ -270,8 +270,6 @@ app.post('/signup', function(req, res, next) {
     });
   })(req, res, next);
 });
-
-
 //sends the request through our local signin strategy, and if successful takes user to homepage,
 /*app.post('/signin', passport.authenticate('local-signin', {session: false}),
   function (req, res) {
@@ -288,7 +286,6 @@ app.post('/signup', function(req, res, next) {
     }.bind(null, res));
   });
 */
-
 app.post('/signin', function(req, res, next) {
   passport.authenticate('local-signin', function(err, user, info) {
     if (err) {
@@ -346,42 +343,57 @@ app.get('/search/works', function (req, res) {
   }
   optionSacem.qs.query = req.query.query;
   var filters= req.query.filters;
-  if (filters && filters !== "") {
-    if (filters !== "all"){
-      optionSacem.qs.filters = req.query.filters;
-      request(optionSacem, function (err, response, body) {
-        if (err) {
-          return console.log(err); //TODO send back error header
-        } else {
-          var bodyObj = JSON.parse(body);
-          if (bodyObj.error == "") {
-            for (var i = 0, length = bodyObj.works.length; i < length; i++) {
-              var result = {};
-              result.iswc = bodyObj.works[i].iswc;
-              result.title = bodyObj.works[i].title;
-              results.results.push(result);
-            }
-            res.send(JSON.stringify(results));
-          } else if (bodyObj.error == "no work") { // If there is no work found, the response doesn't counted as error, so results.error =""
-            res.send(JSON.stringify(results));
+  if (filters !== "all"){
+    optionSacem.qs.filters = req.query.filters;
+    request(optionSacem, function (err, response, body) {
+      if (err) {
+        return console.log(err); //TODO send back error header
+      } else {
+        var bodyObj = JSON.parse(body);
+        if (bodyObj.error == "") {
+          for (var i = 0, length = bodyObj.works.length; i < length; i++) {
+            var result = {};
+            result.iswc = bodyObj.works[i].iswc;
+            result.title = bodyObj.works[i].title;
+            results.results.push(result);
           }
-          else {
-            results.error = bodyObj.error;
-            res.send(JSON.stringify(results));
-          }
+          res.send(JSON.stringify(results));
+        } else if (bodyObj.error == "no work") { // If there is no work found, the response doesn't counted as error, so results.error =""
+          res.send(JSON.stringify(results));
         }
-      });
-    } else {
-      // TODO search with all filters
-
-    }
-  } else {
-    results.error = "Please select a filter";
-    res.send(JSON.stringify(results));
+        else {
+          results.error = bodyObj.error;
+          res.send(JSON.stringify(results));
+        }
+      }
+    });
+  }
+  else {
+    // all filters
+    request(optionSacem, function (err, response, body) {
+      if (err) {
+        return console.log(err); //TODO send back error header
+      } else {
+        var bodyObj = JSON.parse(body);
+        if (bodyObj.error == "") {
+          for (var i = 0, length = bodyObj.works.length; i < length; i++) {
+            var result = {};
+            result.iswc = bodyObj.works[i].iswc;
+            result.title = bodyObj.works[i].title;
+            results.results.push(result);
+          }
+          res.send(JSON.stringify(results));
+        } else if (bodyObj.error == "no work") { // If there is no work found, the response doesn't counted as error, so results.error =""
+          res.send(JSON.stringify(results));
+        }
+        else {
+          results.error = bodyObj.error;
+          res.send(JSON.stringify(results));
+        }
+      }
+    });
   }
 });
-
-
 //---------------artist------------------/
 //Get artist information from Bands In Town
 app.get('/artist', function (req, res) {
