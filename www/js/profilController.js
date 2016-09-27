@@ -14,9 +14,6 @@ angular.module('starter.controllers')
       console.log(response);
     });*/
     $scope.userdata = AuthService.getUserInfo();
-
-
-
     $scope.isLikedAuth = function(name){
 
  return(AuthService.isLikedAuth(name, $scope.userdata));    };

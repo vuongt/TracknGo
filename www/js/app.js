@@ -184,12 +184,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
     $rootScope.$on('$stateChangeStart', function (event,next, nextParams, fromState) {
-      if (!AuthService.isAuthenticated()) {
-        console.log(next.name);
-        if (next.name !== 'tab.home' && next.name !== 'tab.search') {
-          //event.preventDefault();
-          //$state.go('tab.signin');
-        }
+      if (!AuthService.isAuthenticated() && next.name =='tab.profile') {
+        console.log("next is" +next.name);
+        event.preventDefault();
+        $state.go('tab.signin');
       }
     });
   });

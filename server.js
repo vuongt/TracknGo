@@ -13,6 +13,7 @@ var app = express();
 var config = require('./config-dev.js'); //config file contains all tokens and other private info
 var authentication = require('./server/authentication.controller.js');
 
+//TODO verify if all connection has established before staring the server
 //=======================MARIADB======================
 /*Mariasql client to connect to the mariaDB*/
 var Client = require("mariasql");
@@ -23,22 +24,9 @@ var mariaClient = new Client({
   db: config.mariasql.db
 });
 /*
- app.post("/local-reg", function(req,res){
- const user = req.body;
- console.log(req.body);
- var prep = mariaClient.prepare('INSERT INTO users (name,email) VALUES (:name,:email)');
- if (user != {}){
- mariaClient.query(prep({name:user.name, email:user.email}),function(err, rows) {
- if (err)
- throw err;
- console.dir(rows);
- });
- }
  mariaClient.end();
- res.send("Inscription finished !");
- });
  */
-
+//TODO : end of each request ?
 //===================PASSPORT======================
 /*Sign in/up strategy using passport.js*/
 //=================================================
@@ -192,13 +180,6 @@ var optionSacemDetail = {
     'Origin': config.sacem.headerOrigin
   }
 };
-/*
- request(optionListWorks).then(function(res){
- //Request succeed
- }).catch(function(err){
- console.log(err);
- //TODO Handle Error
- });*/
 
 //======================API Eliza===================
 // Retrieve data from Eliza API
@@ -244,12 +225,6 @@ app.get("/home", function (req, res) {
 });
 
 //---------------Sign in, log out---------------
-
-//TODO disable session, delete redirect
-app.get("/signin", function (req, res) {
-  res.setHeader('Content-Type', 'text/html');
-  res.render('signin.ejs', {});
-});
 
 //sends the request through our local signup strategy, and if successful takes user to homepage,
 // otherwise returns then to signin page
@@ -364,12 +339,11 @@ app.get('/artist', function (req, res) {
   if (req.query.name && req.query.name !== "") {
     artist = req.query.name;
     detailsArtist.artist = artist;
-    //TODO artist name with space
     // Searching for concert of this artist from BandsInTown's API
     optionBIT.uri = 'http://api.bandsintown.com/artists/' + artist + '/events.json';
     optionSacem.qs.query = artist;
     optionSacem.qs.filters = "performers";
-    //TODO artist not found
+    //TODO artist not found from band in town
     //TODO how to make 2 independent requests
     request(optionBIT, function (errBit, resBit, bodyBit) {
       if (errBit) {
@@ -424,7 +398,7 @@ app.get('/artist', function (req, res) {
 
 
 //---------------author---------------
-//TODO : show result from API oeuvres or Eliza ? Rather API oeuvres
+//Show result from API oeuvres or Eliza ? Rather API oeuvres
 app.get('/author', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -476,10 +450,8 @@ app.get('/work', function (req, res) {
     error: "",
     iswc: "",
     title: "",
-    composerAuthor: [], // TODO is ipi code necessary ?
-    performer: [],
-    concerts:[]
-    //TODO retrieve information from Eliza
+    composerAuthor: [],
+    performer: []
   };
   //Get information from API oeuvres and then Eliza
   if (req.query.iswc && req.query.iswc !== "") {
@@ -505,34 +477,52 @@ app.get('/work', function (req, res) {
               else work.performer = [party['first name'] + ' ' + party['last name']];
             }
           }
-          var iswc_trimed = "T"+ req.query.iswc.replace(new RegExp("[^(0-9)]", "g"), '');
-          optionEliza.uri = config.eliza.uri + "/song/" +iswc_trimed;
-          request(optionEliza, function (errEliza,resEliza,bodyEliza){
-            if (errEliza) {
-              work.error = "Error when retrieving data. Please try again later";
-              res.send(JSON.stringify(work));
-              return console.log(errEliza);
-            } else {
-              var objEliza = JSON.parse(bodyEliza);
-              var length= objEliza.length;
-              if (length){
-                for (var i =0; i< length;i++){
-                  var concert = {};
-                  var elizaConcert = objEliza[i];
-                  concert.title = elizaConcert.TITRPROG;
-                  concert.cdeprog= elizaConcert.CDEPROG;
-                  concert.date= elizaConcert.DATDBDIF.replace(/T/, ' ').replace(/\..+/, '');
-                  concert.location= elizaConcert.ADR + elizaConcert.VILLE;
-                  work.concerts.push(concert);
-                }
-              }
-              res.send(JSON.stringify(work));
-            }
-          });
+          res.send(JSON.stringify(work));
         } else {
           work.error = bodyObj.error;
           res.send(JSON.stringify(work));
         }
+      }
+    });
+  } else {
+    work.error = "Work's identifier undefined";
+    res.send(JSON.stringify(work));
+  }
+});
+
+app.get('/work/program', function (req, res) {
+  //params :iswc
+  res.setHeader('Content-Type', 'application/json');
+  var work = {
+    error: "",
+    iswc: "",
+    concerts:[]
+  };
+  work.iswc = req.query.iswc;
+  //Get information from Eliza
+  if (req.query.iswc && req.query.iswc !== "") {
+    var iswc_trimed = "T"+ req.query.iswc.replace(new RegExp("[^(0-9)]", "g"), '');
+    optionEliza.uri = config.eliza.uri + "/song/" +iswc_trimed;
+    request(optionEliza, function (errEliza,resEliza,bodyEliza){
+      if (errEliza) {
+        work.error = "Error when retrieving data. Please try again later";
+        res.send(JSON.stringify(work));
+        return console.log(errEliza);
+      } else {
+        var objEliza = JSON.parse(bodyEliza);
+        var length= objEliza.length;
+        if (length){
+          for (var i =0; i< length;i++){
+            var concert = {};
+            var elizaConcert = objEliza[i];
+            concert.title = elizaConcert.TITRPROG;
+            concert.cdeprog= elizaConcert.CDEPROG;
+            concert.date= elizaConcert.DATDBTDIF.replace(/T/, ' ').replace(/\..+/, '');
+            concert.location= elizaConcert.ADR + elizaConcert.VILLE;
+            work.concerts.push(concert);
+          }
+        }
+        res.send(JSON.stringify(work));
       }
     });
   } else {
@@ -562,15 +552,16 @@ app.get('/program', function(req,res){
       return console.log(errEliza);
     } else {
       var objEliza = JSON.parse(bodyEliza);
-      /*program.title = bodyEliza.TITR;
-      program.date = bodyEliza.DATDBDIF.replace(/T/, ' ').replace(/\..+/, '');
-      program.location = bodyEliza.ADR ; */
-      var length = objEliza.length;
+      program.title = objEliza.TITRPROG;
+      program.date = objEliza.DATDBTDIF.replace(/T/, ' ').replace(/\..+/, '');
+      program.location = objEliza.ADR ;
+      var list = objEliza.SETLIST;
+      var length = list.length;
       if (length) {
         for (var i = 0; i < length; i++) {
           var oeuvre = {};
-          oeuvre.title = objEliza[i].TITR;
-          var iswcEliza = objEliza[i].ISWC;
+          oeuvre.title = list[i].TITR;
+          var iswcEliza = list[i].ISWC;
           oeuvre.iswc = iswcEliza.substring(0,1) + "-" + iswcEliza.substring(1,4) + "."+ iswcEliza.substring(4,7) + "."+ iswcEliza.substring(7,10) + "."+ iswcEliza.substring(10);
           program.setList.push(oeuvre);
         }
@@ -583,10 +574,9 @@ app.get('/program', function(req,res){
 
 
 //---------------profile---------------
-app.get('/profile', function (req, res) { //TODO get or post ?
+app.get('/profile', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
-  // TODO verify token
   console.log(req.headers);
   try {
     var requestToken = token.extractToken(req.headers);
@@ -612,7 +602,7 @@ app.get('/profile', function (req, res) { //TODO get or post ?
           var work = {};
           work.iswc = rows[i].iswc;
           work.title = rows[i].title;
-          user.works.push(work); //TODO Attention works may be empty outside this scope
+          user.works.push(work);
         }
         mariaClient.query("SELECT * FROM favorite_authors WHERE id_user='" + decoded.id + "'", function (err, rows) {
           if (err) console.log(err);
@@ -620,7 +610,7 @@ app.get('/profile', function (req, res) { //TODO get or post ?
             for (var i = 0, length = rows.length; i < length; i++) {
               var author = {};
               author.name = rows[i].name_author;
-              user.authors.push(author); //TODO Attention works may be empty outside this scope
+              user.authors.push(author);
             }
             console.log("user object to send:");
             console.log(user);
@@ -725,7 +715,7 @@ app.get('/action/removeevent',function(req,res){
 //---------------action favorite---------------
 app.get('/action/addfavorite', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  //TODO revised try and catch blocks
+  //TODO revised try and catch blocks : make it more compact
   //params: type, id of the content, title
   var action ={authorized:false, actionSucceed: false};
   try {
@@ -742,8 +732,8 @@ app.get('/action/addfavorite', function (req, res) {
     }
     action.authorized = true;
     if (req.query.type === "work") {
-      var prep = mariaClient.prepare("INSERT INTO favorite_works (id_user, iswc, title) VALUES (:userid,:iswc,:title);")
-      mariaClient.query(prep({userid:userid,iswc:req.query.iswc,title:req.query.title}), function (err, rows) {
+      var prepWork = mariaClient.prepare("INSERT INTO favorite_works (id_user, iswc, title) VALUES (:userid,:iswc,:title);")
+      mariaClient.query(prepWork({userid:userid,iswc:req.query.iswc,title:req.query.title}), function (err, rows) {
         if (err) console.log(err); // return res.send(JSON.stringify(action));
         else {
           action.actionSucceed = true;
@@ -753,8 +743,8 @@ app.get('/action/addfavorite', function (req, res) {
       });
     }
     else if (req.query.type === "author") {
-      var prep = mariaClient.prepare("INSERT INTO favorite_authors (id_user, name_author) VALUES (:userid ,:name_author)");
-      mariaClient.query(prep({userid:userid, name_author:req.query.name}), function (err, rows) {
+      var prepAuth = mariaClient.prepare("INSERT INTO favorite_authors (id_user, name_author) VALUES (:userid ,:name_author)");
+      mariaClient.query(prepAuth({userid:userid, name_author:req.query.name}), function (err, rows) {
         if (err) res.send(JSON.stringify(action));
         else {
           action.actionSucceed = true;
@@ -767,7 +757,7 @@ app.get('/action/addfavorite', function (req, res) {
 });
 app.get('/action/removefavorite', function (req, res) {
   //params: type, id
-  //TODO revised try and catch blocks
+  //TODO revised try and catch blocks : make it more compact
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
 
@@ -786,8 +776,8 @@ app.get('/action/removefavorite', function (req, res) {
   }
   action.authorized =true;
   if (req.query.type === "work") {
-    var prep = mariaClient.prepare("DELETE FROM favorite_works WHERE id_user=:userid AND iswc =:iswc");
-    mariaClient.query(prep({userid:userid,iswc:req.query.iswc}), function (err, rows) {
+    var prepWork = mariaClient.prepare("DELETE FROM favorite_works WHERE id_user=:userid AND iswc =:iswc");
+    mariaClient.query(prepWork({userid:userid,iswc:req.query.iswc}), function (err, rows) {
       if (err) return res.send (JSON.stringify(action));
       else {
         action.actionSucceed = true;
@@ -797,8 +787,8 @@ app.get('/action/removefavorite', function (req, res) {
     });
   }
   if (req.query.type === "author") {
-    var prep = mariaClient.prepare("DELETE FROM favorite_authors WHERE id_user=:userid AND name_author =:name_author");
-    mariaClient.query(prep({userid:userid,name_author:req.query.name}), function (err, rows) {
+    var prepAuth = mariaClient.prepare("DELETE FROM favorite_authors WHERE id_user=:userid AND name_author =:name_author");
+    mariaClient.query(prepAuth({userid:userid,name_author:req.query.name}), function (err, rows) {
       if (err) res.send (JSON.stringify(action));
       else {
         action.actionSucceed = true;

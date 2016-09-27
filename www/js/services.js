@@ -48,7 +48,6 @@ angular.module('starter.services', [])
           if (result.data.success) {
             storeUserCredentials(result.data.token);
             storeUserInfo();
-            console.log('info stored');
             resolve(result.data.msg);
           } else {
             reject(result.data.msg);
@@ -230,9 +229,7 @@ console.log("BOUM");
       addFavorites: addFavorites,
       delFavoritesAuth: delFavoritesAuth,
       addFavoritesAuth: addFavoritesAuth,
-      getUserInfo : function() {
-      storeUserInfo();
-      return userInfo;},
+      getUserInfo : function() {storeUserInfo();return userInfo;},
       isAuthenticated: function() {return isAuthenticated;}
     };
   })
