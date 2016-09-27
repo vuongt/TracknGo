@@ -1,10 +1,4 @@
 angular.module('starter.controllers')
-  .run(function(AuthService,$state){
-    console.log('change to sign in because not authenticated')
-    if( !AuthService.isAuthenticated()){
-      $state.go('tab.signin')
-    }
-  })
   .controller('ProfilCtrl', function($scope,AuthService,API_ENDPOINT,$http,$state) {
     /*$scope.userdata = {};
     $http.get(API_ENDPOINT.url + '/profile').then(function successCallback(response){
@@ -13,10 +7,9 @@ angular.module('starter.controllers')
     },function errorCallback(response){
       console.log(response);
     });*/
+    $scope.userdata = AuthService.getUserInfo();
 
 
-    $scope.userdata=AuthService.getUserInfo();
-    console.log($scope.userdata)
     $scope.isLikedAuth = function(name){
 
  return(AuthService.isLikedAuth(name, $scope.userdata));    };

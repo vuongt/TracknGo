@@ -590,13 +590,13 @@ app.get('/program', function(req,res){
   var program = {
     error:"",
     cdeprog:"",
-    title:"",
-    date:"",
-    location:"",
+    //title:"",
+    //date:"",
+    //location:"",
     setList:[]
   };
   program.cdeprog = req.query.cdeprog;
-  optionEliza.uri = config.eliza.uri + "/program/" +program.cdeprog;
+  optionEliza.uri = config.eliza.uri + "/setList/" +program.cdeprog;
   request(optionEliza, function (errEliza,resEliza,bodyEliza) {
     if (errEliza) {
       program.error = "Error when retrieving data. Please try again later";
@@ -609,10 +609,10 @@ app.get('/program', function(req,res){
         program.error =objEliza.error;
         res.send(JSON.stringify(program));
       } else {
-        program.title = objEliza.TITRPROG;
-        program.date = objEliza.DATDBTDIF.replace(/T/, ' ').replace(/\..+/, '');
-        program.location = objEliza.ADR +objEliza.VILLE;
-        var list = objEliza.SETLIST;
+        //program.title = objEliza.TITRPROG;
+        //program.date = objEliza.DATDBTDIF.replace(/T/, ' ').replace(/\..+/, '');
+        //program.location = objEliza.ADR +objEliza.VILLE;
+        var list = objEliza;
         var length = list.length;
         if (length) {
           for (var i = 0; i < length; i++) {

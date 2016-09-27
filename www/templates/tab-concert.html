@@ -8,12 +8,10 @@
       <div class="rightheader" style="color: #FFFFFF;">
 
         <h1>{{title}}</h1>
-        <p> {{date}} </br> {{date}}
-        <h1>{{answer.title}}</h1>
-        <p> {{answer.date}} </br> {{answer.time}}
+        <p> {{date}} </p>
           </br></br>
           <span class="ion-location"> </span>
-        <p> &nbsp <strong> {{answer.location}} </strong>  </br> {{adress}}</p>
+        <p> &nbsp <strong> {{location}} </strong>  </p>
 
       </div>
 
@@ -50,7 +48,7 @@
 
       </ion-item>
     </ion-list>
-    <ion-list id="page-list3" ng-show="isConcert">
+    <ion-list id="page-list3">
       <ion-item class="item-divider" id="page-list-item-divider2">Commentaires</ion-item>
     </ion-list>
     <ion-list ng-repeat="comment in comments" id="page-list4">
@@ -61,8 +59,11 @@
     </ion-list>
 
     <div class="bottom-concert">
-      <textarea type="text" class="myform" placeholder="Rédigez votre commentaire..."></textarea>
-      <span> <button class="position-button lighter"> Envoyer </button></span>
+      <form ng-submit="sendComment(contentComment)">
+        <textarea type="text" class="myform" placeholder="Rédigez votre commentaire..." ng-model="contentComment"></textarea>
+        <span> <button class="position-button lighter"> Envoyer </button></span>
+      </form>
+
 
 
     </div>

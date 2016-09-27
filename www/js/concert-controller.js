@@ -7,7 +7,10 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
 
 
   $scope.cdeprog= "0008201463"; // TODO delete this in prod
-  console.log("acessing detail of program: " + $scope.cdeprog);
+  $scope.date= "2016-09-16T22:00:00.000Z";
+  $scope.title= "Concert Tribute to Balavoine";
+  $scope.location= "SOUFFLENHEIM";
+  console.log("accessing detail of program: " + $scope.cdeprog);
 
 
   $scope.userdata = AuthService.getUserInfo();
@@ -31,9 +34,9 @@ $http({
     $scope.answer = response.data;
     console.log(response.data);
     if ($scope.answer.error == ""){
-      $scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
+      /*$scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
       $scope.location=$scope.answer.location.charAt(0).toUpperCase()+ $scope.answer.location.substring(1).toLowerCase();
-      $scope.date=$scope.answer.date;
+      $scope.date=$scope.answer.date;*/
       $scope.setList=$scope.answer.setList;
       $scope.isSong=false;
       for(var i = 0, len = $scope.setList.length; i < len; i++) {
@@ -64,29 +67,44 @@ $http({
 
   $scope.comments = [];
 // Gestion des commentaires
-
+//get commentaire
   $http({
     method: 'GET',
-    url: 'http://localhost:8080/comment',
+    url: 'http://localhost:8080/comment?cdeprog='+$scope.cdeprog,
     header: {
       Origin: 'http://localhost:8100'
     }
   }).then(function successCallback(response) {
-    $scope.answer = response.data.result;
-    $scope.error = response.data.error;
-    if ($scope.error == "") {
-      if ($scope.answer.length !== 0) {
-        for (var i = 0, len = $scope.answer.length; i < len; i++) {
-          $scope.comments.push($scope.answer[i]);
-        }
-      }
+    if (response.data.error) {
+      console.log(response.data.error);
     } else {
-
+      $scope.comments = response.data;
     }
   }, function errorCallback(error) {
     console.log(error);
   });
-
+//post comment
+  $scope.sendComment = function(contentComment){
+    $http({
+      method: 'POST',
+      url: 'http://localhost:8080/comment?cdeprog='+$scope.cdeprog,
+      header: {
+        Origin: 'http://localhost:8100'
+      },
+      data:{
+        cdeprog:$scope.cdeprog,
+        content:contentComment,
+        date:new Date()
+      }
+    }).then(function successCallback(response) {
+      if (response.data.error) {
+        console.log(response.data.error);
+        //TODO popup
+      }
+    }, function errorCallback(error) {
+      console.log(error);
+    });
+  };
 
 });
 
