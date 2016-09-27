@@ -130,7 +130,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       .state('tab.signin', {
         url: '/signin',
         views: {
-          'tab-home': {
+          'tab-profil': {
             templateUrl: 'templates/tab-signin.html',
             controller: 'SigninCtrl'
           }
@@ -184,10 +184,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
   .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
     $rootScope.$on('$stateChangeStart', function (event,next, nextParams, fromState) {
-      if (!AuthService.isAuthenticated() && next.name =='tab.profile') {
-        console.log("next is" +next.name);
-        event.preventDefault();
-        $state.go('tab.signin');
+      console.log(AuthService.isAuthenticated());
+      if (!AuthService.isAuthenticated()) {
+        console.log("next is " + next.name);
+        if (next.name == 'tab.profil' || next.name == 'tab.planning'){
+          event.preventDefault();
+          $state.go('tab.signin');
+        }
       }
     });
   });

@@ -56,7 +56,7 @@ passport.use('local-signup', new LocalStrategy(
     // we are checking to see if the user trying to sign up already exists
     console.log('starting signup strategy' + req.body);
     mariaClient.query("SELECT * FROM users WHERE email='" + email + "'", function (err, rows) {
-      console.log("rows object when checking email: " + rows);
+      console.log("rows object when checking email: ");console.log(rows[0]);
       if (err) return done(err);
       if (!rows.length) {
         //If there is no user with that email
@@ -78,7 +78,7 @@ passport.use('local-signup', new LocalStrategy(
           return done(null, newUser);
         });
       } else {
-        return done(null, false, {message: 'Email taken.'});
+        return done(null, false, {msg: 'This email has been registered'});
       }
     });
   }
@@ -94,11 +94,11 @@ passport.use('local-signin', new LocalStrategy({
     mariaClient.query("SELECT * FROM users WHERE email='" + email + "'", function (err, rows) {
       if (err) return done(err);
       if (!rows.length) {
-        return (done(null, false, {message: 'No user found'}));
+        return (done(null, false, {msg: 'No user found'}));
       }
       //if the user is found but the password is wrong
       if (rows[0].password !== password)
-        return done(null, false, {message: 'Wrong password'});
+        return done(null, false, {msg: 'Wrong password'});
       // all is well, return successful user
       console.log("Login succeded");
       return done(null, rows[0]);
@@ -135,7 +135,6 @@ app.use(function (req, res, next) {
   if (err) res.locals.error = err;
   if (msg) res.locals.notice = msg;
   if (success) res.locals.success = success;
-
   next();
 });
 
@@ -229,7 +228,7 @@ app.get("/home", function (req, res) {
 //sends the request through our local signup strategy, and if successful takes user to homepage,
 // otherwise returns then to signin page
 //Token created with email
-app.post("/signup", passport.authenticate('local-signup', {session: false}),
+/*app.post("/signup", passport.authenticate('local-signup', {session: false}),
   function (req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
@@ -242,10 +241,39 @@ app.post("/signup", passport.authenticate('local-signup', {session: false}),
       res.status(201).json({success: true, token: 'JWT ' + token});
       console.log('token sent');
     }.bind(null, res));
-  });
+  });*/
+
+app.post('/signup', function(req, res, next) {
+  passport.authenticate('local-signup', function(err, user, info) {
+    if (err) {
+      return next(err); // will generate a 500 error
+    }
+    // Generate a JSON response reflecting authentication status
+    if (! user) {
+      return res.send({ success : false, msg : info.msg});
+    }
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    req.login(user, function(err){
+      if(err){
+        return next(err);
+      }
+      res.setHeader('Content-Type', 'application/json');
+      console.log('Authentication succeeded');
+      token.createToken({email: req.user.email, id: req.user.id, name: req.user.name}, function (res, err, token) {
+        if (err) {
+          return res.status(400).send(err);
+        }
+        res.status(201).json({success: true, token: 'JWT ' + token});
+        console.log('token sent');
+      }.bind(null, res));
+    });
+  })(req, res, next);
+});
+
 
 //sends the request through our local signin strategy, and if successful takes user to homepage,
-app.post('/signin', passport.authenticate('local-signin', {session: false}),
+/*app.post('/signin', passport.authenticate('local-signin', {session: false}),
   function (req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
@@ -259,7 +287,36 @@ app.post('/signin', passport.authenticate('local-signin', {session: false}),
       console.log('token sent');
     }.bind(null, res));
   });
+*/
 
+app.post('/signin', function(req, res, next) {
+  passport.authenticate('local-signin', function(err, user, info) {
+    if (err) {
+      return next(err); // will generate a 500 error
+    }
+    // Generate a JSON response reflecting authentication status
+    if (! user) {
+      return res.send({ success : false, msg : info.msg});
+    }
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    req.login(user, function(err){
+      if(err){
+        return next(err);
+      }
+      // If this function gets called, authentication was successful.
+      // `req.user` contains the authenticated user.
+      res.setHeader('Content-Type', 'application/json');
+      token.createToken({email: req.user.email, id: req.user.id, name: req.user.name}, function (res, err, token) {
+        if (err) {
+          return res.status(400).send(err);
+        }
+        res.status(201).json({success: true, token: 'JWT ' + token});
+        console.log('token sent');
+      }.bind(null, res));
+    });
+  })(req, res, next);
+});
 //logs user out of site, deleting them from the session, and returns to homepage
 app.get('/signout', authentication.signout);
 /*function(req, res) {
