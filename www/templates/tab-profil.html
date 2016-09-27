@@ -2,28 +2,27 @@
   <ion-content>
 
     <div class="big-header">
-      <h3 id="page-heading1">{{userdata.name}}</h3><h3 class="right"><i class="ion-log-out" ng-click="logout()"></i></h3>
-
-      <div id="page-markdown1">
-        <p>2 concerts cette semaine</p>
-      </div>
+      <h3 id="page-heading1">{{userdata.name}}<i class="ion-log-out logout" ng-click="logout()"></i></h3>
       <div>
         <button id="page-button1" class="button button-planning" ui-sref="tab.planning">
           Mon planning
         </button>
       </div>
       <div class="container">
-        <div class="left">
+        <div >
           <h3>{{userdata.authors.length}}</h3>
           <p>Auteurs suivi</p>
         </div>
-        <div class="right">
+        <div >
+          <h3>{{userdata.artists.length}}</h3>
+          <p>Artists suivi</p>
+        </div>
+        <div >
           <h3> {{userdata.works.length}} </h3>
           <p>Titres favoris</p>
         </div>
       </div>
     </div>
-
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider">Auteurs/compositeurs favoris</ion-item>
       <ion-item  ng-repeat="author in userdata.authors">

@@ -1,5 +1,17 @@
 /*CSS A regarder: http://ionicframework.com/docs/components/#outlined-buttons */
+.container {
+  display: flex;
+  justify-content:space-around;
+  padding:10px;
+}
 
+.logout {
+  float: right;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline-block;
+}
+/*
 .left {
   float: left;
   text-align: left;
@@ -13,7 +25,7 @@
   margin: 2px 10px;
   display: inline-block;
 }
-
+*/
 .dropdrow-left {
   width: 50%;
   height: 30px;
