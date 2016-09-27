@@ -8,7 +8,7 @@ angular.module('starter.controllers').controller('SigninCtrl', function($scope,$
       $state.go('tab.profil');
     }, function(errMsg) {
       var alertPopup = $ionicPopup.alert({
-        title: 'Login failed!',
+        title: 'Oups...login failed!',
         template: errMsg
       });
     });

@@ -38,6 +38,7 @@ angular.module('starter.services', [])
           userInfo.name = response.data.name;
           userInfo.works = response.data.works;
           userInfo.authors = response.data.authors;
+          userInfo.artists =response.data.artists;
           console.log(userInfo);
       });
     }
@@ -229,7 +230,9 @@ console.log("BOUM");
       addFavorites: addFavorites,
       delFavoritesAuth: delFavoritesAuth,
       addFavoritesAuth: addFavoritesAuth,
-      getUserInfo : function() {storeUserInfo();return userInfo;},
+      getUserInfo : function() {
+      storeUserInfo();
+      return userInfo;},
       isAuthenticated: function() {return isAuthenticated;}
     };
   })

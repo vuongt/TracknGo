@@ -94,7 +94,7 @@ passport.use('local-signin', new LocalStrategy({
     mariaClient.query("SELECT * FROM users WHERE email='" + email + "'", function (err, rows) {
       if (err) return done(err);
       if (!rows.length) {
-        return (done(null, false, {msg: 'No account has been registered with this email yet !'}));
+        return (done(null, false, {msg: 'No account is registered with this email !'}));
       }
       //if the user is found but the password is wrong
       if (rows[0].password !== password)
@@ -121,22 +121,6 @@ app.use(session({ //Initiate a session
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Session-persisted message middleware
-app.use(function (req, res, next) {
-  var err = req.session.error,
-    msg = req.session.notice,
-    success = req.session.success;
-
-  delete req.session.error;
-  delete req.session.success;
-  delete req.session.notice;
-
-  if (err) res.locals.error = err;
-  if (msg) res.locals.notice = msg;
-  if (success) res.locals.success = success;
-  next();
-});
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", config.accessControl);
@@ -327,9 +311,8 @@ app.get('/signout', authentication.signout);
 //---------------research concert---------------
 app.get('/search/concerts', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', config.accessControl);
-
   //params : position, radius, start, end
+
 });
 
 //----------------research work------------------
@@ -659,10 +642,11 @@ app.get('/profile', function (req, res) {
       return res.send({authorized: false});
     }
     var user = {
-      'email': decoded.email,
-      'name': decoded.name,
-      'works': [],
-      'authors': []
+      email: decoded.email,
+      name: decoded.name,
+      works: [],
+      authors: [],
+      artists: []
     };
     mariaClient.query("SELECT * FROM favorite_works WHERE id_user='" + decoded.id + "'", function (err, rows) {
       if (err) return console.log(err);
@@ -681,9 +665,19 @@ app.get('/profile', function (req, res) {
               author.name = rows[i].name_author;
               user.authors.push(author);
             }
-            console.log("user object to send:");
-            console.log(user);
-            res.send(JSON.stringify(user));
+            mariaClient.query("SELECT * FROM favorite_artists WHERE id_user='" + decoded.id + "'", function (err, rows) {
+              if (err) console.log(err);
+              else {
+                for (var i = 0, length = rows.length; i < length; i++) {
+                  var artist = {};
+                  artist.name = rows[i].name_artist;
+                  user.artists.push(artist);
+                }
+                console.log("user object to send:");
+                console.log(user);
+                res.send(JSON.stringify(user));
+              }
+            });
           }
         });
       }
@@ -801,7 +795,7 @@ app.get('/action/addfavorite', function (req, res) {
     }
     action.authorized = true;
     if (req.query.type === "work") {
-      var prepWork = mariaClient.prepare("INSERT INTO favorite_works (id_user, iswc, title) VALUES (:userid,:iswc,:title);")
+      var prepWork = mariaClient.prepare("INSERT INTO favorite_works (id_user, iswc, title) VALUES (:userid,:iswc,:title);");
       mariaClient.query(prepWork({userid:userid,iswc:req.query.iswc,title:req.query.title}), function (err, rows) {
         if (err) console.log(err); // return res.send(JSON.stringify(action));
         else {
@@ -923,7 +917,7 @@ app.get('/comment', function (req, res) {
   mariaClient.query("SELECT * FROM comment INNER JOIN users ON comment.id_user = users.id where comment.cdeprog='"+cdeprog+"';", function (err, rows) {
     if (err) {
       console.log(err);
-      return res.send({error:"Error when reading from database"}) // TODO Error Handler
+      return res.send({error:"Error when reading from database"}); // TODO Error Handler
     }
     else {
       for (var i = 0, length = rows.length; i < length; i++) {

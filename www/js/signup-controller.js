@@ -13,7 +13,7 @@ angular.module('starter.controllers').controller('SignupCtrl', function($scope,$
       });
     }, function(errMsg) {
       var alertPopup = $ionicPopup.alert({
-        title: 'Register failed!',
+        title: 'Oups...register failed!',
         template: errMsg
       });
     });

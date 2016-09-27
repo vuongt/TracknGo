@@ -12,13 +12,11 @@ angular.module('starter.controllers').controller('ArtistCtrl', function($scope, 
     $scope.isLiked = function(iswc){
 
        return(AuthService.isLiked(iswc, $scope.userdata));
-
        };
 
     $scope.delFavorites = function(iswc, name,type){
         AuthService.delFavorites(iswc, name,type);
         $scope.userdata = AuthService.getUserInfo();
-
 
         };
     $scope.addFavorites = function(iswc, name,type){
@@ -86,21 +84,6 @@ $scope.isSong=false;
 $scope.isConcert= false;
 
   });
-
-  /*
-   * if given group is the selected group, deselect it
-   * else, select the given group
-   */
-  $scope.toggleGroup = function(group) {
-    if ($scope.isGroupShown(group)) {
-      $scope.shownGroup = null;
-    } else {
-      $scope.shownGroup = group;
-    }
-  };
-  $scope.isGroupShown = function(group) {
-    return $scope.shownGroup === group;
-  };
 
 
   $scope.myGoBack = function() {
