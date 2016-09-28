@@ -409,12 +409,14 @@ app.get('/artist', function (req, res) {
           var concertBit = objectBit[i];
           var concert = {};
           concert.title = concertBit.title;
-          concert.datetime = concertBit.formatted_datetime;
+          concert.datetime = concertBit.datetime;
           concert.location = concertBit.formatted_location;
           concert.venue = concertBit.venue.place;
           concert.description = concertBit.description;
+          concert.id_bit = concertBit.id;
           detailsArtist.concerts.push(concert);
         }
+
         request(optionSacem, function (errSacem, resSacem, bodySacem) {
           if (errSacem) {
             detailsArtist.error = "Il y a un problème avec la connection internet. Veuillez réessayer plus tard";
@@ -723,6 +725,7 @@ app.get('/planning', function (req, res) {
         event.location = rows[i].location;
         event.cdeprog = rows[i].cdeprog;
         event.id = rows[i].id_event;
+        event.id_bit = rows[i].id_bit;
         planning.events.push(event);
       }
       res.send(JSON.stringify(planning));
@@ -742,9 +745,10 @@ app.get('/action/addevent',function(req,res){
       var userid = decoded.id;
       action.authorized = true;
       var cdeprog = "";
+      console.log("location :" + req.query.location);
       if (req.query.cdeprog) {cdeprog=req.query.cdeprog;}
-      var prep = mariaClient.prepare("INSERT INTO planning (id_user, cdeprog, prog_date, location, title) VALUES (:userid, :cdeprog, :prog_date, :location, :title);");
-      mariaClient.query(prep({userid:userid, cdeprog:cdeprog, prog_date:req.query.date, location:req.query.location, title:req.query.title}),function(err,rows){
+      var prep = mariaClient.prepare("INSERT INTO planning (id_user, cdeprog, prog_date, location, title,id_bit) VALUES (:userid, :cdeprog, :prog_date, :location, :title, :id_bit);");
+      mariaClient.query(prep({userid:userid, cdeprog:cdeprog, prog_date:req.query.date, location:req.query.location, title:req.query.title, id_bit:req.query.id_bit}),function(err,rows){
         if (err){return res.send (JSON.stringify(action));}
         action.actionSucceed= true;
         res.send (JSON.stringify(action));
@@ -768,12 +772,22 @@ app.get('/action/removeevent',function(req,res){
       var decoded = jwt.decode(requestToken, config.token.secret); //TODO decode or verify ?
       var userid = decoded.id;
       action.authorized = true;
-      var prep = mariaClient.prepare("DELETE FROM planning WHERE id_event = :id");
-      mariaClient.query(prep({id:req.query.id}),function(err,rows){
-        if (err){return res.send (JSON.stringify(action));}
-        action.actionSucceed= true;
-        res.send (JSON.stringify(action));
-      });
+      if(req.query.cdeprog){
+        var prep = mariaClient.prepare("DELETE FROM planning WHERE cdeprog = :cdeprog");
+        mariaClient.query(prep({cdeprog:req.query.cdeprog}),function(err,rows){
+          if (err){return res.send (JSON.stringify(action));}
+          action.actionSucceed= true;
+          res.send (JSON.stringify(action));
+        });
+      }else {
+        var prep = mariaClient.prepare("DELETE FROM planning WHERE id_bit = :id_bit");
+        mariaClient.query(prep({id_bit:req.query.id_bit}),function(err,rows){
+          if (err){return res.send (JSON.stringify(action));}
+          action.actionSucceed= true;
+          res.send (JSON.stringify(action));
+        });
+      }
+
     } else {
       res.send (JSON.stringify(action));
     }

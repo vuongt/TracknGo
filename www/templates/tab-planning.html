@@ -4,23 +4,26 @@
       <span class="ion-ios-arrow-left" ng-click="myGoBack()"></span>
       <h3>Mon planning</h3>
 
-      <label class="item item-input">
+      <label class="item item-input month-select">
         <input type="month" ng-model="month" required>
       </label>
 
     </div>
-    <ion-item class="item-divider">Septembre</ion-item>
+    <ion-item class="item-divider">{{monthNames[month.getMonth()]}}</ion-item>
 
     <ion-item ng-repeat="item in results"
               item="item"
               class="concertbackground"
-              ng-show="item.prog_date.getMonth() == month.getMonth()">
+              ng-show="(item.prog_date.getMonth() == month.getMonth()) && (item.prog_date.getFullYear()== month.getFullYear()) ">
       <p>
-      <h3>{{item.title}}</h3><span class="right">      {{item.prog_date.toDateString()}}</span></p>
+      <h3>{{item.title}}</h3><span class="right">      {{item.prog_date.toLocaleDateString()}}</span></p>
       <p>{{item.location}}</p>
       <div>
         <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome">
           J'y vais !
+        </button>
+        <button id="page-button2" class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit);item.isInPlanning = false" ng-show="item.isInPlanning" style="margin-left: 5%">
+          Retirer de mon planning
         </button>
       </div>
     </ion-item>

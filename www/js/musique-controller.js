@@ -1,24 +1,26 @@
-angular.module('starter.controllers').controller('MusiqueCtrl', function($scope, $http, $stateParams,$state, $ionicPopup, $ionicHistory,AuthService){
+angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService) {
   $scope.iswc = $stateParams.iswc;
   $scope.title = $stateParams.title;
   $scope.myGoBack = function() {window.history.back()  };
   $scope.chargingbeg=true;
 
-$scope.userdata = AuthService.getUserInfo();
+  $scope.userdata = AuthService.getUserInfo();
 
-        $scope.delFavoritesAuth = function(name){
-            AuthService.delFavoritesAuth(name);
-            $scope.userdata = AuthService.getUserInfo();
-            console.log("deleting author");
+  $scope.delFavoritesAuth = function (name) {
+    AuthService.delFavoritesAuth(name);
+    $scope.userdata = AuthService.getUserInfo();
+    console.log("deleting author");
 
 
-            };
-        $scope.addFavoritesAuth = function(name){
-             AuthService.addFavoritesAuth(name);
-             $scope.userdata = AuthService.getUserInfo();
-             console.log("adding author");
+  };
 
-            };
+
+  $scope.addFavoritesAuth = function (name) {
+    AuthService.addFavoritesAuth(name);
+    $scope.userdata = AuthService.getUserInfo();
+    console.log("adding author");
+
+  };
 
                     $scope.delFavoritesArt = function(name){
                         AuthService.delFavoritesArt(name);
@@ -33,8 +35,7 @@ $scope.userdata = AuthService.getUserInfo();
                         };
 
 
-
-    $scope.isLikedAuth = function(name){
+  $scope.isLikedAuth = function (name) {
 
  return(AuthService.isLikedAuth(name, $scope.userdata));    };
       $scope.isLikedArt = function(name){
@@ -54,11 +55,11 @@ $http({
 $scope.chargingbeg=false;
 
     $scope.answer = response.data;
-    if ($scope.answer.error == ""){
-      $scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
-      for(var i = 0, len = $scope.answer.composerAuthor.length; i < len; i++) {
+    if ($scope.answer.error == "") {
+      $scope.title = $scope.answer.title.charAt(0).toUpperCase() + $scope.answer.title.substring(1).toLowerCase();
+      for (var i = 0, len = $scope.answer.composerAuthor.length; i < len; i++) {
         var temp = $scope.answer.composerAuthor[i].trim();
-        $scope.answer.composerAuthor[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+        $scope.answer.composerAuthor[i] = temp.charAt(0).toUpperCase() + temp.substring(1).toLowerCase();
       }
       $scope.isArtist=false;
       if ($scope.answer.performer.length != 0)
@@ -68,7 +69,7 @@ $scope.chargingbeg=false;
 
       for(var i = 0, len = $scope.answer.performer.length; i < len; i++) {
         var temp = $scope.answer.performer[i].trim();
-        $scope.answer.performer[i] = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+        $scope.answer.performer[i] = temp.charAt(0).toUpperCase() + temp.substring(1).toLowerCase();
       }
       console.log($scope.answer);
 
@@ -80,7 +81,7 @@ $scope.chargingbeg=false;
         title: "Error !",
         template: $scope.answer.error
       });
-      alertPopup.then(function(res) {
+      alertPopup.then(function (res) {
         console.log($scope.answer.error);
       });
       console.log($scope.answer);
@@ -88,14 +89,14 @@ $scope.chargingbeg=false;
   }, function errorCallback(response) {
   });
 
-/*  $scope.printMore = function() {
-$scope.numLimit=$scope.numLimit+5;
-$route.reload();
-  };*/
+  /*  $scope.printMore = function() {
+   $scope.numLimit=$scope.numLimit+5;
+   $route.reload();
+   };*/
 
 
-  $scope.myGoBack = function() {
-$ionicHistory.goBack();
+  $scope.myGoBack = function () {
+    $ionicHistory.goBack();
   };
 
 

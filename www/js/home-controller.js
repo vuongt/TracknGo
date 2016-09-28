@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService) {
 
 //Chargement des concerts
 $scope.cdeprog="0008201463";
@@ -102,6 +102,14 @@ $scope.concerts=[$scope.answer];
 
 
 
+
+
+    $scope.addPlanning = function (date, location, title, cdeprog) {
+      AuthService.addPlanning(date,location,title,cdeprog);
+      console.log("adding concert with location:" + location);
+
+
+    };
 
     //for the quicksearch modal
     $ionicModal.fromTemplateUrl('templates/quicksearch.html', {

@@ -43,6 +43,7 @@ CREATE OR REPLACE TABLE planning (
   prog_date DATE,
   location VARCHAR(100),
   title VARCHAR(100),
+  id_bit INT,
   PRIMARY KEY (id_event)
  );
 
@@ -99,8 +100,8 @@ VALUES ('0008201463', '1', '2016-09-24', 'ceci est mon commentaire' ),
        ('0008201496', '1', '2016-09-24', 'another another comment, in English' );
 
 
-INSERT INTO planning (id_user, cdeprog, prog_date, location, title)
-VALUES ('1', '0008201463', '2016-09-16T22:00:00.000Z', '13 Passage du Moulinet, 75013 Paris ', 'Concert Tribute to Balavoine'),
-       ('1', '0008201496', '2016-09-17T22:00:00.000Z', 'SOUFFLENHEIM', 'Concert Tribute to Balavoine');
+INSERT INTO planning (id_user,id_bit, cdeprog, prog_date, location, title)
+VALUES ('1', '123', '', '2016-09-16T22:00:00.000Z', '13 Passage du Moulinet, 75013 Paris ', 'Concert Tribute to Balavoine'),
+       ('1','' ,'0008201496', '2016-09-17T22:00:00.000Z', 'SOUFFLENHEIM', 'Concert Tribute to Balavoine');
 
 

@@ -53,10 +53,16 @@
       <ion-item ng-show="isConcert" class="item-divider" id="page-list-item-divider1">Concerts</ion-item>
 
       <ion-item ng-repeat="item in answer.concerts" item="item" ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'">
-        <p><h3>{{item.title}}</h3><span class="right">{{item.datetime}}</span> </p>
+        <p><h3>{{item.title}}</h3><span class="right">{{item.datetime.toLocaleDateString()}}</span> </p>
         <p>{{item.venue}}</p>
         <div>
           <button id="page-button1" class="button button-planning" ng-click="goConcert()"> J'y vais !
+          </button>
+          <button id="page-button2" class="button button-planning" ng-click="addPlanning(item.datetime.yyyymmdd(), item.venue, item.title, item.cdeprog, item.id_bit); item.isInPlanning = true" ng-show="!item.isInPlanning" style="margin-left: 5%">
+            Ajouter à mon planning
+          </button>
+          <button id="page-button2" class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit);item.isInPlanning = false" ng-show="item.isInPlanning" style="margin-left: 5%">
+            Retirer de mon planning
           </button>
         </div>
       </ion-item>

@@ -1,6 +1,11 @@
-angular.module('starter.controllers').controller('PlanningCtrl', function ($scope, $http) {
+angular.module('starter.controllers').controller('PlanningCtrl', function ($scope, $http, AuthService) {
 
   $scope.month = new Date();
+
+  $scope.monthNames = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin",
+    "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"
+  ];
+
   $http({
     method: 'GET',
     url: 'http://localhost:8080/planning',
@@ -11,16 +16,19 @@ angular.module('starter.controllers').controller('PlanningCtrl', function ($scop
     $scope.authorized = response.data.authorized;
 
     $scope.results = response.data.events;
+    console.log($scope.results);
     for(var i = 0; i<$scope.results.length ; i++){
       $scope.results[i].prog_date = new Date($scope.results[i].prog_date);
+      $scope.results[i].isInPlanning = true;
     }
-
-    console.log($scope.authorized);
-    console.log($scope.results[0].prog_date);
   });
 
-  console.log($scope.month);
+  $scope.removePlanning = function ( cdeprog, id_bit) {
+    console.log("removing concert from planning with id" + id_bit);
 
+    AuthService.delPlanning(cdeprog, id_bit);
+
+  };
 
 
 

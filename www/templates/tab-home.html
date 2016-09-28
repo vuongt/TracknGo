@@ -13,6 +13,9 @@
         <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title,date:item.date,location:item.date})">
           J'y vais !
         </button>
+        <button id="page-button2" class="button button-planning" ng-click="addPlanning(item.date, item.adresse, item.titre, item.cdeprog)" style="margin-left: 5%">
+          Ajouter à mon planning
+        </button>
       </div>
     </ion-item>
 

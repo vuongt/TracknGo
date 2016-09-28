@@ -1,10 +1,10 @@
 angular.module('starter.services', [])
 
-  .service('AuthService', function($q, $http, API_ENDPOINT) {
+  .service('AuthService', function ($q, $http, API_ENDPOINT) {
     var LOCAL_TOKEN_KEY = 'yourTokenKey';
     var isAuthenticated = false;
     var authToken;
-    var userInfo={};
+    var userInfo = {};
 
     function loadUserCredentials() {
       var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
@@ -33,7 +33,7 @@ angular.module('starter.services', [])
       window.localStorage.removeItem(LOCAL_TOKEN_KEY);
     }
 
-    function storeUserInfo(){
+    function storeUserInfo() {
       $http.get(API_ENDPOINT.url + '/profile').then(function (response) {
           userInfo.name = response.data.name;
           userInfo.works = response.data.works;
@@ -43,9 +43,9 @@ angular.module('starter.services', [])
       });
     }
 
-    var register = function(user) {
-      return $q(function(resolve, reject) {
-        $http.post(API_ENDPOINT.url + '/signup', user, {header: {Origin:"http://localhost:8100"}}).then(function(result) {
+    var register = function (user) {
+      return $q(function (resolve, reject) {
+        $http.post(API_ENDPOINT.url + '/signup', user, {header: {Origin: "http://localhost:8100"}}).then(function (result) {
           if (result.data.success) {
             storeUserCredentials(result.data.token);
             storeUserInfo();
@@ -57,9 +57,9 @@ angular.module('starter.services', [])
       });
     };
 
-    var login = function(user) {
-      return $q(function(resolve, reject) {
-        $http.post(API_ENDPOINT.url + '/signin', user).then(function(result) {
+    var login = function (user) {
+      return $q(function (resolve, reject) {
+        $http.post(API_ENDPOINT.url + '/signin', user).then(function (result) {
           if (result.data.success) {
             storeUserCredentials(result.data.token);
             storeUserInfo();
@@ -71,7 +71,7 @@ angular.module('starter.services', [])
       });
     };
 
-    var logout = function() {
+    var logout = function () {
       destroyUserCredentials();
     };
 
@@ -82,108 +82,217 @@ angular.module('starter.services', [])
     console.log('favorites services fonctionne');
 
     //Ajouter une chanson aux favoris
-    var addFavorites = function(iswc, name) {
+    var addFavorites = function (iswc, name) {
 
 
-                $http({
-                      method: 'GET',
-                      url: 'http://localhost:8080/action/addfavorite?type=work&iswc='+iswc+'+&title='+name,
-                      header:{
-                      Origin:'http://localhost:8100'
-                    }
-                    }).then(function successCallback(response) {
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8080/action/addfavorite?type=work&iswc=' + iswc + '+&title=' + name,
+        header: {
+          Origin: 'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
 
-                        console.log("This song has been added");
-
-
-                      }, function errorCallback(response) {
-
-                      });
+        console.log("This song has been added");
 
 
-                 };
+      }, function errorCallback(response) {
+
+      });
+
+
+    };
 
 
     //Supprimer une chanson des favoris
-    var delFavorites = function(iswc, name) {
+    var delFavorites = function (iswc, name) {
 
 
-    console.log('cette chanson '+name+' va être supprimée de vos favoris');
+      console.log('cette chanson ' + name + ' va être supprimée de vos favoris');
 
 
-                      $http({
-                               method: 'GET',
-                               url: 'http://localhost:8080/action/removefavorite?type=work&iswc='+iswc+'&title='+name,
-                               header:{
-                               Origin:'http://localhost:8100'
-                             }
-                             }).then(function successCallback(response) {
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8080/action/removefavorite?type=work&iswc=' + iswc + '&title=' + name,
+        header: {
+          Origin: 'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
 
-                                return({action: response.data.actionSucceed, auth: response.data.authorized});
-
-
-                               }, function errorCallback(response) {
-
-                                 console.log("! failed to delete this song from your favorites !");
-
-                               });
+        return ({action: response.data.actionSucceed, auth: response.data.authorized});
 
 
+      }, function errorCallback(response) {
 
-          };
+        console.log("! failed to delete this song from your favorites !");
+
+      });
+
+
+    };
 
 
 //Ajouter un auteur aux favoris
 
-    var addFavoritesAuth = function(name) {
-console.log("BOUM");
+    var addFavoritesAuth = function (name) {
+      console.log("BOUM");
 
-                $http({
-                      method: 'GET',
-                      url: 'http://localhost:8080/action/addfavorite?type=author&name='+name,
-                      header:{
-                      Origin:'http://localhost:8100'
-                    }
-                    }).then(function successCallback(response) {
-
-
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8080/action/addfavorite?type=author&name=' + name,
+        header: {
+          Origin: 'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
 
 
-                      }, function errorCallback(response) {
+      }, function errorCallback(response) {
 
-                      });
+      });
 
 
-                 };
+    };
 
 
     //Supprimer une chanson des favoris
-    var delFavoritesAuth = function(name) {
+    var delFavoritesAuth = function (name) {
 
 
-    console.log('cet auteur '+name+' va être supprimée de vos favoris');
+      console.log('cet auteur ' + name + ' va être supprimée de vos favoris');
 
 
-                      $http({
-                               method: 'GET',
-                               url: 'http://localhost:8080/action/removefavorite?type=author&name='+name,
-                               header:{
-                               Origin:'http://localhost:8100'
-                             }
-                             }).then(function successCallback(response) {
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8080/action/removefavorite?type=author&name=' + name,
+        header: {
+          Origin: 'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
 
-                                return({action: response.data.actionSucceed, auth: response.data.authorized});
-
-
-                               }, function errorCallback(response) {
+        return ({action: response.data.actionSucceed, auth: response.data.authorized});
 
 
-
-                               });
-
+      }, function errorCallback(response) {
 
 
-          };
+      });
+
+
+    };
+
+    var addPlanning = function (date, location, title, cdeprog, id_bit) {
+      if (cdeprog) {
+        $http({
+          method: 'GET',
+          url: 'http://localhost:8080/action/addevent?cdeprog=' + cdeprog + '&title=' + title + '&location=' + location + '&date=' + date,
+          header: {
+            Origin: 'http://localhost:8100'
+          }
+        }).then(function successCallback(response) {
+
+          console.log("This concert has been added");
+
+          return ({action: response.data.actionSucceed, auth: response.data.authorized});
+
+
+        }, function errorCallback(response) {
+
+          console.log("! failed to delete this concert from your planning !");
+
+        });
+      }
+      else {
+        $http({
+          method: 'GET',
+          url: 'http://localhost:8080/action/addevent?title=' + title + '&location=' + location + '&date=' + date +'&id_bit=' + id_bit,
+          header: {
+            Origin: 'http://localhost:8100'
+          }
+        }).then(function successCallback(response) {
+
+          console.log("This concert has been added with date: " + date);
+
+          return ({action: response.data.actionSucceed, auth: response.data.authorized});
+
+
+        }, function errorCallback(response) {
+
+          console.log("! failed to delete this concert from your planning !");
+        });
+      }
+
+    };
+
+    var delPlanning = function (cdeprog, idBit) {
+      console.log("test service with cdeprog" + cdeprog);
+
+      if(cdeprog){
+        $http({
+          method: 'GET',
+          url: 'http://localhost:8080/action/removeevent?cdeprog=' + cdeprog,
+          header: {
+            Origin: 'http://localhost:8100'
+          }
+        }).then(function successCallback(response) {
+
+          return ({action: response.data.actionSucceed, auth: response.data.authorized});
+
+
+        }, function errorCallback(response) {
+
+
+        });
+      } else {
+        $http({
+          method: 'GET',
+          url: 'http://localhost:8080/action/removeevent?id_bit=' + idBit,
+          header: {
+            Origin: 'http://localhost:8100'
+          }
+        }).then(function successCallback(response) {
+          console.log("réussi? : " + response.data.actionSucceed);
+          return ({action: response.data.actionSucceed, auth: response.data.authorized});
+
+
+        }, function errorCallback(response) {
+
+
+        });
+      }
+
+
+    };
+
+    var isInPlanning = function (cdeprog, title, callback) {
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8080/planning',
+        header: {
+          Origin: 'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
+
+        var results = response.data.events;
+        console.log(title);
+        for (var i = 0; i < results.length; i++) {
+          if (cdeprog) {
+            if (results[i].cdeprog == cdeprog) {
+              return callback(true);
+            }
+          } else {
+            if (results[i].title == title) {
+              console.log("test");
+
+              return callback(true);
+            }
+          }
+
+
+        }
+
+        return callback(false)
+      });
+    };
 
 
 //Ajouter un artiste aux favoris
@@ -244,27 +353,24 @@ console.log("BOUM");
     var isLiked = function (iswc, userdata) {
 
 
-
-      for (var l=0;l<userdata.works.length;l++){
-          if (iswc == userdata.works[l].iswc){
-                return true;
-                }
+      for (var l = 0; l < userdata.works.length; l++) {
+        if (iswc == userdata.works[l].iswc) {
+          return true;
+        }
       }
-    return false;
+      return false;
     };
-
 
 
     var isLikedAuth = function (name, userdata) {
 
 
-
-          for (var k=0;k<userdata.authors.length;k++){
-              if (name == userdata.authors[k].name){
-                    return true;
-                    }
-          }
-        return false;
+      for (var k = 0; k < userdata.authors.length; k++) {
+        if (name == userdata.authors[k].name) {
+          return true;
+        }
+      }
+      return false;
     };
 
     var isLikedArt = function (name, userdata) {
@@ -282,8 +388,6 @@ console.log("BOUM");
 //Add an interprete to your favorites
 
 
-
-
     return {
       login: login,
       register: register,
@@ -294,17 +398,23 @@ console.log("BOUM");
       addFavorites: addFavorites,
       delFavoritesAuth: delFavoritesAuth,
       addFavoritesAuth: addFavoritesAuth,
-       delFavoritesArt: delFavoritesArt,
+      isInPlanning: isInPlanning,
+      addPlanning: addPlanning,
+      delPlanning: delPlanning,
+      delFavoritesArt: delFavoritesArt,
       addFavoritesArt: addFavoritesArt,
       isLikedArt: isLikedArt,
-      getUserInfo : function() {
-      storeUserInfo();
-      return userInfo;},
-      isAuthenticated: function() {return isAuthenticated;}
+      getUserInfo: function () {
+        storeUserInfo();
+        return userInfo;
+      },
+      isAuthenticated: function () {
+        return isAuthenticated;
+      }
     };
   })
-/*AuthInterceptor to broadcast a global event if we encounter a 401 response,
-which means we are not authenticated anymore for some reasons*/
+  /*AuthInterceptor to broadcast a global event if we encounter a 401 response,
+   which means we are not authenticated anymore for some reasons*/
   .factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
     return {
       responseError: function (response) {
