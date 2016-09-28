@@ -1,29 +1,47 @@
 angular.module('starter.controllers')
   .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService) {
 
+    Date.prototype.yyyymmdd = function () {
+      month = '' + (this.getMonth() + 1),
+        day = '' + this.getDate();
+      year = this.getFullYear();
+
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+      return [year, month, day].join('-');
+    };
+
 //Chargement des concerts
   $scope.cdeprog="0008201463";
   var now = new Date();
     $scope.date = now.toISOString();
     //TODO set this to user's date
 
-  $http({
-  method: 'GET',
-  url: 'http://localhost:8080/search/concerts?date='+$scope.date,
-  header:{
-    Origin:'http://localhost:8100'
-  }
-  }).then(function successCallback(response) {
-  $scope.answer = response.data;
-      if ($scope.answer.error == ""){
+    $http({
+      method: 'GET',
+      url: 'http://localhost:8080/search/concerts?date=' + $scope.date,
+      header: {
+        Origin: 'http://localhost:8100'
+      }
+    }).then(function successCallback(response) {
+      $scope.answer = response.data;
+      if ($scope.answer.error == "") {
         $scope.concerts = $scope.answer.concerts;
-        console.log($scope.concerts);
+        $scope.concerts.forEach(function (item,index) {
+          item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
+          item.DATDBTDIF = new Date(item.DATDBTDIF);
+          AuthService.isInPlanning(item.CDEPROG, item.TITRPROG ,function (isInPlanning) {
+            item.isInPlanning = isInPlanning;
+          })
+        });
+
       }
     }, function errorCallback(response) {
     });
 
 
-$scope.concerts=[$scope.answer];
+    $scope.concerts = [$scope.answer];
     //initialisation google maps
     var options = {timeout: 10000, enableHighAccuracy: true};
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
@@ -36,15 +54,16 @@ $scope.concerts=[$scope.answer];
       var geocoder = new google.maps.Geocoder();
       $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
       //creation de la fonction isOpen a infowindow
-      function isInfoWindowOpen(infoWindow){
+      function isInfoWindowOpen(infoWindow) {
         var map = infoWindow.getMap();
         return (map !== null && typeof map !== "undefined");
       }
+
       google.maps.event.addListenerOnce($scope.map, 'idle', function () {
-        for(var i = 0; i < $scope.concerts.length;i++){
-          (function(){
+        for (var i = 0; i < $scope.concerts.length; i++) {
+          (function () {
             var concert = $scope.answer;
-           var address = "avenue Sully prudhomme, Châtenay";
+            var address = "avenue Sully prudhomme, Châtenay";
             geocoder.geocode({'address': address}, function (results, status) {
               if (status === google.maps.GeocoderStatus.OK) {
                 var marker = new google.maps.Marker({
@@ -56,10 +75,10 @@ $scope.concerts=[$scope.answer];
                   //content: concert.title
                 });
                 google.maps.event.addListener(marker, 'click', function () {
-                  if(isInfoWindowOpen(infoWindow)){
+                  if (isInfoWindowOpen(infoWindow)) {
                     infoWindow.close();
                   }
-                  else{
+                  else {
                     infoWindow.open($scope.map, marker);
                   }
                 });
@@ -76,11 +95,17 @@ $scope.concerts=[$scope.answer];
     });
 
 
-
-
-    $scope.addPlanning = function (date, location, title, cdeprog) {
-      AuthService.addPlanning(date,location,title,cdeprog);
+    $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
       console.log("adding concert with location:" + location);
+
+      AuthService.addPlanning(date, location, title, cdeprog, id_bit);
+
+
+    };
+    $scope.removePlanning = function (cdeprog, id_bit) {
+      console.log("removing concert from planning with id" + id_bit);
+
+      AuthService.delPlanning(cdeprog, id_bit);
 
 
     };
@@ -89,30 +114,30 @@ $scope.concerts=[$scope.answer];
     $ionicModal.fromTemplateUrl('templates/quicksearch.html', {
       scope: $scope,
       animation: 'slide-in-up'
-    }).then(function(modal) {
+    }).then(function (modal) {
       $scope.modal = modal;
     });
 
-    $scope.openModal = function() {
+    $scope.openModal = function () {
       $scope.modal.show();
     };
 
-    $scope.closeModal = function() {
+    $scope.closeModal = function () {
       $scope.modal.hide();
     };
 
     //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function() {
+    $scope.$on('$destroy', function () {
       $scope.modal.remove();
     });
 
     // Execute action on hide modal
-    $scope.$on('modal.hidden', function() {
+    $scope.$on('modal.hidden', function () {
       // Execute action
     });
 
     // Execute action on remove modal
-    $scope.$on('modal.removed', function() {
+    $scope.$on('modal.removed', function () {
       // Execute action
     });
   });
