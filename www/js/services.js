@@ -77,14 +77,9 @@ angular.module('starter.services', [])
 
     loadUserCredentials();
 
-    //FAVORITES SERVICE
-
-    console.log('favorites services fonctionne');
-
+    //==============FAVORITES SERVICE===============
     //Ajouter une chanson aux favoris
     var addFavorites = function (iswc, name) {
-
-
       $http({
         method: 'GET',
         url: 'http://localhost:8080/action/addfavorite?type=work&iswc=' + iswc + '+&title=' + name,
@@ -92,25 +87,22 @@ angular.module('starter.services', [])
           Origin: 'http://localhost:8100'
         }
       }).then(function successCallback(response) {
-
-        console.log("This song has been added");
-
-
+        if(!response.data.authorized) {
+          console.log("!action unauthorized! please signin!");
+        } else if(!response.data.actionSucceed){
+          console.log("! failed to delete this song from your favorites !");
+        } else {
+          console.log("This song has been added");
+        }
       }, function errorCallback(response) {
-
+        console.log(response);
+        console.log("error when connecting to server");
       });
-
-
     };
-
 
     //Supprimer une chanson des favoris
     var delFavorites = function (iswc, name) {
-
-
-      console.log('cette chanson ' + name + ' va être supprimée de vos favoris');
-
-
+      console.log('la chanson ' + name + ' va être supprimée de vos favoris');
       $http({
         method: 'GET',
         url: 'http://localhost:8080/action/removefavorite?type=work&iswc=' + iswc + '&title=' + name,
@@ -118,25 +110,24 @@ angular.module('starter.services', [])
           Origin: 'http://localhost:8100'
         }
       }).then(function successCallback(response) {
-
+        if(!response.data.authorized) {
+          console.log("!action unauthorized! please signin!");
+        } else if(!response.data.actionSucceed){
+          console.log("! failed to delete this song from your favorites !");
+        } else {
+          console.log("This song has been added");
+        }
         return ({action: response.data.actionSucceed, auth: response.data.authorized});
-
-
       }, function errorCallback(response) {
-
-        console.log("! failed to delete this song from your favorites !");
-
+        console.log(response);
+        console.log("error when connecting to server");
       });
 
 
     };
 
-
 //Ajouter un auteur aux favoris
-
     var addFavoritesAuth = function (name) {
-      console.log("BOUM");
-
       $http({
         method: 'GET',
         url: 'http://localhost:8080/action/addfavorite?type=author&name=' + name,
@@ -144,10 +135,17 @@ angular.module('starter.services', [])
           Origin: 'http://localhost:8100'
         }
       }).then(function successCallback(response) {
-
-
+        if(!response.data.authorized) {
+          console.log("!action unauthorized! please signin!");
+        } else if(!response.data.actionSucceed){
+          console.log("! failed to delete this author from your favorites !");
+        } else {
+          console.log("This author has been added");
+        }
+        return ({action: response.data.actionSucceed, auth: response.data.authorized});
       }, function errorCallback(response) {
-
+        console.log(response);
+        console.log("error when connecting to server");
       });
 
 
@@ -156,11 +154,7 @@ angular.module('starter.services', [])
 
     //Supprimer une chanson des favoris
     var delFavoritesAuth = function (name) {
-
-
       console.log('cet auteur ' + name + ' va être supprimée de vos favoris');
-
-
       $http({
         method: 'GET',
         url: 'http://localhost:8080/action/removefavorite?type=author&name=' + name,
@@ -168,17 +162,96 @@ angular.module('starter.services', [])
           Origin: 'http://localhost:8100'
         }
       }).then(function successCallback(response) {
-
+        if(!response.data.authorized) {
+          console.log("!action unauthorized! please signin!");
+        } else if(!response.data.actionSucceed){
+          console.log("! failed to delete this author from your favorites !");
+        } else {
+          console.log("This author has been added");
+        }
         return ({action: response.data.actionSucceed, auth: response.data.authorized});
-
-
       }, function errorCallback(response) {
-
-
+        console.log(response);
+        console.log("error when connecting to server");
       });
-
-
     };
+
+
+    //Ajouter un artiste aux favoris
+    var addFavoritesArt = function(name) {
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8080/action/addfavorite?type=artist&name='+name,
+        header:{
+          Origin:'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
+        if(!response.data.authorized) {
+          console.log("!action unauthorized! please signin!");
+        } else if(!response.data.actionSucceed){
+          console.log("! failed to delete this artist from your favorites !");
+        } else {
+          console.log("This artist has been added");
+        }
+        return ({action: response.data.actionSucceed, auth: response.data.authorized});
+      }, function errorCallback(response) {
+        console.log(response);
+        console.log("error when connecting to server");
+      });
+    };
+
+    //Supprimer un artist des favoris
+    var delFavoritesArt = function(name) {
+      console.log('cet auteur '+name+' va être supprimée de vos favoris');
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8080/action/removefavorite?type=artist&name='+name,
+        header:{
+          Origin:'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
+        if(!response.data.authorized) {
+          console.log("!action unauthorized! please signin!");
+        } else if(!response.data.actionSucceed){
+          console.log("! failed to delete this artist from your favorites !");
+        } else {
+          console.log("This artist has been added");
+        }
+        return({action: response.data.actionSucceed, auth: response.data.authorized});
+      }, function errorCallback(response) {
+        console.log(response);
+        console.log("error when connecting to server");
+      });
+    };
+
+    var isLiked = function (iswc, userdata) {
+      for (var l = 0; l < userdata.works.length; l++) {
+        if (iswc == userdata.works[l].iswc) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    var isLikedAuth = function (name, userdata) {
+      for (var k = 0; k < userdata.authors.length; k++) {
+        if (name == userdata.authors[k].name) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    var isLikedArt = function (name, userdata) {
+      for (var k=0;k<userdata.artists.length;k++){
+        if (name == userdata.artists[k].name){
+          return true;
+        }
+      }
+      return false;
+    };
+
+    //===================PLANNING=======================
 
     var addPlanning = function (date, location, title, cdeprog, id_bit) {
       if (cdeprog) {
@@ -293,99 +366,6 @@ angular.module('starter.services', [])
         return callback(false)
       });
     };
-
-
-//Ajouter un artiste aux favoris
-
-    var addFavoritesArt = function(name) {
-
-
-                $http({
-                      method: 'GET',
-                      url: 'http://localhost:8080/action/addfavorite?type=artist&name='+name,
-                      header:{
-                      Origin:'http://localhost:8100'
-                    }
-                    }).then(function successCallback(response) {
-
-
-
-
-                      }, function errorCallback(response) {
-
-                      });
-
-
-                 };
-
-
-    //Supprimer une chanson des favoris
-    var delFavoritesArt = function(name) {
-
-
-    console.log('cet auteur '+name+' va être supprimée de vos favoris');
-
-
-                      $http({
-                               method: 'GET',
-                               url: 'http://localhost:8080/action/removefavorite?type=artist&name='+name,
-                               header:{
-                               Origin:'http://localhost:8100'
-                             }
-                             }).then(function successCallback(response) {
-
-                                return({action: response.data.actionSucceed, auth: response.data.authorized});
-
-
-                               }, function errorCallback(response) {
-
-
-
-                               });
-
-
-
-          };
-
-
-
-
-    var isLiked = function (iswc, userdata) {
-
-
-      for (var l = 0; l < userdata.works.length; l++) {
-        if (iswc == userdata.works[l].iswc) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-
-    var isLikedAuth = function (name, userdata) {
-
-
-      for (var k = 0; k < userdata.authors.length; k++) {
-        if (name == userdata.authors[k].name) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    var isLikedArt = function (name, userdata) {
-
-
-
-          for (var k=0;k<userdata.artists.length;k++){
-              if (name == userdata.artists[k].name){
-                    return true;
-                    }
-          }
-        return false;
-    };
-
-//Add an interprete to your favorites
 
 
     return {
