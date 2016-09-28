@@ -31,7 +31,7 @@ CREATE OR REPLACE TABLE comment (
   id_comment INT NOT NULL AUTO_INCREMENT,
   cdeprog VARCHAR(10) NOT NULL,
   id_user MEDIUMINT NOT NULL,
-  creation_date DATE,
+  creation_date DATETIME,
   content VARCHAR(2000),
   PRIMARY KEY (id_comment)
 );
@@ -40,7 +40,7 @@ CREATE OR REPLACE TABLE planning (
   id_event INT NOT NULL AUTO_INCREMENT,
   id_user MEDIUMINT NOT NULL,
   cdeprog VARCHAR(10),
-  prog_date DATE,
+  prog_date DATETIME,
   location VARCHAR(100),
   title VARCHAR(100),
   id_bit INT,
@@ -94,10 +94,10 @@ VALUES ('1','Katy Perry'),
 
 
 INSERT INTO comment (cdeprog, id_user, creation_date, content)
-VALUES ('0008201463', '1', '2016-09-24', 'ceci est mon commentaire' ),
-       ('0008201463', '2', '2016-09-24', 'another comment, in English' ),
-       ('0008201496', '2', '2016-09-24', 'another comment, in English' ),
-       ('0008201496', '1', '2016-09-24', 'another another comment, in English' );
+VALUES ('0008201463', '1', '2016-09-26 10:58:00', 'I\'ve come to talk with you again' ),
+       ('0008201463', '2', '2016-09-26 10:50:00', 'I\'ve come to talk with you again' ),
+       ('0008201496', '2', '2016-09-25 10:58:00', 'Hello darkness, my old friend' ),
+       ('0008201496', '1', '2016-09-25 10:55:00', 'Hello darkness, my old friend' );
 
 
 INSERT INTO planning (id_user,id_bit, cdeprog, prog_date, location, title)

@@ -43,29 +43,23 @@
           {{object.title}}
 
         </div>
-
-
-
       </ion-item>
     </ion-list>
+
     <ion-list id="page-list3">
       <ion-item class="item-divider" id="page-list-item-divider2">Commentaires</ion-item>
     </ion-list>
-    <ion-list ng-repeat="comment in comments" id="page-list4">
-      <ion-item><span class="iconeperso">{{comment.sender.charAt(0).toUpperCase()}}</span> &nbsp <strong>{{comment.sender}}
-        &nbsp </strong> <span class="lighter">{{comment.date}}</span>
-        </br> </br>  {{comment.content}}
-      </ion-item>
-    </ion-list>
-
     <div class="bottom-concert">
-      <form ng-submit="sendComment(contentComment)">
-        <textarea type="text" class="myform" placeholder="Rédigez votre commentaire..." ng-model="contentComment"></textarea>
-        <span> <button class="position-button lighter"> Envoyer </button></span>
+      <form name = commentForm>
+        <input type="text" class="myform" placeholder="Rédigez votre commentaire..." ng-model="contentComment"></input>
+        <span> <button class="position-button lighter" ng-click="submit(contentComment)"> Envoyer </button></span>
       </form>
-
-
-
     </div>
+    <ion-list ng-repeat="comment in comments">
+      <div class="comment item-divider"><span class="iconeperso">{{comment.sender.charAt(0).toUpperCase()}}</span> &nbsp <strong>{{comment.sender}} &nbsp </strong> <span class="lighter">{{comment.date}}</span>
+        </br> </br>
+        <p> {{comment.content}} </p>
+      </div>
+    </ion-list>
   </ion-content>
 </ion-view>

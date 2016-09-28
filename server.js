@@ -936,7 +936,7 @@ app.get('/comment', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   var cdeprog = req.query.cdeprog;
   var comments = [];
-  mariaClient.query("SELECT * FROM comment INNER JOIN users ON comment.id_user = users.id where comment.cdeprog='"+cdeprog+"';", function (err, rows) {
+  mariaClient.query("SELECT * FROM comment INNER JOIN users ON comment.id_user = users.id where comment.cdeprog='"+cdeprog+"' ORDER BY creation_date DESC;", function (err, rows) {
     if (err) {
       console.log(err);
       return res.send({error:"Error when reading from database"}); // TODO Error Handler

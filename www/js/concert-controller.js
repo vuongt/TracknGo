@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams) {
+angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams,$ionicPopup) {
 
   $scope.cdeprog= $stateParams.cdeprog;
   $scope.date= $stateParams.date;
@@ -66,45 +66,63 @@ $http({
   };
 
   $scope.comments = [];
+  $scope.empty ="";
 // Gestion des commentaires
 //get commentaire
-  $http({
-    method: 'GET',
-    url: 'http://localhost:8080/comment?cdeprog='+$scope.cdeprog,
-    header: {
-      Origin: 'http://localhost:8100'
-    }
-  }).then(function successCallback(response) {
-    if (response.data.error) {
-      console.log(response.data.error);
-    } else {
-      $scope.comments = response.data;
-    }
-  }, function errorCallback(error) {
-    console.log(error);
-  });
-//post comment
-  $scope.sendComment = function(contentComment){
+  var getComment = function(){
     $http({
-      method: 'POST',
+      method: 'GET',
       url: 'http://localhost:8080/comment?cdeprog='+$scope.cdeprog,
       header: {
         Origin: 'http://localhost:8100'
-      },
-      data:{
-        cdeprog:$scope.cdeprog,
-        content:contentComment,
-        date:new Date()
       }
     }).then(function successCallback(response) {
       if (response.data.error) {
         console.log(response.data.error);
-        //TODO popup
+      } else {
+        $scope.comments = response.data;
+        console.log($scope.comments);
       }
     }, function errorCallback(error) {
       console.log(error);
     });
   };
+  getComment();
+
+//post comment
+  $scope.submit = function(contentComment){
+    console.log(contentComment);
+    if(contentComment && contentComment!==""){
+      $http({
+        method: 'POST',
+        url: 'http://localhost:8080/comment?cdeprog='+$scope.cdeprog,
+        header: {
+          Origin: 'http://localhost:8100'
+        },
+        data:{
+          cdeprog:$scope.cdeprog,
+          content:contentComment,
+          date: new Date() //TODO timezone ?
+        }
+      }).then(function successCallback(response) {
+        if (response.data.error) {
+          console.log(response.data.error);
+          //TODO popup
+        }
+      }, function errorCallback(error) {
+        console.log(error);
+      });
+    }else {
+      var alertPopup = $ionicPopup.alert({
+        title:"Oups !",
+        template:"Your comment is empty !"
+      })
+    }
+    this.contentComment = null;
+    //TODO clear field after sending
+    getComment();
+  };
+
 
 });
 
