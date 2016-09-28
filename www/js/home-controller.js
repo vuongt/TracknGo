@@ -4,7 +4,7 @@ angular.module('starter.controllers')
 //Chargement des concerts
   $scope.cdeprog="0008201463";
   var now = new Date();
-    $scope.date = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2);
+    $scope.date = now.toISOString();
     //TODO set this to user's date
 
   $http({
@@ -17,6 +17,7 @@ angular.module('starter.controllers')
   $scope.answer = response.data;
       if ($scope.answer.error == ""){
         $scope.concerts = $scope.answer.concerts;
+        console.log($scope.concerts);
       }
     }, function errorCallback(response) {
     });

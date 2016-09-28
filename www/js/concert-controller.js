@@ -2,7 +2,7 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
 
   $scope.cdeprog= $stateParams.cdeprog;
   $scope.datedbt= $stateParams.datedbt;
-  $scope.datefin= $stateParams.datefin;
+  $scope.datefin= $stateParams.datefin; //TODO date format
   $scope.title= $stateParams.title;
   $scope.location= $stateParams.location;
 

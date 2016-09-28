@@ -9,8 +9,8 @@
     <ion-item ng-repeat="item in concerts"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'">
       <h2 class = "white">{{item.TITRPROG}}</h2>
-      <p><span class="left">Début: {{item.DATDBTDIF | date:'medium'}}</span></p>
-      <p><span class="left">Fin: {{item.DATFINDIF | date:'medium'}}</span></p>
+      <p><span class="left">Début: {{item.DATDBTDIF|date:'medium':'+0000'}}</span></p>
+      <p><span class="left">Fin: {{item.DATFINDIF|date:'medium':'+0000'}}</span></p>
       <p><span class = "right">{{item.NOM}}</span> </p>
       <p><span class = "right">{{item.VILLE}}</span> </p>
       <div>
