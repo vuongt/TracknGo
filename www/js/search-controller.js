@@ -7,7 +7,7 @@ angular.module('starter.controllers')
 
   $scope.isSong = false;
   $scope.isPlus = false;
-
+  $scope.numLimit = 5;
   $scope.filter= "all";
   $scope.nbrPage=1;
   $scope.charging=false;
@@ -123,11 +123,22 @@ $scope.userdata = AuthService.getUserInfo();
 
 
 
+  $scope.printMore = function () {
+    $scope.numLimit = $scope.numLimit + 5;
 
+
+    if ($scope.numLimit >= $scope.maxResults) {
+      $scope.isPlus = false;
+    }
+
+
+  };
 
 
 
   }]);
+
+
 
 
 

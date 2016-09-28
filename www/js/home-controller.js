@@ -54,7 +54,7 @@ $scope.concerts=[$scope.answer];
         for(var i = 0; i < $scope.concerts.length;i++){
           (function(){
             var concert = $scope.answer;
-            var address = $scope.answer.location;
+           var address = "avenue Sully prudhomme, Châtenay";
             geocoder.geocode({'address': address}, function (results, status) {
               if (status === google.maps.GeocoderStatus.OK) {
 
@@ -66,7 +66,7 @@ $scope.concerts=[$scope.answer];
                 });
 
                 var infoWindow = new google.maps.InfoWindow({
-                  content: concert.titre
+                  //content: concert.title
                 });
 
                 google.maps.event.addListener(marker, 'click', function () {
