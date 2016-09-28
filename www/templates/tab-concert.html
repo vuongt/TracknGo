@@ -8,15 +8,16 @@
       <div class="rightheader" style="color: #FFFFFF;">
 
         <h1>{{title}}</h1>
-        <p> {{date}} </p>
-          </br></br>
-          <span class="ion-location"> </span>
-        <p> &nbsp <strong> {{location}} </strong>  </p>
+        <p><span class="left">Début: {{datedbt | date:'medium'}}</span></p>
+        <p><span class="left">Fin: {{datefin | date:'medium'}}</span></p>
+          <br><br>
+
+        <p class = "left"> <span class="ion-location"> </span> &nbsp <strong> {{location}} </strong>  </p>
 
       </div>
 
-
-      </br> </br>
+      <br> <br>
+      <br> <br>
       <a href="#/tab/profil" id="concert-button1"
          style="font-weight:lighter;font-size:-15px;border-radius:200px 200px 200px 200px; opacity: 0.7;);"
          class="button button-light button-medium button-outline">Ajouter à mon planning</a>
@@ -28,6 +29,8 @@
 
     <ion-list>
       <ion-item class="item-divider">Au programme du concert</ion-item>
+      <p ng-show="noProgram" style="text-align:center; padding-top:50px;" class="lighter">No program available</p>
+      <ion-spinner style="padding-left: 50%;" ng-show="charging" icon="spiral"></ion-spinner>
     </ion-list>
     <ion-list ng-repeat="object in setList" id="page-list2">
       <ion-item id="page-list-item4">

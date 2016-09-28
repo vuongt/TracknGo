@@ -2,15 +2,19 @@
   <ion-content class="">
     <div id="map" data-tap-disabled="true"></div>
 
-    <ion-item class="item item-divider">3 Concerts autour de vous
+    <ion-item class="item item-divider">
+        <p>{{concerts.length}} concerts aujourd'hui</p>
       <i class="ion-ios-search-strong icon-right" ng-click="openModal()" style="float: right; font-size: 130%"></i>
     </ion-item>
     <ion-item ng-repeat="item in concerts"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'">
-      <h3>{{item.title}}</h3><p><span class="right">      {{item.date}}</span></p>
-      <p>{{item.location}}</p>
+      <h2 class = "white">{{item.TITRPROG}}</h2>
+      <p><span class="left">Début: {{item.DATDBTDIF | date:'medium'}}</span></p>
+      <p><span class="left">Fin: {{item.DATFINDIF | date:'medium'}}</span></p>
+      <p><span class = "right">{{item.NOM}}</span> </p>
+      <p><span class = "right">{{item.VILLE}}</span> </p>
       <div>
-        <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title,date:item.date,location:item.date})">
+        <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,datedbt:item.DATDBTDIF,datefin:item.DATFINDIF,location:item.NOM+item.VILLE})">
           J'y vais !
         </button>
         <button id="page-button2" class="button button-planning" ng-click="addPlanning(item.date, item.adresse, item.titre, item.cdeprog)" style="margin-left: 5%">

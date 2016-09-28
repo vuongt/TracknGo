@@ -1,16 +1,17 @@
 angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams,$ionicPopup) {
 
   $scope.cdeprog= $stateParams.cdeprog;
-  $scope.date= $stateParams.date;
+  $scope.datedbt= $stateParams.datedbt;
+  $scope.datefin= $stateParams.datefin;
   $scope.title= $stateParams.title;
   $scope.location= $stateParams.location;
 
 
-  $scope.cdeprog= "0008201463"; // TODO delete this in prod
+  /*$scope.cdeprog= "0008201463"; // TODO delete this in prod
   $scope.date= "2016-09-16T22:00:00.000Z";
   $scope.title= "Concert Tribute to Balavoine";
   $scope.location= "SOUFFLENHEIM";
-  console.log("accessing detail of program: " + $scope.cdeprog);
+  console.log("accessing detail of program: " + $scope.cdeprog);*/
 
 
   $scope.userdata = AuthService.getUserInfo();
@@ -24,6 +25,8 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
        $scope.userdata = AuthService.getUserInfo();
   };
 
+  $scope.noProgram = false;
+  $scope.charging=true;
 $http({
   method: 'GET',
   url: 'http://localhost:8080/program?cdeprog='+$scope.cdeprog,
@@ -31,13 +34,15 @@ $http({
     Origin:'http://localhost:8100'
   }
 }).then(function successCallback(response) {
-    $scope.answer = response.data;
-    console.log(response.data);
-    if ($scope.answer.error == ""){
+  $scope.answer = response.data;
+  console.log(response.data);
+  $scope.setList = $scope.answer.setList;
+  $scope.charging=false;
+    if ($scope.setList.length!==0 && $scope.answer.error==""){
+      $scope.noProgram = false;
       /*$scope.title=$scope.answer.title.charAt(0).toUpperCase()+ $scope.answer.title.substring(1).toLowerCase();
       $scope.location=$scope.answer.location.charAt(0).toUpperCase()+ $scope.answer.location.substring(1).toLowerCase();
       $scope.date=$scope.answer.date;*/
-      $scope.setList=$scope.answer.setList;
       $scope.isSong=false;
       for(var i = 0, len = $scope.setList.length; i < len; i++) {
                 $scope.isSong=true;
@@ -48,13 +53,7 @@ $http({
                    }
       }
     } else {
-      var alertPopup = $ionicPopup.alert({
-        title: "Sorry !",
-        template: "No program available"
-      });
-      alertPopup.then(function(res) {
-        console.log($scope.answer.error);
-      });
+      $scope.noProgram=true;
     }
   }, function errorCallback(response) {
   });

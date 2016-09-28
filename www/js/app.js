@@ -72,7 +72,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
 
       .state('tab.concertHome', {
-        url: '/concert/?cdeprog&title&date&location',
+        url: '/concert/?cdeprog&title&datedbt&datefin&location',
         views: {
           'tab-home': {
             templateUrl: 'templates/tab-concert.html',

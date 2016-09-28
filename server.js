@@ -185,13 +185,6 @@ var optionBIT = {
     app_id: 'Sacem'
   }
 };
-/*request(optionBIT,function(err,res,body){
- if(err) {
- return console.log(err);
- } else {
- console.log(res.statusCode, body);
- }
- });*/
 //=======================ROUTES========================
 // Express routing
 //=====================================================
@@ -311,8 +304,26 @@ app.get('/signout', authentication.signout);
 //---------------research concert---------------
 app.get('/search/concerts', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  //params : position, radius, start, end
-
+  //params : position, radius, date
+  //TODO Verify if the query is correct !
+  var results= {
+    error:"",
+    concerts:[]
+  };
+  if (!req.query.date || req.query.date===""){
+    results.error = "Invalid query";
+    res.send(JSON.stringify(results));
+  } else {
+    optionEliza.uri = config.eliza.uri + "/date/" +req.query.date;
+    request(optionEliza,function(error,response,body){
+      if(error){
+        results.error = "Error when searching in Eliza";
+      } else {
+        results.concerts = JSON.parse(body);
+      }
+      res.send(JSON.stringify(results));
+    });
+  }
 });
 
 //----------------research work------------------
