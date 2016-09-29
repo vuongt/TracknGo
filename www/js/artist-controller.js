@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('ArtistCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService) {
+angular.module('starter.controllers').controller('ArtistCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService, $ionicPopup) {
   $scope.name = $stateParams.name;
   //$scope.concerts=[];
   //$scope.songs=[];
@@ -89,7 +89,7 @@ $scope.charging=false;
       if ($scope.answer.concerts.length !== 0) {
         $scope.answer.concerts.forEach(function (item,index) {
           item.datetime = new Date(item.datetime);
-          AuthService.isInPlanning(item.cdeprog, item.title,function (isInPlanning) {
+          AuthService.isInPlanning(item.cdeprog, item.id_bit, function (isInPlanning) {
             item.isInPlanning = isInPlanning;
           })
 
@@ -138,7 +138,23 @@ $scope.charging=false;
   $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
     console.log("adding concert with location:" + location);
 
-    AuthService.addPlanning(date, location, title, cdeprog, id_bit);
+    AuthService.addPlanning(date, location, title, cdeprog, id_bit, function (result) {
+      if (!result.auth) {
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Oups !',
+          template: 'Please sign in to do this action',
+          okText: 'Sign in'
+        });
+
+        confirmPopup.then(function (res) {
+          if (res) {
+            $state.go('tab.profil');
+          } else {
+            console.log('Action annulé');
+          }
+        });
+      }
+    });
 
 
   };

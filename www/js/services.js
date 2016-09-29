@@ -258,7 +258,7 @@ angular.module('starter.services', [])
 
     //===================PLANNING=======================
 
-    var addPlanning = function (date, location, title, cdeprog, id_bit) {
+    var addPlanning = function (date, location, title, cdeprog, id_bit, callback) {
       if (cdeprog) {
         $http({
           method: 'GET',
@@ -269,8 +269,9 @@ angular.module('starter.services', [])
         }).then(function successCallback(response) {
 
           console.log("This concert has been added");
+          var result = {action: response.data.actionSucceed, auth: response.data.authorized};
 
-          return ({action: response.data.actionSucceed, auth: response.data.authorized});
+          return (callback(result));
 
 
         }, function errorCallback(response) {
@@ -289,8 +290,8 @@ angular.module('starter.services', [])
         }).then(function successCallback(response) {
 
           console.log("This concert has been added with date: " + date);
-
-          return ({action: response.data.actionSucceed, auth: response.data.authorized});
+          var result = {action: response.data.actionSucceed, auth: response.data.authorized};
+          return (callback(result));
 
 
         }, function errorCallback(response) {
@@ -341,7 +342,7 @@ angular.module('starter.services', [])
 
     };
 
-    var isInPlanning = function (cdeprog, title, callback) {
+    var isInPlanning = function (cdeprog, id_bit, callback) {
       $http({
         method: 'GET',
         url: 'http://localhost:8080/planning',
@@ -351,14 +352,13 @@ angular.module('starter.services', [])
       }).then(function successCallback(response) {
 
         var results = response.data.events;
-        console.log(title);
         for (var i = 0; i < results.length; i++) {
           if (cdeprog) {
             if (results[i].cdeprog == cdeprog) {
               return callback(true);
             }
           } else {
-            if (results[i].title == title) {
+            if (results[i].id_bit == id_bit) {
               console.log("test");
               return callback(true);
             }

@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService) {
+angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService, $ionicPopup) {
   $scope.iswc = $stateParams.iswc;
   $scope.title = $stateParams.title;
   $scope.myGoBack = function () {
@@ -151,7 +151,7 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
           $scope.concerts.forEach(function (item,index) {
             item.title = item.title.charAt(0).toUpperCase() + item.title.substring(1).toLowerCase();
             item.date = new Date(item.date);
-            AuthService.isInPlanning(item.cdeprog, item.title,function (isInPlanning) {
+            AuthService.isInPlanning(item.cdeprog, item.id_bit,function (isInPlanning) {
               item.isInPlanning = isInPlanning;
             })
 
@@ -178,7 +178,23 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
   $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
     console.log("adding concert with location:" + location);
 
-    AuthService.addPlanning(date, location, title, cdeprog, id_bit);
+    AuthService.addPlanning(date, location, title, cdeprog, id_bit, function (result) {
+      if (!result.auth) {
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Oups !',
+          template: 'Please sign in to do this action',
+          okText: 'Sign in'
+        });
+
+        confirmPopup.then(function (res) {
+          if (res) {
+            $state.go('tab.profil');
+          } else {
+            console.log('Action annulé');
+          }
+        });
+      }
+    });
 
 
   };
