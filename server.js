@@ -816,49 +816,50 @@ app.get('/action/addfavorite', function (req, res) {
   var action ={authorized:false, actionSucceed: false};
   try {
     var requestToken = token.extractToken(req.headers); //token has been verified here
+    if (requestToken) {
+      try {
+        var decoded = jwt.decode(requestToken, config.token.secret);
+        var userid = decoded.id;
+      } catch (err) {
+        console.log(err);//res.send (JSON.stringify(action));    }
+      }
+      action.authorized = true;
+      if (req.query.type === "work") {
+        var prepWork = mariaClient.prepare("INSERT INTO favorite_works (id_user, iswc, title) VALUES (:userid,:iswc,:title);");
+        mariaClient.query(prepWork({userid:userid,iswc:req.query.iswc,title:req.query.title}), function (err, rows) {
+          if (err) console.log(err); // return res.send(JSON.stringify(action));
+          else {
+            action.actionSucceed = true;
+            console.log('Add favorite ' + req.query.title + ' succeeded');
+            res.send(JSON.stringify(action));
+          }
+        });
+      }
+      else if (req.query.type === "author") {
+        var prepAuth = mariaClient.prepare("INSERT INTO favorite_authors (id_user, name_author) VALUES (:userid ,:name_author)");
+        mariaClient.query(prepAuth({userid:userid, name_author:req.query.name}), function (err, rows) {
+          if (err) res.send(JSON.stringify(action));
+          else {
+            action.actionSucceed = true;
+            console.log('Add favorite ' + req.query.name + ' succeeded');
+            res.send(JSON.stringify(action));
+          }
+        });
+      } else if (req.query.type === "artist") {
+        var prepArt = mariaClient.prepare("INSERT INTO favorite_artists (id_user, name_artist) VALUES (:userid ,:name_artist)");
+        mariaClient.query(prepArt({userid:userid, name_artist:req.query.name}), function (err, rows) {
+          if (err) res.send(JSON.stringify(action));
+          else {
+            action.actionSucceed = true;
+            console.log('Add favorite ' + req.query.name + ' succeeded');
+            res.send(JSON.stringify(action));
+          }
+        });
+      }
+    }
   } catch (err){
-    console.log(err);//res.send (JSON.stringify(action));
-  }
-  if (requestToken) {
-    try {
-      var decoded = jwt.decode(requestToken, config.token.secret);
-      var userid = decoded.id;
-    } catch (err) {
-      console.log(err);//res.send (JSON.stringify(action));    }
-    }
-    action.authorized = true;
-    if (req.query.type === "work") {
-      var prepWork = mariaClient.prepare("INSERT INTO favorite_works (id_user, iswc, title) VALUES (:userid,:iswc,:title);");
-      mariaClient.query(prepWork({userid:userid,iswc:req.query.iswc,title:req.query.title}), function (err, rows) {
-        if (err) console.log(err); // return res.send(JSON.stringify(action));
-        else {
-          action.actionSucceed = true;
-          console.log('Add favorite ' + req.query.title + ' succeeded');
-          res.send(JSON.stringify(action));
-        }
-      });
-    }
-    else if (req.query.type === "author") {
-      var prepAuth = mariaClient.prepare("INSERT INTO favorite_authors (id_user, name_author) VALUES (:userid ,:name_author)");
-      mariaClient.query(prepAuth({userid:userid, name_author:req.query.name}), function (err, rows) {
-        if (err) res.send(JSON.stringify(action));
-        else {
-          action.actionSucceed = true;
-          console.log('Add favorite ' + req.query.name + ' succeeded');
-          res.send(JSON.stringify(action));
-        }
-      });
-    } else if (req.query.type === "artist") {
-      var prepArt = mariaClient.prepare("INSERT INTO favorite_artists (id_user, name_artist) VALUES (:userid ,:name_artist)");
-      mariaClient.query(prepArt({userid:userid, name_artist:req.query.name}), function (err, rows) {
-        if (err) res.send(JSON.stringify(action));
-        else {
-          action.actionSucceed = true;
-          console.log('Add favorite ' + req.query.name + ' succeeded');
-          res.send(JSON.stringify(action));
-        }
-      });
-    }
+    console.log(err);
+    res.send (JSON.stringify(action));
   }
 });
 app.get('/action/removefavorite', function (req, res) {

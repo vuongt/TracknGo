@@ -20,43 +20,60 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
   $scope.userdata = AuthService.getUserInfo();
 
   $scope.delFavoritesAuth = function (name) {
-    AuthService.delFavoritesAuth(name);
-    $scope.userdata = AuthService.getUserInfo();
+    AuthService.delFavoritesAuth(name,verifyAction);
     console.log("deleting author");
-
-
   };
 
-
   $scope.addFavoritesAuth = function (name) {
-    AuthService.addFavoritesAuth(name);
-    $scope.userdata = AuthService.getUserInfo();
+    AuthService.addFavoritesAuth(name,verifyAction);
     console.log("adding author");
 
   };
 
   $scope.delFavoritesArt = function (name) {
-    AuthService.delFavoritesArt(name);
+    AuthService.delFavoritesArt(name,verifyAction);
     $scope.userdata = AuthService.getUserInfo();
-
-
   };
   $scope.addFavoritesArt = function (name) {
-    AuthService.addFavoritesArt(name);
+    AuthService.addFavoritesArt(name,verifyAction);
     $scope.userdata = AuthService.getUserInfo();
-
   };
 
 
   $scope.isLikedAuth = function (name) {
-
     return (AuthService.isLikedAuth(name, $scope.userdata));
   };
   $scope.isLikedArt = function (name) {
-
-    return (AuthService.isLiked(name, $scope.userdata));
+    return (AuthService.isLikedArt(name, $scope.userdata));
   };
 
+  function verifyAction(authorized,actionSucceed){
+    if (!authorized) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Oups !',
+        template: 'Please sign in to do this action',
+        okText:'Sign in'
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          $state.go('tab.profil');
+        } else {
+          console.log('Action annulé');
+        }
+      });
+    } else if (!actionSucceed){
+      var alertPopup = $ionicPopup.alert({
+        title: "Oups !",
+        template: "There is a problem while connecting to server. Please try again later"
+      });
+      alertPopup.then(function (res) {
+        console.log($scope.error);
+      });
+    } else {
+      $scope.userdata = AuthService.getUserInfo();
+    }
+  }
 
   $scope.charging = false;
 
@@ -169,8 +186,6 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
     console.log("removing concert from planning with id" + id_bit);
 
     AuthService.delPlanning(cdeprog, id_bit);
-
-
   };
 
 

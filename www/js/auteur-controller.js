@@ -1,38 +1,50 @@
 angular.module('starter.controllers').controller('AuteurCtrl', function(AuthService, $scope, $http, $ionicPopup, $stateParams, $ionicHistory) {
-$scope.name= $stateParams.name;
-$scope.isSong=true;
-$scope.isPlus = false;
+  $scope.name= $stateParams.name;
+  $scope.isSong=true;
+  $scope.isPlus = false;
 
 
-$scope.userdata = AuthService.getUserInfo();
+  $scope.userdata = AuthService.getUserInfo();
 
-$scope.charging=true;
+  $scope.charging=true;
+  //==============Favorite manager=======================
+  $scope.isLiked = function(iswc){return(AuthService.isLiked(iswc, $scope.userdata));};
 
-    $scope.isLiked = function(iswc){
+  $scope.delFavorites = function(iswc, name){
+      AuthService.delFavorites(iswc, name,verifyAction);
+  };
+  $scope.addFavorites = function(iswc, name){
+       AuthService.addFavorites(iswc, name,verifyAction);
+  };
 
- return(AuthService.isLiked(iswc, $scope.userdata));    };
+  function verifyAction(authorized,actionSucceed){
+    if (!authorized) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Oups !',
+        template: 'Please sign in to do this action',
+        okText:'Sign in'
+      });
 
-
-
-
-
-
-
-        $scope.delFavorites = function(iswc, name){
-            AuthService.delFavorites(iswc, name);
-            $scope.userdata = AuthService.getUserInfo();
-
-
-            };
-        $scope.addFavorites = function(iswc, name){
-             AuthService.addFavorites(iswc, name);
-             $scope.userdata = AuthService.getUserInfo();
-
-            };
-
-
-
-
+      confirmPopup.then(function(res) {
+        if(res) {
+          $state.go('tab.profil');
+        } else {
+          console.log('Action annulé');
+        }
+      });
+    } else if (!actionSucceed){
+      var alertPopup = $ionicPopup.alert({
+        title: "Oups !",
+        template: "There is a problem while connecting to server. Please try again later"
+      });
+      alertPopup.then(function (res) {
+        console.log($scope.error);
+      });
+    } else {
+      $scope.userdata = AuthService.getUserInfo();
+    }
+  }
+  //=============GET INFORMATION================
 $http({
   method: 'GET',
   url: 'http://localhost:8080/author?name='+$scope.name,
@@ -55,13 +67,10 @@ $http({
           var temp = $scope.answer[i].title.trim();
           $scope.answer[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
              if ($scope.answer[i].iswc.length != 0){
-                        $scope.answer[i].isInfo = true;
-                   }
-
-
+               $scope.answer[i].isInfo = true;
+             }
         }
         if ($scope.numLimit<=len){$scope.isPlus = true;}
-
       }
 
      $scope.answer.sort(compare);
@@ -114,14 +123,8 @@ $scope.numLimit=$scope.numLimit+5;
 
   $scope.nbrPage =  $scope.nbrPage+1;
   }
-
   if ($scope.numLimit>=$scope.maxResults){$scope.isPlus = false;}
-
-
   };
-
-
-
 });
 
 

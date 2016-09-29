@@ -50,7 +50,7 @@
     <button ng-show="isPlus" class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats... </button>
 
     <ion-list>
-      <ion-item ng-show="isConcert" class="item-divider" id="page-list-item-divider1">Concerts</ion-item>
+      <ion-item ng-show="isConcert" class="item-divider">Concerts</ion-item>
 
       <ion-item ng-repeat="item in answer.concerts" item="item" ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'">
         <p><h3>{{item.title}}</h3><span class="right">{{item.datetime.toLocaleDateString()}}</span> </p>

@@ -79,7 +79,8 @@ angular.module('starter.services', [])
 
     //==============FAVORITES SERVICE===============
     //Ajouter une chanson aux favoris
-    var addFavorites = function (iswc, name) {
+
+    function addFavorites(iswc, name, cb) {
       $http({
         method: 'GET',
         url: 'http://localhost:8080/action/addfavorite?type=work&iswc=' + iswc + '+&title=' + name,
@@ -94,14 +95,15 @@ angular.module('starter.services', [])
         } else {
           console.log("This song has been added");
         }
+        cb(response.data.authorized,response.data.actionSucceed);
       }, function errorCallback(response) {
         console.log(response);
         console.log("error when connecting to server");
       });
-    };
+    }
 
     //Supprimer une chanson des favoris
-    var delFavorites = function (iswc, name) {
+    function delFavorites(iswc, name,cb) {
       console.log('la chanson ' + name + ' va être supprimée de vos favoris');
       $http({
         method: 'GET',
@@ -117,17 +119,16 @@ angular.module('starter.services', [])
         } else {
           console.log("This song has been added");
         }
-        return ({action: response.data.actionSucceed, auth: response.data.authorized});
+        cb(response.data.authorized,response.data.actionSucceed);
       }, function errorCallback(response) {
         console.log(response);
         console.log("error when connecting to server");
       });
 
-
-    };
+    }
 
 //Ajouter un auteur aux favoris
-    var addFavoritesAuth = function (name) {
+    function addFavoritesAuth(name,cb) {
       $http({
         method: 'GET',
         url: 'http://localhost:8080/action/addfavorite?type=author&name=' + name,
@@ -142,18 +143,16 @@ angular.module('starter.services', [])
         } else {
           console.log("This author has been added");
         }
-        return ({action: response.data.actionSucceed, auth: response.data.authorized});
+        cb(response.data.authorized,response.data.actionSucceed);
       }, function errorCallback(response) {
         console.log(response);
         console.log("error when connecting to server");
       });
-
-
-    };
+    }
 
 
     //Supprimer une chanson des favoris
-    var delFavoritesAuth = function (name) {
+    function delFavoritesAuth(name,cb) {
       console.log('cet auteur ' + name + ' va être supprimée de vos favoris');
       $http({
         method: 'GET',
@@ -169,16 +168,16 @@ angular.module('starter.services', [])
         } else {
           console.log("This author has been added");
         }
-        return ({action: response.data.actionSucceed, auth: response.data.authorized});
+        cb(response.data.authorized,response.data.actionSucceed);
       }, function errorCallback(response) {
         console.log(response);
         console.log("error when connecting to server");
       });
-    };
+    }
 
 
     //Ajouter un artiste aux favoris
-    var addFavoritesArt = function(name) {
+    function addFavoritesArt(name,cb) {
       $http({
         method: 'GET',
         url: 'http://localhost:8080/action/addfavorite?type=artist&name='+name,
@@ -193,15 +192,15 @@ angular.module('starter.services', [])
         } else {
           console.log("This artist has been added");
         }
-        return ({action: response.data.actionSucceed, auth: response.data.authorized});
+        cb(response.data.authorized,response.data.actionSucceed);
       }, function errorCallback(response) {
         console.log(response);
         console.log("error when connecting to server");
       });
-    };
+    }
 
     //Supprimer un artist des favoris
-    var delFavoritesArt = function(name) {
+    function delFavoritesArt(name,cb) {
       console.log('cet auteur '+name+' va être supprimée de vos favoris');
       $http({
         method: 'GET',
@@ -217,35 +216,41 @@ angular.module('starter.services', [])
         } else {
           console.log("This artist has been added");
         }
-        return({action: response.data.actionSucceed, auth: response.data.authorized});
+        cb(response.data.authorized,response.data.actionSucceed);
       }, function errorCallback(response) {
         console.log(response);
         console.log("error when connecting to server");
       });
-    };
+    }
 
     var isLiked = function (iswc, userdata) {
-      for (var l = 0; l < userdata.works.length; l++) {
-        if (iswc == userdata.works[l].iswc) {
-          return true;
+      if (isAuthenticated){
+        for (var l = 0; l < userdata.works.length; l++) {
+          if (iswc == userdata.works[l].iswc) {
+            return true;
+          }
         }
       }
       return false;
     };
 
     var isLikedAuth = function (name, userdata) {
-      for (var k = 0; k < userdata.authors.length; k++) {
-        if (name == userdata.authors[k].name) {
-          return true;
+      if (isAuthenticated){
+        for (var k = 0; k < userdata.authors.length; k++) {
+          if (name == userdata.authors[k].name) {
+            return true;
+          }
         }
       }
       return false;
     };
 
     var isLikedArt = function (name, userdata) {
-      for (var k=0;k<userdata.artists.length;k++){
-        if (name == userdata.artists[k].name){
-          return true;
+      if (isAuthenticated){
+        for (var k=0;k<userdata.artists.length;k++){
+          if (name == userdata.artists[k].name){
+            return true;
+          }
         }
       }
       return false;
@@ -355,14 +360,10 @@ angular.module('starter.services', [])
           } else {
             if (results[i].title == title) {
               console.log("test");
-
               return callback(true);
             }
           }
-
-
         }
-
         return callback(false)
       });
     };

@@ -19,23 +19,45 @@ angular.module('starter.controllers').controller('ArtistCtrl', function ($scope,
 
   $scope.userdata = AuthService.getUserInfo();
 
+//=================Favorite Manager=====================
   $scope.isLiked = function (iswc) {
-
        return(AuthService.isLiked(iswc, $scope.userdata));
-       };
-
-  $scope.delFavorites = function (iswc, name, type) {
-    AuthService.delFavorites(iswc, name, type);
-    $scope.userdata = AuthService.getUserInfo();
-
-        };
-    $scope.addFavorites = function(iswc, name,type){
-         AuthService.addFavorites(iswc, name, type);
-         $scope.userdata = AuthService.getUserInfo();
-
   };
+  $scope.delFavorites = function (iswc, name) {
+    AuthService.delFavorites(iswc, name, verifyAction);
+  };
+    $scope.addFavorites = function(iswc, name){
+         AuthService.addFavorites(iswc, name, verifyAction);
+  };
+  function verifyAction(authorized,actionSucceed){
+    if (!authorized) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Oups !',
+        template: 'Please sign in to do this action',
+        okText:'Sign in'
+      });
 
+      confirmPopup.then(function(res) {
+        if(res) {
+          $state.go('tab.profil');
+        } else {
+          console.log('Action annulé');
+        }
+      });
+    } else if (!actionSucceed){
+      var alertPopup = $ionicPopup.alert({
+        title: "Oups !",
+        template: "There is a problem while connecting to server. Please try again later"
+      });
+      alertPopup.then(function (res) {
+        console.log($scope.error);
+      });
+    } else {
+      $scope.userdata = AuthService.getUserInfo();
+    }
+  }
 
+  //==============GET Information=======================
 $http({
   method: 'GET',
   url: 'http://localhost:8080/artist?name='+$scope.name,
@@ -50,7 +72,6 @@ $scope.charging=false;
     $scope.isSong = false;
     $scope.isConcert = false;
     $scope.isPlus = false;
-
     if ($scope.error == "") {
       if ($scope.answer.works.length !== 0) {
         $scope.isSong = true;
@@ -61,14 +82,10 @@ $scope.charging=false;
             $scope.answer.works[i].isInfo = true;
           }
         }
-
         if ($scope.numLimit <= len) {
           $scope.isPlus = true;
         }
-
       }
-
-
       if ($scope.answer.concerts.length !== 0) {
         $scope.answer.concerts.forEach(function (item,index) {
           item.datetime = new Date(item.datetime);

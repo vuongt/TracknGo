@@ -17,10 +17,10 @@
     <ion-list>
       <ion-item class="item-divider" id="page-list-item-divider1">Auteur/Compositeur</ion-item>
       <ion-item ng-repeat="author in answer.composerAuthor">
-        <i id="liked" class="ion-ios-star star" ng-click= "delFavoritesAuth(author)"
+        <i  class="ion-ios-star star" ng-click= "delFavoritesAuth(author)"
            ng-show="isLikedAuth(author)"></i>
 
-        <i id="liked" ng-click= "addFavoritesAuth(author)"
+        <i  ng-click= "addFavoritesAuth(author)"
            class="ion-ios-star-outline star" ng-show="!isLikedAuth(author)"></i>
 
         <div  id="link" class="elipse" ui-sref="tab.auteur({name: author})">
@@ -32,13 +32,13 @@
     <ion-list>
       <ion-item ng-show="isArtist" class="item-divider" id="page-list-item-divider2">Interprètes</ion-item>
       <ion-item ng-repeat="artist in answer.performer track by $index">
-        <i id="liked" class="ion-ios-star star" ng-click= "delFavoritesArt(artist)"
+        <i  class="ion-ios-star star" ng-click= "delFavoritesArt(artist)"
            ng-show="isLikedArt(artist)"></i>
 
-        <i id="liked" ng-click= "addFavoritesArt(artist)"
+        <i  ng-click= "addFavoritesArt(artist)"
            class="ion-ios-star-outline star" ng-show="!isLikedArt(artist)"></i>
 
-        <div  id="link" class="elipse" ui-sref="tab.artist({name: artist})">
+        <div  class="elipse" ui-sref="tab.artist({name: artist})">
           {{artist}}
 
         </div>
