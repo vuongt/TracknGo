@@ -5,10 +5,12 @@ var express = require('express'),
   // TOD0 session not necessary
   passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
-  request = require('request'),
+  request = require('request-promise'),
   bodyParser = require('body-parser'),
   token = require('./server/token.controller.js'),
-  jwt = require('jsonwebtoken');
+  jwt = require('jsonwebtoken'),
+  async = require('async');
+
 var app = express();
 var config = require('./config-dev.js'); //config file contains all tokens and other private info
 var authentication = require('./server/authentication.controller.js');
@@ -304,17 +306,24 @@ app.get('/signout', authentication.signout);
 //---------------research concert---------------
 app.get('/search/concerts', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  //params : position, radius, date
+  //params : position, radius, start,end
   //TODO Verify if the query is correct !
+  var position={};
+  var radius = 0;
+  if(req.query.position!=="") { position = req.query.position;}
+  if(req.query.radius!=="") { radius = req.query.radius;}
+  if(req.query.start!=="" && req.query.end!=="") {
+    var start = new Date(req.query.start);
+    var end = new Date(req.query.end);
+  } else {
+    var today = new Date();
+  }
   var results= {
     error:"",
     concerts:[]
   };
-  if (!req.query.date || req.query.date===""){
-    results.error = "Invalid query";
-    res.send(JSON.stringify(results));
-  } else {
-    optionEliza.uri = config.eliza.uri + "/date/" +req.query.date;
+  if (today){
+    optionEliza.uri = config.eliza.uri + "/date/" + today.toISOString();
     request(optionEliza,function(error,response,body){
       if(error){
         results.error = "Error when searching in Eliza";
@@ -323,6 +332,39 @@ app.get('/search/concerts', function (req, res) {
       }
       res.send(JSON.stringify(results));
     });
+  } else if (start && end) {
+    console.log("start day" + start);
+    console.log("end day" +end);
+    var dateList = [];
+    var date = start;
+    while (date<=end) {
+      dateList.push(new String(date.toISOString()));
+      date.setDate(date.getDate() +1);
+    }
+    console.log(dateList);
+    var calls=[];
+    dateList.forEach(function(d){
+      calls.push(function(callback){
+        optionEliza.uri = config.eliza.uri + "/date/" + d;
+        request(optionEliza,function(error,response,body){
+          if(error){
+            results.error = "Error when searching in Eliza";
+            return callback(error);
+          } else {
+            results.concerts.push.apply(results.concerts,JSON.parse(body).slice());
+            console.log("result for: " + d );
+            console.log(results.concerts.length);
+            callback(null,body);
+          }
+        });
+      })
+    });
+
+    async.parallel(calls,function(err,result){
+      //This function is call when all the functions in calls have finished
+      if(err){return console.log(err);}
+      res.send(JSON.stringify(results));
+    })
   }
 });
 
@@ -714,34 +756,34 @@ app.get('/planning', function (req, res) {
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
   try {
     var requestToken = token.extractToken(req.headers);
+    if (requestToken) {
+      try {
+        var decoded = jwt.decode(requestToken, config.token.secret);
+        var userid = decoded.id;
+      } catch (err) {
+        return res.send({authorized: false});
+      }
+    }
+    var planning ={authorized:true, events: []};
+    mariaClient.query("SELECT * FROM planning WHERE id_user ='"+userid+"';", function(err,rows){
+      if(err) {console.log(err); return res.send({error: "reading database error"});}
+      else {
+        for (var i = 0, length = rows.length; i < length; i++) {
+          var event = {};
+          event.title = rows[i].title;
+          event.prog_date = rows[i].prog_date;
+          event.location = rows[i].location;
+          event.cdeprog = rows[i].cdeprog;
+          event.id = rows[i].id_event;
+          event.id_bit = rows[i].id_bit;
+          planning.events.push(event);
+        }
+        res.send(JSON.stringify(planning));
+      }
+    });
   } catch (err){
     return res.send({authorized : false});
   }
-  if (requestToken) {
-    try {
-      var decoded = jwt.decode(requestToken, config.token.secret);
-      var userid = decoded.id;
-    } catch (err) {
-      return res.send({authorized: false});
-    }
-  }
-  var planning ={authorized:true, events: []};
-  mariaClient.query("SELECT * FROM planning WHERE id_user ='"+userid+"';", function(err,rows){
-    if(err) {console.log(err); return res.send({error: "reading database error"});}
-    else {
-      for (var i = 0, length = rows.length; i < length; i++) {
-        var event = {};
-        event.title = rows[i].title;
-        event.prog_date = rows[i].prog_date;
-        event.location = rows[i].location;
-        event.cdeprog = rows[i].cdeprog;
-        event.id = rows[i].id_event;
-        event.id_bit = rows[i].id_bit;
-        planning.events.push(event);
-      }
-      res.send(JSON.stringify(planning));
-    }
-  });
 
 });
 
@@ -871,49 +913,49 @@ app.get('/action/removefavorite', function (req, res) {
   var action ={authorized:false, actionSucceed: false};
   try {
     var requestToken = token.extractToken(req.headers);
+    if (requestToken) {
+      try {
+        var decoded = jwt.decode(requestToken, config.token.secret);
+        var userid = decoded.id;
+      } catch (err) {
+        res.send (JSON.stringify(action));    }
+    }
+    action.authorized =true;
+    if (req.query.type === "work") {
+      var prepWork = mariaClient.prepare("DELETE FROM favorite_works WHERE id_user=:userid AND iswc =:iswc");
+      mariaClient.query(prepWork({userid:userid,iswc:req.query.iswc}), function (err, rows) {
+        if (err) return res.send (JSON.stringify(action));
+        else {
+          action.actionSucceed = true;
+          console.log('Remove favorite ' + req.query.iswc+ ' succeeded');
+          res.send (JSON.stringify(action));
+        }
+      });
+    }
+    if (req.query.type === "author") {
+      var prepAuth = mariaClient.prepare("DELETE FROM favorite_authors WHERE id_user=:userid AND name_author =:name_author");
+      mariaClient.query(prepAuth({userid:userid,name_author:req.query.name}), function (err, rows) {
+        if (err) res.send (JSON.stringify(action));
+        else {
+          action.actionSucceed = true;
+          console.log('Remove favorite ' + req.query.name + ' succeeded');
+          res.send (JSON.stringify(action));
+        }
+      });
+    }
+    if (req.query.type === "artist") {
+      var prepArt = mariaClient.prepare("DELETE FROM favorite_artists WHERE id_user=:userid AND name_artist =:name_artist");
+      mariaClient.query(prepArt({userid:userid,name_artist:req.query.name}), function (err, rows) {
+        if (err) res.send (JSON.stringify(action));
+        else {
+          action.actionSucceed = true;
+          console.log('Remove favorite ' + req.query.name + ' succeeded');
+          res.send (JSON.stringify(action));
+        }
+      });
+    }
   } catch (err){
     res.send (JSON.stringify(action));
-  }
-  if (requestToken) {
-    try {
-      var decoded = jwt.decode(requestToken, config.token.secret);
-      var userid = decoded.id;
-    } catch (err) {
-      res.send (JSON.stringify(action));    }
-  }
-  action.authorized =true;
-  if (req.query.type === "work") {
-    var prepWork = mariaClient.prepare("DELETE FROM favorite_works WHERE id_user=:userid AND iswc =:iswc");
-    mariaClient.query(prepWork({userid:userid,iswc:req.query.iswc}), function (err, rows) {
-      if (err) return res.send (JSON.stringify(action));
-      else {
-        action.actionSucceed = true;
-        console.log('Remove favorite ' + req.query.iswc+ ' succeeded');
-        res.send (JSON.stringify(action));
-      }
-    });
-  }
-  if (req.query.type === "author") {
-    var prepAuth = mariaClient.prepare("DELETE FROM favorite_authors WHERE id_user=:userid AND name_author =:name_author");
-    mariaClient.query(prepAuth({userid:userid,name_author:req.query.name}), function (err, rows) {
-      if (err) res.send (JSON.stringify(action));
-      else {
-        action.actionSucceed = true;
-        console.log('Remove favorite ' + req.query.name + ' succeeded');
-        res.send (JSON.stringify(action));
-      }
-    });
-  }
-  if (req.query.type === "artist") {
-    var prepArt = mariaClient.prepare("DELETE FROM favorite_artists WHERE id_user=:userid AND name_artist =:name_artist");
-    mariaClient.query(prepArt({userid:userid,name_artist:req.query.name}), function (err, rows) {
-      if (err) res.send (JSON.stringify(action));
-      else {
-        action.actionSucceed = true;
-        console.log('Remove favorite ' + req.query.name + ' succeeded');
-        res.send (JSON.stringify(action));
-      }
-    });
   }
 });
 

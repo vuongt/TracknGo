@@ -22,7 +22,7 @@ angular.module('starter.controllers')
 
   $http({
   method: 'GET',
-  url: API_ENDPOINT.url + '/search/concerts?date='+$scope.date,
+  url: API_ENDPOINT.url + '/search/concerts?position=&radius=&start=&end=',
   header:{
     Origin:'http://localhost:8100'
   }
