@@ -45,7 +45,7 @@ angular.module('starter.controllers')
         $scope.concerts.forEach(function (item,index) {
           item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
           item.DATDBTDIF = new Date(item.DATDBTDIF);
-          AuthService.isInPlanning(item.CDEPROG, item.TITRPROG ,function (isInPlanning) {
+          AuthService.isInPlanning(item.CDEPROG, item.id_bit ,function (isInPlanning) {
             item.isInPlanning = isInPlanning;
           })
         });
@@ -110,9 +110,26 @@ angular.module('starter.controllers')
 
 
     $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
-      console.log("adding concert with location:" + location);
 
-      AuthService.addPlanning(date, location, title, cdeprog, id_bit);
+
+      AuthService.addPlanning(date, location, title, cdeprog, id_bit, function (result) {
+        if (!result.auth) {
+          var confirmPopup = $ionicPopup.confirm({
+            title: 'Oups !',
+            template: 'Please sign in to do this action',
+            okText: 'Sign in'
+          });
+
+          confirmPopup.then(function (res) {
+            if (res) {
+              $state.go('tab.profil');
+            } else {
+              console.log('Action annulé');
+            }
+          });
+        }
+      });
+
 
 
     };

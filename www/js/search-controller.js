@@ -14,44 +14,44 @@ angular.module('starter.controllers')
   $scope.api = AuthService.api;
   //$scope.concerts == [];
 
-  $scope.userdata = AuthService.getUserInfo();
+    $scope.userdata = AuthService.getUserInfo();
 
-  $scope.isLiked = function(iswc){
-    return(AuthService.isLiked(iswc, $scope.userdata));
-  };
-  $scope.delFavorites = function(iswc, name){
-      AuthService.delFavorites(iswc, name,verifyAction);
-  };
-  $scope.addFavorites = function(iswc, name){
-       AuthService.addFavorites(iswc, name,verifyAction);
-  };
-  function verifyAction(authorized,actionSucceed){
-    if (!authorized) {
-      var confirmPopup = $ionicPopup.confirm({
-        title: 'Oups !',
-        template: 'Please sign in to do this action',
-        okText:'Sign in'
-      });
+    $scope.isLiked = function (iswc) {
+      return (AuthService.isLiked(iswc, $scope.userdata));
+    };
+    $scope.delFavorites = function (iswc, name) {
+      AuthService.delFavorites(iswc, name, verifyAction);
+    };
+    $scope.addFavorites = function (iswc, name) {
+      AuthService.addFavorites(iswc, name, verifyAction);
+    };
+    function verifyAction(authorized, actionSucceed) {
+      if (!authorized) {
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Oups !',
+          template: 'Please sign in to do this action',
+          okText: 'Sign in'
+        });
 
-      confirmPopup.then(function(res) {
-        if(res) {
-          $state.go('tab.profil');
-        } else {
-          console.log('Action annulé');
-        }
-      });
-    } else if (!actionSucceed){
-      var alertPopup = $ionicPopup.alert({
-        title: "Oups !",
-        template: "There is a problem while connecting to server. Please try again later"
-      });
-      alertPopup.then(function (res) {
-        console.log($scope.error);
-      });
-    } else {
-      $scope.userdata = AuthService.getUserInfo();
+        confirmPopup.then(function (res) {
+          if (res) {
+            $state.go('tab.profil');
+          } else {
+            console.log('Action annulé');
+          }
+        });
+      } else if (!actionSucceed) {
+        var alertPopup = $ionicPopup.alert({
+          title: "Oups !",
+          template: "There is a problem while connecting to server. Please try again later"
+        });
+        alertPopup.then(function (res) {
+          console.log($scope.error);
+        });
+      } else {
+        $scope.userdata = AuthService.getUserInfo();
+      }
     }
-  }
 
 
     $scope.submitSearch = function(search, filter,api){
@@ -72,58 +72,59 @@ angular.module('starter.controllers')
    $scope.numLimit=5;
 
 
-    if (response.data.error ==""){
-      console.log($scope.answer);
-      for(var i = 0, len = $scope.answer.length; i < len; i++)
-      {
-        var temp = $scope.answer[i].title.trim();
-        $scope.answer[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
-        $scope.answer[i].isInfo = false;
+        if (response.data.error == "") {
+          console.log($scope.answer);
+          for (var i = 0, len = $scope.answer.length; i < len; i++) {
+            var temp = $scope.answer[i].title.trim();
+            $scope.answer[i].title = temp.charAt(0).toUpperCase() + temp.substring(1).toLowerCase();
+            $scope.answer[i].isInfo = false;
 
-        if ($scope.answer[i].iswc.length != 0){
+            if ($scope.answer[i].iswc.length != 0) {
               $scope.answer[i].isInfo = true;
-         }
-              if ($scope.answer.length!=0){
+            }
+            if ($scope.answer.length != 0) {
 
-                $scope.isSong=true;
-                if ($scope.numLimit<=len){$scope.isPlus = true;}
+              $scope.isSong = true;
+              if ($scope.numLimit <= len) {
+                $scope.isPlus = true;
               }
+            }
+          }
+
+          if ($scope.answer.length < 100) {
+            $scope.maxResults = $scope.answer.length;
+          }
+
+          $scope.answer.sort(compare);
         }
 
-        if ($scope.answer.length<100){
-        $scope.maxResults=$scope.answer.length;
-        }
 
-        $scope.answer.sort(compare);
+        else {
+          //Show an alert of the error
+          if (response.data.error == "") {
+            $scope.answer[i].isInfo = false;
+          }
+          var alertPopup = $ionicPopup.alert({
+            title: "Recherche impossible !",
+            template: $scope.error
+          });
+          alertPopup.then(function (res) {
+            console.log($scope.error);
+          });
+        }
+      }, function errorCallback(response) {
+
+      });
+    }
+
+    $scope.printMore = function () {
+      $scope.numLimit = $scope.numLimit + 5;
+      if ($scope.numLimit >= $scope.maxResults) {
+        $scope.isPlus = false;
       }
-
-
-
-    else {
-      //Show an alert of the error
-      if (response.data.error ==""){
-     $scope.answer[i].isInfo= false;}
-      var alertPopup = $ionicPopup.alert({
-        title: "Recherche impossible !",
-        template: $scope.error
-      });
-      alertPopup.then(function(res) {
-        console.log($scope.error);
-      });
-    }
-  }, function errorCallback(response) {
-
-  });
-  }
-
-  $scope.printMore = function () {
-    $scope.numLimit = $scope.numLimit + 5;
-    if ($scope.numLimit >= $scope.maxResults) {
-      $scope.isPlus = false;
-    }
-  };
+    };
   }]);
-function compare(a,b) {
+function compare(a, b) {
   if (a.title < b.title)
     return -1;
   if (a.title > b.title)
