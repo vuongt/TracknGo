@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('ArtistCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService) {
+angular.module('starter.controllers').controller('ArtistCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService,API_ENDPOINT) {
   $scope.name = $stateParams.name;
   //$scope.concerts=[];
   //$scope.songs=[];
@@ -60,7 +60,7 @@ angular.module('starter.controllers').controller('ArtistCtrl', function ($scope,
   //==============GET Information=======================
 $http({
   method: 'GET',
-  url: 'http://localhost:8080/artist?name='+$scope.name,
+  url: API_ENDPOINT.url + '/artist?name='+$scope.name,
   header:{
     Origin:'http://localhost:8100'
   }

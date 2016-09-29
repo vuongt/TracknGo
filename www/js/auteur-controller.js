@@ -1,7 +1,7 @@
-angular.module('starter.controllers').controller('AuteurCtrl', function(AuthService, $scope, $http, $ionicPopup, $stateParams, $ionicHistory) {
-  $scope.name= $stateParams.name;
-  $scope.isSong=true;
-  $scope.isPlus = false;
+angular.module('starter.controllers').controller('AuteurCtrl', function(AuthService, $scope, $http, $ionicPopup, $stateParams, $ionicHistory,API_ENDPOINT) {
+$scope.name= $stateParams.name;
+$scope.isSong=true;
+$scope.isPlus = false;
 
 
   $scope.userdata = AuthService.getUserInfo();
@@ -47,7 +47,7 @@ angular.module('starter.controllers').controller('AuteurCtrl', function(AuthServ
   //=============GET INFORMATION================
 $http({
   method: 'GET',
-  url: 'http://localhost:8080/author?name='+$scope.name,
+  url: API_ENDPOINT.url + '/author?name='+$scope.name,
   header:{
   Origin:'http://localhost:8100'
   }
@@ -116,6 +116,8 @@ $http({
 
 
 
+
+
   $scope.printMore = function() {
 $scope.numLimit=$scope.numLimit+5;
 
@@ -130,9 +132,9 @@ $scope.numLimit=$scope.numLimit+5;
 
 function compare(a,b) {
   if (a.title < b.title)
-    return -1;
+   { return -1;}
   if (a.title > b.title)
-    return 1;
+    {return 1;}
   return 0;
 }
 

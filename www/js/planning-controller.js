@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('PlanningCtrl', function ($scope, $http, AuthService) {
+angular.module('starter.controllers').controller('PlanningCtrl', function ($scope, $http, AuthService,API_ENDPOINT) {
 
   $scope.month = new Date();
 
@@ -8,7 +8,7 @@ angular.module('starter.controllers').controller('PlanningCtrl', function ($scop
 
   $http({
     method: 'GET',
-    url: 'http://localhost:8080/planning',
+    url: API_ENDPOINT.url + '/planning',
     header: {
       Origin: 'http://localhost:8100'
     }

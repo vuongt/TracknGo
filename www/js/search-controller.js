@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
 
 
-.controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", function($rootScope,$scope,$http, AuthService,$stateParams, $ionicPopup,$route){
+.controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", "$state", function($rootScope,$scope,$http, AuthService,$stateParams, $ionicPopup,$state){
 
 
 
@@ -11,6 +11,7 @@ angular.module('starter.controllers')
   $scope.filter= "all";
   $scope.nbrPage=1;
   $scope.charging=false;
+  $scope.api = AuthService.api;
   //$scope.concerts == [];
 
   $scope.userdata = AuthService.getUserInfo();
@@ -52,11 +53,13 @@ angular.module('starter.controllers')
     }
   }
 
-    $scope.submitSearch = function(search, filter){
+
+    $scope.submitSearch = function(search, filter,api){
         $scope.charging=true;
+
             $http({
               method: 'GET',
-              url: 'http://localhost:8080/search/works?query='+search+'&filters='+filter+'&page='+$scope.nbrPage,
+              url: api +'/search/works?query='+search+'&filters='+filter+'&page='+$scope.nbrPage,
               header:{
               Origin:'http://localhost:8100'
             }

@@ -5,12 +5,12 @@
         <label class="item item-select">
 
           <div class="col">
-            <form  class="col" ng-submit="submitSearch(search, filter)">
+            <form  class="col" ng-submit="submitSearch(search, filter,api)">
               <input   class="item item-input" type="text" placeholder="Que recherchez vous?" ng-model="search">
             </form>
           </div>
           <select ng-model="filter" class="large-select">
-            <option value="all"> Sélectionner un filtre </option>
+            <option value="all">  </option>
             <option value="parties">Auteurs/Compositeurs </option>
             <option  value="titles,subtitles">Chansons</option>
             <option value="performers">Interprètes</option>
@@ -25,7 +25,6 @@
 
 
     <ion-list ng-show="isSong">
-      <ion-item class="item-divider" id="page-list-item-divider1">Morceaux</ion-item>
       <ion-item ng-repeat="song in answer | limitTo:numLimit">
 
 

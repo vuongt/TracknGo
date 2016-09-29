@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams,$ionicPopup) {
+angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams,$ionicPopup,API_ENDPOINT) {
 
   $scope.cdeprog= $stateParams.cdeprog;
   $scope.datedbt= $stateParams.datedbt;
@@ -71,7 +71,7 @@ $http({
   var getComment = function(){
     $http({
       method: 'GET',
-      url: 'http://localhost:8080/comment?cdeprog='+$scope.cdeprog,
+      url: API_ENDPOINT.url + '/comment?cdeprog='+$scope.cdeprog,
       header: {
         Origin: 'http://localhost:8100'
       }

@@ -8,5 +8,5 @@ angular.module('starter')
   })
 
   .constant('API_ENDPOINT', {
-    url: 'http://localhost:8080/'
-  });
+    url: 'http://192.168.43.18:8080'
+      });

@@ -80,10 +80,11 @@ angular.module('starter.services', [])
     //==============FAVORITES SERVICE===============
     //Ajouter une chanson aux favoris
 
+
     function addFavorites(iswc, name, cb) {
       $http({
         method: 'GET',
-        url: 'http://localhost:8080/action/addfavorite?type=work&iswc=' + iswc + '+&title=' + name,
+        url: API_ENDPOINT.url + '/action/addfavorite?type=work&iswc=' + iswc + '+&title=' + name,
         header: {
           Origin: 'http://localhost:8100'
         }
@@ -107,7 +108,7 @@ angular.module('starter.services', [])
       console.log('la chanson ' + name + ' va être supprimée de vos favoris');
       $http({
         method: 'GET',
-        url: 'http://localhost:8080/action/removefavorite?type=work&iswc=' + iswc + '&title=' + name,
+        url: API_ENDPOINT.url + '/action/removefavorite?type=work&iswc=' + iswc + '&title=' + name,
         header: {
           Origin: 'http://localhost:8100'
         }
@@ -127,7 +128,7 @@ angular.module('starter.services', [])
 
     }
 
-//Ajouter un auteur aux favoris
+    //Ajouter un auteur aux favoris
     function addFavoritesAuth(name,cb) {
       $http({
         method: 'GET',
@@ -262,7 +263,7 @@ angular.module('starter.services', [])
       if (cdeprog) {
         $http({
           method: 'GET',
-          url: 'http://localhost:8080/action/addevent?cdeprog=' + cdeprog + '&title=' + title + '&location=' + location + '&date=' + date,
+          url: API_ENDPOINT.url + '/action/addevent?cdeprog=' + cdeprog + '&title=' + title + '&location=' + location + '&date=' + date,
           header: {
             Origin: 'http://localhost:8100'
           }
@@ -282,7 +283,7 @@ angular.module('starter.services', [])
       else {
         $http({
           method: 'GET',
-          url: 'http://localhost:8080/action/addevent?title=' + title + '&location=' + location + '&date=' + date +'&id_bit=' + id_bit,
+          url: API_ENDPOINT.url + '/action/addevent?title=' + title + '&location=' + location + '&date=' + date +'&id_bit=' + id_bit,
           header: {
             Origin: 'http://localhost:8100'
           }
@@ -307,7 +308,7 @@ angular.module('starter.services', [])
       if(cdeprog){
         $http({
           method: 'GET',
-          url: 'http://localhost:8080/action/removeevent?cdeprog=' + cdeprog,
+          url: API_ENDPOINT.url + '/action/removeevent?cdeprog=' + cdeprog,
           header: {
             Origin: 'http://localhost:8100'
           }
@@ -323,7 +324,7 @@ angular.module('starter.services', [])
       } else {
         $http({
           method: 'GET',
-          url: 'http://localhost:8080/action/removeevent?id_bit=' + idBit,
+          url: API_ENDPOINT.url + '/action/removeevent?id_bit=' + idBit,
           header: {
             Origin: 'http://localhost:8100'
           }
@@ -344,7 +345,7 @@ angular.module('starter.services', [])
     var isInPlanning = function (cdeprog, title, callback) {
       $http({
         method: 'GET',
-        url: 'http://localhost:8080/planning',
+        url: API_ENDPOINT.url + '/planning',
         header: {
           Origin: 'http://localhost:8100'
         }
@@ -372,6 +373,7 @@ angular.module('starter.services', [])
     return {
       login: login,
       register: register,
+      api: API_ENDPOINT.url,
       logout: logout,
       isLiked: isLiked,
       isLikedAuth: isLikedAuth,

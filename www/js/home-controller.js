@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService,API_ENDPOINT) {
 
     Date.prototype.yyyymmdd = function () {
       month = '' + (this.getMonth() + 1),
@@ -14,20 +14,34 @@ angular.module('starter.controllers')
 
 //Chargement des concerts
   $scope.cdeprog="0008201463";
+  $scope.charging=true;
+  $isConcertHome=false;
   var now = new Date();
     $scope.date = now.toISOString();
     //TODO set this to user's date
 
-    $http({
-      method: 'GET',
-      url: 'http://localhost:8080/search/concerts?date=' + $scope.date,
-      header: {
-        Origin: 'http://localhost:8100'
-      }
-    }).then(function successCallback(response) {
-      $scope.answer = response.data;
-      if ($scope.answer.error == "") {
+  $http({
+  method: 'GET',
+  url: API_ENDPOINT.url + '/search/concerts?date='+$scope.date,
+  header:{
+    Origin:'http://localhost:8100'
+  }
+  }).then(function successCallback(response) {
+
+
+  $scope.charging=false;
+  $scope.answer = response.data;
+
+
+      if ($scope.answer.error == ""){
         $scope.concerts = $scope.answer.concerts;
+        console.log($scope.concerts);
+
+        if ($scope.concerts.length!=0){
+
+        $scope.isConcertHome=true;
+
+        }
         $scope.concerts.forEach(function (item,index) {
           item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
           item.DATDBTDIF = new Date(item.DATDBTDIF);

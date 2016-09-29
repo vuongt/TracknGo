@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService) {
+angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService,API_ENDPOINT) {
   $scope.iswc = $stateParams.iswc;
   $scope.title = $stateParams.title;
   $scope.myGoBack = function () {
@@ -79,7 +79,7 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
 
   $http({
     method: 'GET',
-    url: 'http://localhost:8080/work?iswc=' + $scope.iswc,
+    url: API_ENDPOINT.url + '/work?iswc=' + $scope.iswc,
     header: {
       Origin: 'http://localhost:8100'
     }
@@ -136,7 +136,7 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
     $scope.charging = true;
     $http({
       method: 'GET',
-      url: 'http://localhost:8080/work/program?iswc=' + iswc,
+      url: API_ENDPOINT.url + '/work/program?iswc=' + iswc,
       header: {
         Origin: 'http://localhost:8100'
       }
