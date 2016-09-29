@@ -29,7 +29,7 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
   $scope.charging=true;
 $http({
   method: 'GET',
-  url: 'http://localhost:8080/program?cdeprog='+$scope.cdeprog,
+  url: API_ENDPOINT.url + '/program?cdeprog='+$scope.cdeprog,
   header:{
     Origin:'http://localhost:8100'
   }
@@ -94,7 +94,7 @@ $http({
     if(contentComment && contentComment!==""){
       $http({
         method: 'POST',
-        url: 'http://localhost:8080/comment?cdeprog='+$scope.cdeprog,
+        url: API_ENDPOINT.url + '/comment?cdeprog='+$scope.cdeprog,
         header: {
           Origin: 'http://localhost:8100'
         },
