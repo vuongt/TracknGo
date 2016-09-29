@@ -1,7 +1,7 @@
 angular.module('starter.controllers')
 
 
-  .controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", function ($rootScope, $scope, $http, AuthService, $stateParams, $ionicPopup, $route) {
+.controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", function($rootScope,$scope,$http, AuthService,$stateParams, $ionicPopup,$state){
 
 
     $scope.isSong = false;

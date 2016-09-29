@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('AuteurCtrl', function(AuthService, $scope, $http, $ionicPopup, $stateParams, $ionicHistory) {
+angular.module('starter.controllers').controller('AuteurCtrl', function(AuthService, $scope, $http, $ionicPopup, $stateParams, $ionicHistory,$state) {
   $scope.name= $stateParams.name;
   $scope.isSong=true;
   $scope.isPlus = false;
