@@ -968,23 +968,24 @@ app.post('/comment', function (req, res) {
     var requestToken = token.extractToken(req.headers);
     var decoded = jwt.decode(requestToken, config.token.secret);
     var userid = decoded.id;
+    action.authorized =true;
+    console.log ('Before writing to DB : ');
+    console.log(req.body);
+    var prep= mariaClient.prepare("INSERT INTO comment (cdeprog, id_user,creation_date,content) VALUES (:cdeprog,:userid,:date,:content);");
+    mariaClient.query(prep({cdeprog:req.body.cdeprog,userid:userid,date:req.body.date, content:req.body.content}),function(err,rows){
+      if (err) {
+        console.log(err);
+        return res.send(JSON.stringify(action));
+      } else {
+        action.actionSucceed =true;
+        console.log("posting comment succeeded");
+        res.send (JSON.stringify(action));
+      }
+    });
   } catch (err){
     res.send (JSON.stringify(action));
   }
-  action.authorized =true;
-  console.log ('Before writing to DB : ');
-  console.log(req.body);
-  var prep= mariaClient.prepare("INSERT INTO comment (cdeprog, id_user,creation_date,content) VALUES (:cdeprog,:userid,:date,:content);");
-  mariaClient.query(prep({cdeprog:req.body.cdeprog,userid:userid,date:req.body.date, content:req.body.content}),function(err,rows){
-    if (err) {
-      console.log(err);
-      return res.send({error:"Error when reading from database"}); // TODO Error Handler
-    } else {
-      action.actionSucceed =true;
-      console.log("posting comment succeeded");
-      res.send (JSON.stringify(action));
-    }
-  });
+
 });
 app.get('/comment', function (req, res) {
   res.setHeader('Content-Type', 'application/json');

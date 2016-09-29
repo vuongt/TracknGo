@@ -91,6 +91,10 @@ $http({
 
 //post comment
   $scope.submit = function(contentComment){
+    send(contentComment,verifyAction);
+    this.contentComment = null;
+  };
+  function send(contentComment,verifyAction){
     console.log(contentComment);
     if(contentComment && contentComment!==""){
       $http({
@@ -106,9 +110,10 @@ $http({
         }
       }).then(function successCallback(response) {
         if (response.data.error) {
-          console.log(response.data.error);
+          return console.log(response.data.error);
           //TODO popup
         }
+        verifyAction(response.data.authorized,response.data.actionSucceed);
       }, function errorCallback(error) {
         console.log(error);
       });
@@ -122,6 +127,33 @@ $http({
     //TODO clear field after sending
     getComment();
   };
+  function verifyAction(authorized,actionSucceed){
+    if (!authorized) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Oups !',
+        template: 'Please sign in to do this action',
+        okText:'Sign in'
+      });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          $state.go('tab.profil');
+        } else {
+          console.log('Action annulé');
+        }
+      });
+    } else if (!actionSucceed){
+      var alertPopup = $ionicPopup.alert({
+        title: "Oups !",
+        template: "There is a problem while connecting to server. Please try again later"
+      });
+      alertPopup.then(function (res) {
+        console.log($scope.error);
+      });
+    } else {
+      $scope.userdata = AuthService.getUserInfo();
+    }
+  }
 
 
 });
