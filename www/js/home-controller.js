@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService,API_ENDPOINT) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT) {
 
     Date.prototype.yyyymmdd = function () {
       month = '' + (this.getMonth() + 1),
@@ -13,10 +13,10 @@ angular.module('starter.controllers')
     };
 
 //Chargement des concerts
-  $scope.cdeprog="0008201463";
-  $scope.charging=true;
-  $isConcertHome=false;
-  var now = new Date();
+    $scope.cdeprog = "0008201463";
+    $scope.charging = true;
+    $isConcertHome = false;
+    var now = new Date();
     $scope.date = now.toISOString();
     //TODO set this to user's date
 
@@ -29,83 +29,152 @@ angular.module('starter.controllers')
   }).then(function successCallback(response) {
 
 
-  $scope.charging=false;
-  $scope.answer = response.data;
+      $scope.charging = false;
+      $scope.answer = response.data;
 
 
-      if ($scope.answer.error == ""){
+      if ($scope.answer.error == "") {
         $scope.concerts = $scope.answer.concerts;
-        console.log($scope.concerts);
 
-        if ($scope.concerts.length!=0){
+        if ($scope.concerts.length != 0) {
 
-        $scope.isConcertHome=true;
+          $scope.isConcertHome = true;
 
         }
-        $scope.concerts.forEach(function (item,index) {
+        $scope.concerts.forEach(function (item, index) {
           item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
           item.DATDBTDIF = new Date(item.DATDBTDIF);
-          AuthService.isInPlanning(item.CDEPROG, item.id_bit ,function (isInPlanning) {
+          AuthService.isInPlanning(item.CDEPROG, item.id_bit, function (isInPlanning) {
             item.isInPlanning = isInPlanning;
           })
         });
 
-      }
-    }, function errorCallback(response) {
-    });
+
+        //initialisation google maps
+        var options = {timeout: 10000, enableHighAccuracy: true};
+        $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+          var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          var mapOptions = {
+            center: latLng,
+            zoom: 11,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+          var geocoder = new google.maps.Geocoder();
+          $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+          //creation de la fonction isOpen a infowindow
+          function isInfoWindowOpen(infoWindow) {
+            var map = infoWindow.getMap();
+            return (map !== null && typeof map !== "undefined");
+          }
 
 
-    $scope.concerts = [$scope.answer];
-    //initialisation google maps
-    var options = {timeout: 10000, enableHighAccuracy: true};
-    $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-      var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      var mapOptions = {
-        center: latLng,
-        zoom: 13,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-      var geocoder = new google.maps.Geocoder();
-      $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-      //creation de la fonction isOpen a infowindow
-      function isInfoWindowOpen(infoWindow) {
-        var map = infoWindow.getMap();
-        return (map !== null && typeof map !== "undefined");
-      }
+          google.maps.event.addListenerOnce($scope.map, 'idle', function () {
 
-      google.maps.event.addListenerOnce($scope.map, 'idle', function () {
-        for (var i = 0; i < $scope.concerts.length; i++) {
-          (function () {
-            var concert = $scope.answer;
-            var address = "avenue Sully prudhomme, Châtenay";
-            geocoder.geocode({'address': address}, function (results, status) {
-              if (status === google.maps.GeocoderStatus.OK) {
-                var marker = new google.maps.Marker({
-                  map: $scope.map,
-                  animation: google.maps.Animation.DROP,
-                  position: results[0].geometry.location
-                });
-                var infoWindow = new google.maps.InfoWindow({
-                  //content: concert.title
-                });
-                google.maps.event.addListener(marker, 'click', function () {
-                  if (isInfoWindowOpen(infoWindow)) {
-                    infoWindow.close();
+            $scope.concerts.forEach(function (item, index) {
+              setTimeout(function () {
+
+
+                var request = {
+
+                  query: item.NOM + " " + item.VILLE
+                };
+
+                var service = new google.maps.places.PlacesService($scope.map);
+
+                service.textSearch(request, callback);
+
+                function callback(results, status) {
+                  if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    var marker = new google.maps.Marker({
+                      map: $scope.map,
+                      animation: google.maps.Animation.DROP,
+                      position: results[0].geometry.location
+                    });
+
+                    var infoWindow = new google.maps.InfoWindow({
+                      content: item.TITRPROG + " @ " + item.NOM.toLowerCase()
+                    });
+                    google.maps.event.addListener(marker, 'click', function () {
+                      if (isInfoWindowOpen(infoWindow)) {
+                        infoWindow.close();
+                      }
+                      else {
+                        infoWindow.open($scope.map, marker);
+                      }
+                    });
                   }
                   else {
-                    infoWindow.open($scope.map, marker);
+                    request = {
+                      query: item.VILLE
+
+                    };
+                    service.textSearch(request, function (results, status) {
+
+                      if (status === google.maps.places.PlacesServiceStatus.OK) {
+
+                        var marker = new google.maps.Marker({
+                          map: $scope.map,
+                          animation: google.maps.Animation.DROP,
+                          position: results[0].geometry.location
+                        });
+                        var infoWindow = new google.maps.InfoWindow({
+                          content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
+                        });
+                        google.maps.event.addListener(marker, 'click', function () {
+                          if (isInfoWindowOpen(infoWindow)) {
+                            infoWindow.close();
+                          }
+                          else {
+                            infoWindow.open($scope.map, marker);
+                          }
+                        });
+                      } else {
+                        console.log('Geocode was not successful for the following reason: ' + status);
+                      }
+                    });
                   }
-                });
-              } else {
-                alert('Geocode was not successful for the following reason: ' + status);
-              }
+
+                }
+
+              }, 300*index);
             });
-          })();
-        }
-      }, function (error) {
-      });
+            /*for (var i = 0; i < $scope.concerts.length; i++) {
+             (function () {
+             var address = "LA MAROQUINERIE IN PARIS"; //$scope.concerts[i].VILLE;
+             geocoder.geocode({'address': address}, function (results, status) {
+             if (status === google.maps.GeocoderStatus.OK) {
+             var marker = new google.maps.Marker({
+             map: $scope.map,
+             animation: google.maps.Animation.DROP,
+             position: results[0].geometry.location
+             });
+             var infoWindow = new google.maps.InfoWindow({
+             //content: concert.title
+             });
+             google.maps.event.addListener(marker, 'click', function () {
+             if (isInfoWindowOpen(infoWindow)) {
+             infoWindow.close();
+             }
+             else {
+             infoWindow.open($scope.map, marker);
+             }
+             });
+             } else {
+             alert('Geocode was not successful for the following reason: ' + status);
+             }
+             });
+             })();
+             }*/
+          }, function (error) {
+          });
 
 
+        });
+
+
+      }
+
+    }, function errorCallback(response) {
     });
 
 
@@ -129,7 +198,6 @@ angular.module('starter.controllers')
           });
         }
       });
-
 
 
     };

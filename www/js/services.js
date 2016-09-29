@@ -353,17 +353,20 @@ angular.module('starter.services', [])
       }).then(function successCallback(response) {
 
         var results = response.data.events;
-        for (var i = 0; i < results.length; i++) {
-          if (cdeprog) {
-            if (results[i].cdeprog == cdeprog) {
-              return callback(true);
-            }
-          } else {
-            if (results[i].id_bit == id_bit) {
-              console.log("test");
-              return callback(true);
+        if(results){
+          for (var i = 0; i < results.length; i++) {
+            if (cdeprog) {
+              if (results[i].cdeprog == cdeprog) {
+                return callback(true);
+              }
+            } else {
+              if (results[i].id_bit == id_bit) {
+                console.log("test");
+                return callback(true);
+              }
             }
           }
+
         }
         return callback(false)
       });
