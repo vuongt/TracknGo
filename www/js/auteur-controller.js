@@ -66,6 +66,7 @@ $http({
         for(var i = 0, len = $scope.answer.length; i < len; i++) {
           var temp = $scope.answer[i].title.trim();
           $scope.answer[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+          $scope.answer[i].isInfo = false;
              if ($scope.answer[i].iswc.length != 0){
                $scope.answer[i].isInfo = true;
              }

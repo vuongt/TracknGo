@@ -48,6 +48,7 @@ $http({
                 $scope.isSong=true;
                 var temp = $scope.setList[i].title.trim();
                 $scope.setList[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
+                $scope.answer[i].isInfo = false;
                    if ($scope.setList[i].iswc.length != 0){
                               $scope.setList[i].isInfo = true;
                    }

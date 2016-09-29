@@ -78,6 +78,7 @@ $scope.charging=false;
         for (var i = 0, len = $scope.answer.works.length; i < len; i++) {
           var temp = $scope.answer.works[i].title.trim();
           $scope.answer.works[i].title = temp.charAt(0).toUpperCase() + temp.substring(1).toLowerCase();
+          $scope.answer[i].isInfo = false;
           if ($scope.answer.works[i].iswc.length != 0) {
             $scope.answer.works[i].isInfo = true;
           }
