@@ -13,7 +13,7 @@ var mariaClient = new mysql.createPool({
   host: config.mariasql.host,
   user: config.mariasql.user,
   password: config.mariasql.password,
-  db: config.mariasql.db
+  database: config.mariasql.db
 });
 
 function signin(req, res, next) {
@@ -80,8 +80,9 @@ function signup(req, res) {
                   return done(err);
                 }
                 console.log('row insert result: ');
-                console.dir(rows);
-                newUser.id = rows.info.insertId;
+                console.log(rows);
+                console.log(fields);
+                newUser.id = rows.insertId;
                 console.log("newUser object: ");
                 console.dir(newUser);
                 // Remove sensitive data before login

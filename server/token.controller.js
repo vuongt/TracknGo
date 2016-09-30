@@ -11,7 +11,7 @@ var mariaClient = mysql.createPool({
   host: config.mariasql.host,
   user: config.mariasql.user,
   password: config.mariasql.password,
-  db: config.mariasql.db
+  database: config.mariasql.db
 });
 
 //===================TOKEN CONTROLLER==============

@@ -24,7 +24,7 @@ var mariaClient = new mysql.createPool({
   host: config.mariasql.host,
   user: config.mariasql.user,
   password: config.mariasql.password,
-  db: config.mariasql.db
+  database: config.mariasql.db
 });
 /*
  mariaClient.end();
@@ -85,13 +85,13 @@ passport.use('local-signup', new LocalStrategy(
               if (err) {
                 return done(err);
               }
-              connection2.query(sql, function (err, rows) {
+              connection2.query(sql, function (err, rows, fields) {
                 if (err) {
                   return done(err);
                 }
                 console.log('row insert result: ');
                 console.dir(rows);
-                newUser.id = rows.info.insertId;
+                newUser.id = rows.insertId;
                 console.log("newUser object: ");
                 console.dir(newUser);
                 return done(null, newUser);
@@ -1014,7 +1014,7 @@ app.get('/action/addfavorite', function (req, res) {
           if (err) {
             res.json({error: "error connecting to database"});
           } else {
-          connection.query(prepArt({userid: userid, name_artist: req.query.name}), function (err, rows, fields) {
+          connection.query(sqlArt, function (err, rows, fields) {
             if (err) res.send(JSON.stringify(action));
             else {
               action.actionSucceed = true;
@@ -1186,7 +1186,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Something broke!');
 });
 
-mariaClient.end();
 //=================PORT============================
 var port = process.env.PORT || config.port; //select your port or let it pull from .env file //
 app.listen(port, function (err) {
