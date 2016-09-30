@@ -77,6 +77,10 @@ angular.module('starter.controllers')
                    item.ADR="";
 
               }
+              else{
+              length = item.ADR.length;
+              item.ADR=item.ADR.slice(0,length-2);
+              }
 
           }
 
