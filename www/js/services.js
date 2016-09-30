@@ -5,6 +5,7 @@ angular.module('starter.services', [])
     var isAuthenticated = false;
     var authToken;
     var userInfo = {};
+    var userPlanning={};
 
     function loadUserCredentials() {
       var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
@@ -268,7 +269,6 @@ angular.module('starter.services', [])
             Origin: 'http://localhost:8100'
           }
         }).then(function successCallback(response) {
-
           console.log("This concert has been added");
           var result = {action: response.data.actionSucceed, auth: response.data.authorized};
 
