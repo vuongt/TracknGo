@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col">
         <label class="item item-select">
-
+          <form  class="col" ng-submit="submitSearch(search, filter,api)">
           <div class="col">
-            <form  class="col" ng-submit="submitSearch(search, filter,api)">
+
               <input   class="item item-input" type="text" placeholder="Que recherchez vous?" ng-model="search">
-            </form>
+
           </div>
           <select ng-model="filter" class="large-select">
             <option value="all">  </option>
@@ -15,6 +15,7 @@
             <option  value="titles,subtitles">Chansons</option>
             <option value="performers">Interprètes</option>
           </select>
+          </form>
         </label>
 
       </div>
