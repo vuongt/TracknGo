@@ -6,7 +6,7 @@ angular.module('starter.controllers')
     $scope.search = function(locationString,geolocation,radius,start,end){
       //Get location
       if (geolocation){
-        //TODO get curernt position and write it to $scope.location
+        //TODO get current position and write it to $scope.location
         $scope.location="";
       } else {
         $scope.location="";

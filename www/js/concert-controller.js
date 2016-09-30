@@ -89,6 +89,7 @@ $http({
   };
   function send(contentComment,verifyAction){
     console.log(contentComment);
+    console.log(new Date());
     if(contentComment && contentComment!==""){
       $http({
         method: 'POST',
