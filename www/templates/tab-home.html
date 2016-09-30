@@ -7,7 +7,7 @@
 
 
     <ion-item class="item item-divider" ng-show="isConcertHome">
-        <p>{{concerts.length}} concerts aujourd'hui dans ELIZA</p>
+        <p>{{concerts.length}} concerts autour de vous </p>
 
       <i class="ion-ios-search-strong icon-right" ng-click="openModal()" style="float: right; font-size: 130%"></i>
 
@@ -15,12 +15,12 @@
 
 
     </ion-item>
-    <ion-item ng-repeat="item in concerts"
+    <ion-item ng-repeat="item in concerts | limitTo:numLimit"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome">
       <h2 class = "white">{{item.TITRPROG}}</h2>
       <p><span class="left"><strong>{{item.DATDBTDIF|date:'mediumDate':'+0000'}}</strong></span></p>
       <p><span class = "right">{{item.NOM}}</span> </p>
-      <p><span class = "right">{{item.VILLE}}</span> </p>
+      <p><span class = "right">{{item.ADR}} {{item.VILLE}}</span> </p>
       <div>
         <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,datedbt:item.DATDBTDIF,datefin:item.DATFINDIF,location:item.NOM+item.VILLE})">
           Lire plus
@@ -38,6 +38,7 @@
       </div>
     </ion-item>
 
+    <button ng-show="isPlus" class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats... </button>
 
       <p ng-show="!charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Bienvenue sur Track&Go</p>
 
