@@ -466,7 +466,7 @@ label.month-select {
 
 
 .quicksearch{
-  height:50%;
+  height:200px;
 background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1)), url('../img/map.png');
 
     background-size: cover;
