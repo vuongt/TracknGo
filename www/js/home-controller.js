@@ -1,6 +1,11 @@
 angular.module('starter.controllers')
   .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT,$stateParams) {
 
+
+    //Initialisation des variables d'affichage
+    $scope.numLimit = 3;
+    $scope.isPlus = false;
+
     Date.prototype.yyyymmdd = function () {
       month = '' + (this.getMonth() + 1),
         day = '' + this.getDate();
@@ -35,6 +40,7 @@ angular.module('starter.controllers')
 
 
       $scope.charging = false;
+      $scope.isPlus= false;
       $scope.answer = response.data;
 
 
@@ -45,6 +51,9 @@ angular.module('starter.controllers')
         if ($scope.concerts.length != 0) {
 
           $scope.isConcertHome = true;
+          if ($scope.numLimit <= $scope.concerts.length) {
+                          $scope.isPlus = true;
+                        }
 
         }
         $scope.concerts.forEach(function (item, index) {
@@ -63,6 +72,10 @@ angular.module('starter.controllers')
                   item.TITRPROG = "Manifestation à "+item.NOM;
 
                   item.NOM="";
+              }
+              if(item.ADR==" . . ."){
+                   item.ADR="";
+
               }
 
           }
@@ -268,4 +281,14 @@ angular.module('starter.controllers')
     $scope.$on('modal.removed', function () {
       // Execute action
     });
+
+
+        $scope.printMore = function () {
+          $scope.numLimit = $scope.numLimit + 5;
+          if ($scope.numLimit >= $scope.maxResults) {
+            $scope.isPlus = false;
+          }
+        };
+
+
   });
