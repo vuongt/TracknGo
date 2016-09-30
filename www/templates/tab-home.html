@@ -3,16 +3,22 @@
     <div id="map" data-tap-disabled="true"></div>
 
     <ion-spinner ng-show="!isConcertHome && charging" style="padding-left: 50%; float: center;" icon="spiral"></ion-spinner>
+    <p ng-show="charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Bievenue sur Track & Go</p>
+
 
     <ion-item class="item item-divider" ng-show="isConcertHome">
         <p>{{concerts.length}} concerts aujourd'hui dans ELIZA</p>
+
       <i class="ion-ios-search-strong icon-right" ng-click="openModal()" style="float: right; font-size: 130%"></i>
+
+
+
+
     </ion-item>
     <ion-item ng-repeat="item in concerts"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome">
       <h2 class = "white">{{item.TITRPROG}}</h2>
-      <p><span class="left">Début: {{item.DATDBTDIF|date:'medium':'+0000'}}</span></p>
-      <p><span class="left">Fin: {{item.DATFINDIF|date:'medium':'+0000'}}</span></p>
+      <p><span class="left"><strong>{{item.DATDBTDIF|date:'mediumDate':'+0000'}}</strong></span></p>
       <p><span class = "right">{{item.NOM}}</span> </p>
       <p><span class = "right">{{item.VILLE}}</span> </p>
       <div>

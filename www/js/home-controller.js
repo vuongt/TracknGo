@@ -35,6 +35,7 @@ angular.module('starter.controllers')
 
       if ($scope.answer.error == "") {
         $scope.concerts = $scope.answer.concerts;
+        console.log($scope.concerts);
 
         if ($scope.concerts.length != 0) {
 
@@ -42,7 +43,26 @@ angular.module('starter.controllers')
 
         }
         $scope.concerts.forEach(function (item, index) {
-          item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
+
+       item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
+       item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
+       item.VILLE = item.VILLE.charAt(0).toUpperCase() + item.VILLE.substring(1).toLowerCase();
+
+          if (item.TITRPROG="Manifestation de _artiste a preciser ..."){
+              if(item.NOM=="Salle non referencee" || item.NOM==""){
+                 item.TITRPROG = "Manifestation à "+item.VILLE;
+
+                 item.NOM="";
+              }
+              else{
+                  item.TITRPROG = "Manifestation à "+item.NOM;
+
+                  item.NOM="";
+              }
+
+          }
+
+
           item.DATDBTDIF = new Date(item.DATDBTDIF);
           AuthService.isInPlanning(item.CDEPROG, item.id_bit, function (isInPlanning) {
             item.isInPlanning = isInPlanning;

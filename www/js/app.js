@@ -104,6 +104,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       })
 
 
+
       .state('tab.artist', {
         url: '/artist/?name',
         views: {
@@ -192,4 +193,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     });
-  });
+  })
+

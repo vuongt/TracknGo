@@ -1,28 +1,35 @@
 <ion-modal-view>
   <ion-content>
+
+
     <i class="icon-right icon ion-close-round close-modal"
        ng-click="closeModal()"></i>
+
+
+
     <div class="search-header">
       <h2>Recherche</h2>
     </div>
 
     <div class="search-container">
       <i class="ion-ios-search-strong icon-search"></i>
-      <input id="search" type="text" placeholder="Rechercher un Lieu..." class="quicksearch-bar">
-    </div>
+      <input id="search" type="text" placeholder="Rechercher un Lieu..." class="quicksearch-bar" ng-model="position">
 
+
+</div>
 
     <div class="form-container">
       <h3>Date</h3>
       <div>
         <span>Du</span>
-        <input type="date" placeholder="Du">
+        <input type="date" placeholder="Du" ng-model="start">
       </div>
       <div>
         <span>au</span>
-        <input type="date" placeholder="au">
+        <input type="date" placeholder="au" ng-model="end">
 
       </div>
+
       <div class="geolocalabel">
         <label>
           <input type="checkbox" ng-model="string">
@@ -30,10 +37,15 @@
         </label>
       </div>
     </div>
+    <div class="quicksearch">
+
     <div class="button-container">
-      <button id="page-button1" class="button button-validate">
+      <button id="page-button1" class="button button-validate" ng-click="submitQuickSearch = function(position,start, end, api)">
         Valider
       </button>
+    </div>
+
+
     </div>
   </ion-content>
 </ion-modal-view>

@@ -4,7 +4,6 @@ angular.module('starter.controllers').controller('ArtistCtrl', function ($scope,
   //$scope.songs=[];
   $scope.numLimit = 5;
   $scope.isPlus = false;
-
   Date.prototype.yyyymmdd = function () {
     month = '' + (this.getMonth() + 1),
       day = '' + this.getDate(),
@@ -65,6 +64,7 @@ $http({
     Origin:'http://localhost:8100'
   }
 }).then(function successCallback(response) {
+console.log(response.data);
 $scope.charging=false;
     $scope.answer = response.data;
     $scope.numLimit = 5;
@@ -76,9 +76,9 @@ $scope.charging=false;
       if ($scope.answer.works.length !== 0) {
         $scope.isSong = true;
         for (var i = 0, len = $scope.answer.works.length; i < len; i++) {
-          var temp = $scope.answer.works[i].title.trim();
-          $scope.answer.works[i].title = temp.charAt(0).toUpperCase() + temp.substring(1).toLowerCase();
-          $scope.answer[i].isInfo = false;
+        console.log($scope.answer.works[i]);
+          $scope.answer.works[i].title = $scope.answer.works[i].title.charAt(0).toUpperCase() + $scope.answer.works[i].title.substring(1).toLowerCase();
+          $scope.answer.works[i].isInfo = false;
           if ($scope.answer.works[i].iswc.length != 0) {
             $scope.answer.works[i].isInfo = true;
           }

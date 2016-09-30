@@ -463,3 +463,97 @@ label.month-select {
 .comment {
   padding: 20px;
 }
+
+
+.quicksearch{
+  height:50%;
+background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1)), url('../img/map.png');
+
+    background-size: cover;
+
+      filter: grayscale(100%);
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+
+}
+
+
+/*Modal view*/
+
+{
+  box-sizing: border-box;
+}
+
+.Modal-backdrop
+{
+ position: fixed;
+ top: 0px;
+ left: 0px;
+ height:100%;
+ width:100%;
+ background: #000;
+ z-index: 1;
+ opacity: 0.5;
+}
+
+.Modal-holder
+{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height:100%;
+  width:100%;
+  background: transparent;
+  z-index: 2;
+  padding: 30px 15px;
+}
+8. Create the Confirm Modal’s Template
+This template is for the actual modal box with the confirm message in it. The following code goes in modals/confirm.html:
+
+<div class="Modal-box">
+  Are you sure you want to do that?
+  <button>Yes</button>
+</div>
+Styling for the Modal-box:
+
+.Modal-box
+{
+  margin: 0 auto;
+  width: 100%;
+  background: #fff;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 1px 2px 5px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+@media screen and (min-width: 992px)
+{
+  .Modal-box
+  {
+    width: 50%;
+    padding: 30px;
+  }
+}
+
+.Modal-box
+{
+  margin: 0 auto;
+  width: 100%;
+  background: #fff;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 1px 2px 5px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+@media screen and (min-width: 992px)
+{
+  .Modal-box
+  {
+    width: 50%;
+    padding: 30px;
+  }
+}
