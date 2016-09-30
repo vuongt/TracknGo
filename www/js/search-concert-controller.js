@@ -19,9 +19,11 @@ angular.module('starter.controllers')
         $scope.radius = "";
       }
       //Get and verify date
-      if (start && end && start < end){
+      if (start && end && start <= end){
         $scope.start = start;
         $scope.end = end;
+        //passe parameter to home page
+        $state.go('tab.home',{location:$scope.location,radius:$scope.radius,start:$scope.start,end:$scope.end});
       } else {
         //Show an alert that user has to choose a date
         var alertPopup = $ionicPopup.alert({
@@ -32,8 +34,6 @@ angular.module('starter.controllers')
           console.log("Date entrée non valide");
         });
       }
-      //passe parameter to home page
-      $state.go('tab.home',{location:$scope.location,radius:$scope.radius,start:$scope.start,end:$scope.end});
     }
   });
 
