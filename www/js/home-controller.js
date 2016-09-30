@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT, $ionicPopup) {
 
     Date.prototype.yyyymmdd = function () {
       month = '' + (this.getMonth() + 1),
@@ -198,11 +198,13 @@ angular.module('starter.controllers')
     });
 
 
-    $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
+    $scope.addPlanning = function (date, location, title, cdeprog, id_bit, item) {
 
 
       AuthService.addPlanning(date, location, title, cdeprog, id_bit, function (result) {
         if (!result.auth) {
+
+
           var confirmPopup = $ionicPopup.confirm({
             title: 'Oups !',
             template: 'Please sign in to do this action',
@@ -215,6 +217,8 @@ angular.module('starter.controllers')
             } else {
               console.log('Action annulé');
             }
+            item.isInPlanning = false;
+
           });
         }
       });

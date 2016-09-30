@@ -178,7 +178,27 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
   $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
     console.log("adding concert with location:" + location);
 
-    AuthService.addPlanning(date, location, title, cdeprog, id_bit);
+    AuthService.addPlanning(date, location, title, cdeprog, id_bit, function (result) {
+      if (!result.auth) {
+
+
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Oups !',
+          template: 'Please sign in to do this action',
+          okText: 'Sign in'
+        });
+
+        confirmPopup.then(function (res) {
+          if (res) {
+            $state.go('tab.profil');
+          } else {
+            console.log('Action annulé');
+          }
+          item.isInPlanning = false;
+
+        });
+      }
+    });
 
 
   };
