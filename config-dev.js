@@ -1,11 +1,11 @@
 module.exports = {
-	port:"8080",
-	secret:"FollowZBeat",
-	mariasql:{
-		host:"localhost",
-		user:"dty",
-		password:"dty",
-		db:"appdb"
+	"port":"8080",
+	"secret":"FollowZBeat",
+	"mariasql":{
+		"host":"149.202.167.34",
+		"user":"dty",
+		"password":"dty",
+		"db":"appdb"
 	},
 	sacem:{
 		token:"23d3cb8e-6852-4c3a-acb6-f964ce1e8109",
