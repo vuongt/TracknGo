@@ -5,8 +5,9 @@ var jwt = require('jsonwebtoken'),
   config= require('../config-dev.js');
 
 /*Mariasql client to connect to the mariaDB*/
-var Client = require("mariasql");
-var mariaClient = new Client({
+var mysql = require("mysql");
+var mariaClient = mysql.createPool({
+  connectionLimit : 50,
   host: config.mariasql.host,
   user: config.mariasql.user,
   password: config.mariasql.password,
@@ -43,15 +44,26 @@ function createToken(payload, cb) {
   var token = jwt.sign(payload, config.token.secret, { expiresIn: config.token.expiration_string });
   // stores a token with payload data for a ttl period of time
   console.log('token created');
-  var prep = mariaClient.prepare('INSERT INTO users_token (email,token,expire_date) VALUES (:email,:token,ADDTIME(NOW(),:expire_date))');
-  mariaClient.query(prep({email:payload.email,token:token,expire_date:expire}),function(err,rows){
-    if (err) { return cb(err); }
-    if(rows) {
-      cb(null, token);
+  var prep ='INSERT INTO users_token (email,token,expire_date) VALUES (?,?,ADDTIME(NOW(),?))';
+  var insert = [payload.email, token, expire];
+  var sql = mysql.format(prep, insert);
+  mariaClient.getConnection(function(err, connection) {
+    if (err) {
+      return cb(err);
     } else {
-      cb(new Error('Token not set'));
-    }
-  });
+    connection.query(sql, function (err, rows, fields) {
+      if (err) {
+        return cb(err);
+      }
+      if (rows) {
+        cb(null, token);
+      } else {
+        cb(new Error('Token not set'));
+      }
+    });
+  }
+    connection.release();
+});
 }
 
 function refreshToken(payload,cb){
@@ -68,10 +80,21 @@ function expireToken(headers, cb) {
     if(token == null) {return cb(new Error('Token is null'));}
 
     // delete token
-    mariaClient.query("DELETE FROM users_token WHERE token = '"+token+"'",function(err,rows){
-      if (err){ return cb(err);}
-      if(!rows) {return cb(new Error('Token not found'));}
-      return cb(null, true);
+    mariaClient.getConnection(function(err, connection) {
+      if (err) {
+        return cb(err);
+      } else {
+        connection.query("DELETE FROM users_token WHERE token = ?", [token], function (err, rows, fields) {
+          if (err) {
+            return cb(err);
+          }
+          if (!rows) {
+            return cb(new Error('Token not found'));
+          }
+          return cb(null, true);
+        });
+      }
+      connection.release()
     });
   } catch (err) {
     return cb(err);
@@ -87,16 +110,27 @@ function verifyToken(headers, cb) {
     if(token == null) {return cb(new Error('Token is null'));}
 
     // gets the associated data of the token
-    mariaClient.query("SELECT * FROM users_token WHERE token = '"+token+"'",function(err,rows){
-      if (err){ return console.log(err);}
-      else {
-        if (!rows.length) {return cb(new Error('Token not found'));}
-        else {
-          return cb(null, JSON.parse(rows[0]));
-          console.log('Token verified');
-        }
+    mariaClient.getConnection(function(err, connection) {
+      if (err) {
+        return cb(err);
+      } else {
+        connection.query("SELECT * FROM users_token WHERE token = ?", [token], function (err, rows, fields) {
+          if (err) {
+            return console.log(err);
+          }
+          else {
+            if (!rows.length) {
+              return cb(new Error('Token not found'));
+            }
+            else {
+              return cb(null, JSON.parse(rows[0]));
+              console.log('Token verified');
+            }
 
+          }
+        });
       }
+      connection.release()
     });
     /*redis.get(token, function(err, userData) {
       if(err) {return cb(err);}

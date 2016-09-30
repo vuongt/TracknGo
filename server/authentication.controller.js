@@ -7,8 +7,9 @@ var token    = require('./token.controller.js');
 var config = require('../config-dev');
 
 /*Mariasql client to connect to the mariaDB*/
-var Client = require("mariasql");
-var mariaClient = new Client({
+var mysql = require("mysql");
+var mariaClient = new mysql.createPool({
+  connectionLimit : 50,
   host: config.mariasql.host,
   user: config.mariasql.user,
   password: config.mariasql.password,
@@ -53,39 +54,57 @@ function signup(req, res) {
   if (email == '' || password == '') {
     return res.sendStatus(400);
   }
-  mariaClient.query("SELECT * FROM users WHERE email='"+req.body.email+"'" ,function(err,rows){
-    console.log("rows object when checking email: " + rows);
-    if (err) return done(err);
-    if (!rows.length) {
-      //If there is no user with that email
-      // create the user
-      var newUser = {};
-      newUser.email = req.body.email;
-      newUser.password = req.body.password;
-      newUser.name= req.body.name;
-      var prep = mariaClient.prepare('INSERT INTO users (name,email,password) VALUES (:name,:email,:password)');
-      mariaClient.query(prep({name:req.body.name, email: newUser.email, password: newUser.password}), function (err, rows) {
-        if (err) {return done(err);}
-        console.log('row insert result: ');
-        console.dir(rows);
-        newUser.id = rows.info.insertId;
-        console.log("newUser object: ");
-        console.dir(newUser);
-        // Remove sensitive data before login
-        newUser.password = undefined;
-        newUser.name = undefined;
-
-        token.createToken(newUser, function(res, err, token) {
-          if (err) {
-            logger.error(err.message);
-            return res.status(400).send(err);
-          }
-          res.status(201).json({token: token});
-        }.bind(null, res));
-      });
+  mariaClient.getConnection(function(err, connection) {
+    if (err) {
+      return done(err);
     } else {
-      return done(null, false, { message: 'Email taken.' });
+      connection.query("SELECT * FROM users WHERE email=?", [req.body.email], function (err, rows, fields) {
+        console.log("rows object when checking email: " + rows);
+        if (err) return done(err);
+        if (!rows.length) {
+          //If there is no user with that email
+          // create the user
+          var newUser = {};
+          newUser.email = req.body.email;
+          newUser.password = req.body.password;
+          newUser.name = req.body.name;
+          var prep = 'INSERT INTO users (name,email,password) VALUES (:name,:email,:password)';
+          var insert = [req.body.name, newUser.email, newUser.password];
+          var sql = mysql.format(prep, insert);
+          mariaClient.getConnection(function(err2,connection2) {
+            if (err2) {
+              return done(err);
+            } else {
+              connection2.query(sql, function (err, rows) {
+                if (err) {
+                  return done(err);
+                }
+                console.log('row insert result: ');
+                console.dir(rows);
+                newUser.id = rows.info.insertId;
+                console.log("newUser object: ");
+                console.dir(newUser);
+                // Remove sensitive data before login
+                newUser.password = undefined;
+                newUser.name = undefined;
+
+                token.createToken(newUser, function (res, err, token) {
+                  if (err) {
+                    logger.error(err.message);
+                    return res.status(400).send(err);
+                  }
+                  res.status(201).json({token: token});
+                }.bind(null, res));
+              });
+            }
+            connection2.release();
+          });
+        } else {
+          return done(null, false, {message: 'Email taken.'});
+        }
+      });
     }
+    connection.release()
   });
 }
 //Middleware to verify the token and attaches the user object to the request if authenticated
