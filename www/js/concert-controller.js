@@ -1,8 +1,7 @@
 angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams,$ionicPopup,API_ENDPOINT) {
 
   $scope.cdeprog= $stateParams.cdeprog;
-  $scope.datedbt= $stateParams.datedbt;
-  $scope.datefin= $stateParams.datefin; //TODO date format
+  $scope.date= $stateParams.date;
   $scope.title= $stateParams.title;
   $scope.location= $stateParams.location;
   console.log($scope.title);
@@ -88,6 +87,7 @@ $http({
     send(contentComment,verifyAction);
     this.contentComment = null;
   };
+
   function send(contentComment,verifyAction){
     console.log(contentComment);
     console.log(new Date());
