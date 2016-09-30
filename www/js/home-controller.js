@@ -25,10 +25,14 @@ angular.module('starter.controllers')
     $scope.radius="";
     $scope.start="";
     $scope.end="";
+    $scope.timeCriteria="aujourd'hui";
     if($stateParams.location && $stateParams.location!=="") {$scope.location=$stateParams.location;}
     if($stateParams.radius && $stateParams.radius!=="") {$scope.radius=$stateParams.radius;}
-    if($stateParams.start && $stateParams.start!=="") {$scope.start=$stateParams.start;}
-    if($stateParams.end && $stateParams.end!=="") {$scope.end=$stateParams.end;}
+    if($stateParams.start && $stateParams.start!=="" && $stateParams.end && $stateParams.end!=="") {
+      $scope.start=$stateParams.start;
+      $scope.end=$stateParams.end;
+      $scope.timeCriteria = "du " + $stateParams.start.slice(0,15) + " au " + $stateParams.end.slice(0,15);
+    }
 
   $http({
   method: 'GET',

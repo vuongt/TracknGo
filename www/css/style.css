@@ -509,6 +509,7 @@ background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1)), u
   z-index: 2;
   padding: 30px 15px;
 }
+/*
 8. Create the Confirm Modal’s Template
 This template is for the actual modal box with the confirm message in it. The following code goes in modals/confirm.html:
 
@@ -517,7 +518,7 @@ This template is for the actual modal box with the confirm message in it. The fo
   <button>Yes</button>
 </div>
 Styling for the Modal-box:
-
+*/
 .Modal-box
 {
   margin: 0 auto;

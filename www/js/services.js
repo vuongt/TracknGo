@@ -132,7 +132,7 @@ angular.module('starter.services', [])
     function addFavoritesAuth(name,cb) {
       $http({
         method: 'GET',
-        url: 'http://localhost:8080/action/addfavorite?type=author&name=' + name,
+        url: API_ENDPOINT.url + '/action/addfavorite?type=author&name=' + name,
         header: {
           Origin: 'http://localhost:8100'
         }
@@ -157,7 +157,7 @@ angular.module('starter.services', [])
       console.log('cet auteur ' + name + ' va être supprimée de vos favoris');
       $http({
         method: 'GET',
-        url: 'http://localhost:8080/action/removefavorite?type=author&name=' + name,
+        url: API_ENDPOINT.url +'/action/removefavorite?type=author&name=' + name,
         header: {
           Origin: 'http://localhost:8100'
         }
@@ -181,7 +181,7 @@ angular.module('starter.services', [])
     function addFavoritesArt(name,cb) {
       $http({
         method: 'GET',
-        url: 'http://localhost:8080/action/addfavorite?type=artist&name='+name,
+        url: API_ENDPOINT.url + '/action/addfavorite?type=artist&name='+name,
         header:{
           Origin:'http://localhost:8100'
         }
@@ -205,7 +205,7 @@ angular.module('starter.services', [])
       console.log('cet auteur '+name+' va être supprimée de vos favoris');
       $http({
         method: 'GET',
-        url: 'http://localhost:8080/action/removefavorite?type=artist&name='+name,
+        url: API_ENDPOINT.url +'/action/removefavorite?type=artist&name='+name,
         header:{
           Origin:'http://localhost:8100'
         }
