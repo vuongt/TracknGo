@@ -13,7 +13,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .constant('API_ENDPOINT', {
-    url: 'http://localhost:8080'
+    url: 'http://149.202.167.34:8080'
   })
 
   .run(function ($ionicPlatform) {
@@ -69,8 +69,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           }
         }
       })
-
-
 
       .state('tab.concertHome', {
         url: '/concert/?cdeprog&title&datedbt&datefin&location',

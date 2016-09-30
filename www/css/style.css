@@ -142,13 +142,15 @@ h1,h2{
 
 }
 
-.ion-location {
+.ion-location{
 
   font-size: 28px;
   float: left;
 
 }
-
+.ion-calendar {
+  font-size: 28px;
+}
 /*CSS de la page Auteur*/
 
 .artist-background {
