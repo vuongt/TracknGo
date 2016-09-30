@@ -19,7 +19,7 @@
       <h3>{{item.title}}</h3><span class="right">      {{item.prog_date.toLocaleDateString()}}</span></p>
       <p>{{item.location}}</p>
       <div>
-        <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome">
+        <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome(item.cdeprog)">
           Plus d'infos
         </button>
         <button id="page-button2" class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit);item.isInPlanning = false" ng-show="item.isInPlanning" style="margin-left: 5%">

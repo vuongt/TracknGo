@@ -23,7 +23,7 @@ angular.module('starter.controllers').controller('PlanningCtrl', function ($scop
     }
   });
 
-  $scope.removePlanning = function ( cdeprog, id_bit) {
+  $scope.removePlanning = function (cdeprog, id_bit) {
     console.log("removing concert from planning with id" + id_bit);
 
     AuthService.delPlanning(cdeprog, id_bit);
