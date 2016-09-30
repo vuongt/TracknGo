@@ -9,23 +9,27 @@
       </label>
 
     </div>
-    <ion-item class="item-divider">{{monthNames[month.getMonth()]}}</ion-item>
+    <ion-scroll>
+      <ion-item class="item-divider">{{monthNames[month.getMonth()]}}</ion-item>
 
-    <ion-item ng-repeat="item in results"
-              item="item"
-              class="concertbackground"
-              ng-show="(item.prog_date.getMonth() == month.getMonth()) && (item.prog_date.getFullYear()== month.getFullYear()) ">
-      <p>
-      <h3>{{item.title}}</h3><span class="right">      {{item.prog_date.toLocaleDateString()}}</span></p>
-      <p>{{item.location}}</p>
-      <div>
-        <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome(item.cdeprog)">
-          Plus d'infos
-        </button>
-        <button id="page-button2" class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit);item.isInPlanning = false" ng-show="item.isInPlanning" style="margin-left: 5%">
-          Retirer de mon planning
-        </button>
-      </div>
-    </ion-item>
+      <ion-item ng-repeat="item in results"
+                item="item"
+                class="concertbackground"
+                ng-show="(item.prog_date.getMonth() == month.getMonth()) && (item.prog_date.getFullYear()== month.getFullYear()) ">
+        <p>
+        <h3>{{item.title}}</h3><span class="right">      {{item.prog_date.toLocaleDateString()}}</span></p>
+        <p>{{item.location}}</p>
+        <div>
+          <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome(item.cdeprog)">
+            Plus d'infos
+          </button>
+          <button id="page-button2" class="button button-planning"
+                  ng-click="removePlanning(item.cdeprog, item.id_bit);item.isInPlanning = false"
+                  ng-show="item.isInPlanning" style="margin-left: 5%">
+            Retirer de mon planning
+          </button>
+        </div>
+      </ion-item>
+    </ion-scroll>
   </ion-content>
 </ion-view>

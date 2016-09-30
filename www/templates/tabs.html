@@ -6,22 +6,22 @@ navigation history that also transitions its views in and out.
 <ion-tabs class="tabs-icon-top tabs-color-active-positive">
 
   <!-- Home Tab -->
-  <ion-tab title="Home" icon-off="ion-home" icon-on="ion-home" href="#/tab/home">
+  <ion-tab title="Home" icon-off="ion-home" icon-on="ion-home" ng-click="goHome()">
     <ion-nav-view name="tab-home"></ion-nav-view>
   </ion-tab>
 
   <!-- Track Tab -->
-  <ion-tab title="Track" icon-off="ion-ios-musical-notes" icon-on="ion-ios-musical-notes" href="#/tab/search/works" on-deselect="clearHistory()" >
+  <ion-tab title="Track" icon-off="ion-ios-musical-notes" icon-on="ion-ios-musical-notes" ng-click="goSearch()" on-deselect="clearHistory()" >
     <ion-nav-view name="tab-search"></ion-nav-view>
   </ion-tab>
 
   <!-- Go Tab -->
-  <ion-tab title="Go" icon-off="ion-ios-search-strong" icon-on="ion-ios-search-strong" href="#/tab/search/concerts" on-deselect="clearHistory()" >
+  <ion-tab title="Go" icon-off="ion-ios-search-strong" icon-on="ion-ios-search-strong" ng-click="goConcert()" on-deselect="clearHistory()" >
     <ion-nav-view name="tab-search-concert"></ion-nav-view>
   </ion-tab>
 
   <!-- Profil Tab -->
-  <ion-tab title="Profil" icon-off="ion-android-person" icon-on="ion-android-person" href="#/tab/profil">
+  <ion-tab title="Profil" icon-off="ion-android-person" icon-on="ion-android-person" ng-click="goProfil()">
     <ion-nav-view name="tab-profil"></ion-nav-view>
   </ion-tab>
 
