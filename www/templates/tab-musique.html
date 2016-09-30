@@ -65,16 +65,16 @@
       </ion-item>
       <ion-item ng-repeat="item in concerts"
                 ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'">
-        <h3>{{item.title}}</h3><p><span class="right">      {{item.date}}</span></p>
+        <h3>{{item.title}}</h3><p><span class="right">      {{item.date |date:'medium':'+0000'}}</span></p>
         <p>{{item.location}}</p>
         <div>
-          <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.cdeprog})">
+          <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title,datedbt:item.date,datefin:item.date,location:item.location})">
            Lire plus
           </button>
-          <button id="page-button2" class="button button-planning" ng-click="addPlanning(item.date.yyyymmdd(), item.location, item.title, item.cdeprog, item.id_bit); item.isInPlanning = true" ng-show="!item.isInPlanning" style="margin-left: 5%">
+          <button  class="button button-planning" ng-click="addPlanning(item.date.yyyymmdd(), item.location, item.title, item.cdeprog, item.id_bit); item.isInPlanning = true" ng-show="!item.isInPlanning" style="margin-left: 5%">
             Ajouter à mon planning
           </button>
-          <button id="page-button2" class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit); item.isInPlanning = false" ng-show="item.isInPlanning" style="margin-left: 5%">
+          <button class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit); item.isInPlanning = false" ng-show="item.isInPlanning" style="margin-left: 5%">
             Retirer de mon planning
           </button>
         </div>

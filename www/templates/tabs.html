@@ -10,9 +10,14 @@ navigation history that also transitions its views in and out.
     <ion-nav-view name="tab-home"></ion-nav-view>
   </ion-tab>
 
-  <!-- Search Tab -->
-  <ion-tab title="Search" icon-off="ion-ios-search-strong" icon-on="ion-ios-search-strong" href="#/tab/search" on-deselect="clearHistory()" >
+  <!-- Track Tab -->
+  <ion-tab title="Track" icon-off="ion-ios-musical-notes" icon-on="ion-ios-musical-notes" href="#/tab/search/works" on-deselect="clearHistory()" >
     <ion-nav-view name="tab-search"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Go Tab -->
+  <ion-tab title="Go" icon-off="ion-ios-search-strong" icon-on="ion-ios-search-strong" href="#/tab/search/concerts" on-deselect="clearHistory()" >
+    <ion-nav-view name="tab-search-concert"></ion-nav-view>
   </ion-tab>
 
   <!-- Profil Tab -->

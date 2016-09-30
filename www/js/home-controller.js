@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT, $ionicPopup) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT,$stateParams) {
 
     Date.prototype.yyyymmdd = function () {
       month = '' + (this.getMonth() + 1),
@@ -16,13 +16,18 @@ angular.module('starter.controllers')
     $scope.cdeprog = "0008201463";
     $scope.charging = true;
     $isConcertHome = false;
-    var now = new Date();
-    $scope.date = now.toISOString();
-    //TODO set this to user's date
+    $scope.location="";
+    $scope.radius="";
+    $scope.start="";
+    $scope.end="";
+    if($stateParams.location && $stateParams.location!=="") {$scope.location=$stateParams.location;}
+    if($stateParams.radius && $stateParams.radius!=="") {$scope.radius=$stateParams.radius;}
+    if($stateParams.start && $stateParams.start!=="") {$scope.start=$stateParams.start;}
+    if($stateParams.end && $stateParams.end!=="") {$scope.end=$stateParams.end;}
 
   $http({
   method: 'GET',
-  url: API_ENDPOINT.url + '/search/concerts?position=&radius=&start=&end=',
+  url: API_ENDPOINT.url + '/search/concerts?position='+$scope.location+'&radius='+$scope.radius+'&start='+$scope.start+'&end='+$scope.end,
   header:{
     Origin:'http://localhost:8100'
   }

@@ -1,0 +1,39 @@
+<ion-content>
+    <form>
+      <div class="search-header">
+        <h2>Recherche</h2>
+      </div>
+
+      <div class="search-container">
+        <i class="ion-ios-search-strong icon-search"></i>
+        <input id="search" type="text" placeholder="Rechercher un lieu..." class="quicksearch-bar" ng-model = "locationString">
+      </div>
+
+      <div class ="form-container">
+        <div class="geolocalabel">
+          <label>
+            <input type="checkbox" ng-model="geolocation">
+            <span>Me géolocaliser</span>
+          </label>
+        </div>
+        <div>
+          <span>Rayon </span>
+          <input type="text" placeholder="(optionnel)" ng-model="radius">
+        </div>
+        <div>
+          <span>Du</span>
+          <input type="date" placeholder="Du" ng-model="start">
+        </div>
+        <div>
+          <span>au</span>
+          <input type="date" placeholder="au" ng-model="end">
+
+        </div>
+      </div>
+      <div class="button-container">
+        <button id="page-button1" class="button button-validate" ng-click="search(locationString,geolocation,radius,start,end)">
+          Chercher
+        </button>
+      </div>
+    </form>
+  </ion-content>

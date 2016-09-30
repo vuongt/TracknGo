@@ -7,13 +7,6 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
   $scope.location= $stateParams.location;
 
 
-  /*$scope.cdeprog= "0008201463"; // TODO delete this in prod
-  $scope.date= "2016-09-16T22:00:00.000Z";
-  $scope.title= "Concert Tribute to Balavoine";
-  $scope.location= "SOUFFLENHEIM";
-  console.log("accessing detail of program: " + $scope.cdeprog);*/
-
-
   $scope.userdata = AuthService.getUserInfo();
   $scope.isLiked = function(iswc){return(AuthService.isLiked(iswc, $scope.userdata));};
   $scope.delFavorites = function(iswc, name){
@@ -48,7 +41,7 @@ $http({
                 $scope.isSong=true;
                 var temp = $scope.setList[i].title.trim();
                 $scope.setList[i].title = temp.charAt(0).toUpperCase()+ temp.substring(1).toLowerCase();
-                $scope.answer[i].isInfo = false;
+                $scope.setList[i].isInfo = false;
                    if ($scope.setList[i].iswc.length != 0){
                               $scope.setList[i].isInfo = true;
                    }

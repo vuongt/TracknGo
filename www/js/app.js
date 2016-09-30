@@ -50,7 +50,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       // Each tab has its own nav history stack:
 
       .state('tab.home', {
-        url: '/home',
+        url: '/home?location&radius&start&end',
         views: {
           'tab-home': {
             templateUrl: 'templates/tab-home.html',
@@ -60,7 +60,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       })
 
       .state('tab.search', {
-        url: '/search',
+        url: '/search/works',
         views: {
 
           'tab-search': {
@@ -69,6 +69,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           }
         }
       })
+
 
 
       .state('tab.concertHome', {
@@ -81,12 +82,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           }
         }
       })
-      .state('tab.concertSearch', {
-        url: '/concert',
+
+      .state('tab.searchConcert', {
+        url: '/search/concerts',
         views: {
-          'tab-search': {
-            templateUrl: 'templates/tab-concert.html',
-            controller: 'ConcertCtrl'
+          'tab-search-concert': {
+            templateUrl: 'templates/tab-search-concert.html',
+            controller: 'SearchConcertCtrl'
           }
         }
       })

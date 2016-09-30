@@ -16,7 +16,6 @@ module.exports = {
 	},
   eliza:{
 	  uri: "http://149.202.167.34:3000",
-
   },
 	accessControl:"http://localhost:8100",
   token: {

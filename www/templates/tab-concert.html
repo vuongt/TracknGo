@@ -34,10 +34,10 @@
     </ion-list>
     <ion-list ng-repeat="object in setList" id="page-list2">
       <ion-item id="page-list-item4">
-        <i id="liked" class="ion-ios-star star" ng-click= "delFavorites(object.iswc, object.title)"
+        <i class="ion-ios-star star" ng-click= "delFavorites(object.iswc, object.title)"
            ng-show="isLiked(object.iswc)"></i>
 
-        <i id="liked" ng-click= "addFavorites(object.iswc, object.title)"
+        <i ng-click= "addFavorites(object.iswc, object.title)"
            class="ion-ios-star-outline star" ng-show="!isLiked(object.iswc)"></i>
 
         <i id="info" class="info ion-ios-information-outline"  ng-show="object.isInfo"></i>
