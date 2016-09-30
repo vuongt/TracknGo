@@ -3,7 +3,7 @@
     <div id="map" data-tap-disabled="true"></div>
 
     <ion-spinner ng-show="!isConcertHome && charging" style="padding-left: 50%; float: center;" icon="spiral"></ion-spinner>
-    <p ng-show="charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Que souhaitez-vous écouter aujourd'hui ?</p>
+    <p ng-show="charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Qu'allez-vous écouter aujourd'hui ?</p>
 
 
     <div class='comment' ng-show="isConcertHome">
@@ -35,7 +35,7 @@
       </div>
     </ion-item>
 
-    <button ng-show="isPlus" class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats... </button>
+    <button style="border:none;" ng-show="isPlus" class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats... </button>
 
       <p ng-show="!charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Bienvenue sur Track&Go</p>
 

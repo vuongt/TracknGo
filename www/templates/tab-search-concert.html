@@ -1,42 +1,65 @@
 <ion-content>
     <form>
-      <div class="search-header">
+      <div>
         <h2>Recherche</h2>
       </div>
 
       <div class="search-container">
-        <i class="ion-ios-search-strong icon-search"></i>
         <input id="search" type="text" placeholder="Rechercher un lieu..." class="quicksearch-bar" ng-model = "locationString">
+        <i class="ion-ios-search-strong"></i>
+
       </div>
 
       <div class ="form-container">
-        <div class="geolocalabel">
-          <label>
-            <input type="checkbox" ng-model="geolocation">
-            <span>Me géolocaliser</span>
-          </label>
-        </div>
-        <div>
-          <span>Rayon </span>
-          <input type="text" placeholder="(optionnel)" ng-model="radius">
-        </div>
-        <div>
-          <span>Du</span>
-          <input type="date" placeholder="Du" ng-model="start">
-        </div>
-        <div>
-          <span>au</span>
-          <input type="date" placeholder="au" ng-model="end">
 
-        </div>
-      </div>
-      <div class="quicksearch">
-      <div class="button-container">
-        <button id="page-button1" class="button button-validate" ng-click="search(locationString,geolocation,radius,start,end)">
-          Chercher
-        </button>
-      </div>
 
-        </div>
-    </form>
-  </ion-content>
+        <ul class="list" style="padding-right:10%;">
+
+          <li class="item item-toggle">
+          Me géolocaliser
+            <label class="toggle toggle-assertive">
+              <input type="checkbox" ng-model="geolocation">
+              <div class="track">
+                <div class="handle"></div>
+              </div>
+            </label>
+          </li>
+        </ul>
+
+
+        <!--
+                  <div>
+                  <span style="font-size:100%;">Rayon </span>
+                  <label style="border: none;" class="item item-input">
+                  <input style="padding-bottom:3%;" type="text" placeholder="Par défaut, 50km" ng-model="radius">
+                  </label>
+                </div>
+                -->
+
+
+                <div>
+                  <label style="border: none;" class="item item-input">
+                    <span class="input-label">Du</span>
+                  <input type="date" ng-model="start">
+                  </label>
+                </div>
+                </br>
+                <div>
+                  <label style="border: none;" class="item item-input">
+                    <span class="input-label">Au</span>
+                  <input type="date" placeholder="optionnel" ng-model="end">
+                  </label>
+
+                </div>
+              </div>
+              <div class="quicksearch">
+              <div >
+              <div>
+                <button class="button-container button button-validate" ng-click="search(locationString,geolocation,radius,start,end)">
+                  Go !
+                </button>
+              </div>
+              </div>
+                </div>
+            </form>
+          </ion-content>

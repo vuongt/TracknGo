@@ -329,7 +329,8 @@ body {
 }
 
 .form-container {
-  width: 60%;
+  width: 100%;
+  padding-left:10%;
   margin: 0 auto;
   margin-top: 10%;
 }
@@ -376,8 +377,9 @@ body {
 
 .button-container {
   margin: 0 auto;
-  width: 100px;
-  margin-top: 15%;
+  width: 50%;
+  margin-top: 20%;
+  margin-left:40%;
 }
 
 .button-validate {
@@ -468,12 +470,14 @@ label.month-select {
 
 
 .quicksearch{
-  height:200px;
+  height:300px;
+
+
 background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1)), url('../img/map.png');
 
     background-size: cover;
 
-      filter: grayscale(100%);
+ filter: grayscale(100%);
       -webkit-filter: grayscale(100%);
       -moz-filter: grayscale(100%);
       -ms-filter: grayscale(100%);
