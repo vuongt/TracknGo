@@ -18,9 +18,10 @@
     <ion-item ng-repeat="item in concerts | limitTo:numLimit"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome">
       <h2 class = "white">{{item.TITRPROG}}</h2>
-      <p><span class="left"><strong>{{item.DATDBTDIF|date:'mediumDate':'+0000'}}</strong></span></p>
-      <p><span class = "right">{{item.NOM}}</span> </p>
-      <p><span class = "right">{{item.ADR}} {{item.VILLE}}</span> </p>
+      <p><span class="left"><strong>{{item.DATDBTDIF|date:'mediumDate':'+0000'}}</strong></span>
+        <span class = "right">{{item.NOM}}</span> <span class = "right">{{item.ADR}} {{item.VILLE}}</span> </p>
+
+
       <div>
         <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,datedbt:item.DATDBTDIF,datefin:item.DATFINDIF,location:item.NOM+item.VILLE})">
           Lire plus

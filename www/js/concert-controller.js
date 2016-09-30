@@ -5,6 +5,7 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
   $scope.datefin= $stateParams.datefin; //TODO date format
   $scope.title= $stateParams.title;
   $scope.location= $stateParams.location;
+  console.log($scope.title);
 
 
   $scope.userdata = AuthService.getUserInfo();
