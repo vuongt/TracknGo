@@ -2,15 +2,58 @@
  * Created by vuong on 30/09/2016.
  */
 angular.module('starter.controllers')
-  .controller('SearchConcertCtrl',function($rootScope,$scope, $ionicPopup,$state){
+  .controller('SearchConcertCtrl',function($rootScope,$scope,$cordovaGeolocation, $ionicPopup,$state){
+
+  geocoder = new google.maps.Geocoder();
+
     $scope.search = function(locationString,geolocation,radius,start,end){
       //Get location
       if (geolocation){
-        //TODO get current position and write it to $scope.location
-        $scope.location="";
+              var options = {timeout: 10000, enableHighAccuracy: true};
+        $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+        $scope.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+         console.log(position.coords.latitude, position.coords.longitude);
+         console.log("Searching for your location");
+
+
+                     var mapOptions = {
+                         center: myLatlng,
+                         zoom: 16,
+                         mapTypeId: google.maps.MapTypeId.ROADMAP
+                     };
+
+                     var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+                     $scope.map = map;
+                     $ionicLoading.hide();
+
+
+          }, function(err) {
+                     $ionicLoading.hide();
+                     console.log(err);
+                 });
+
+
       } else {
         $scope.location="";
-        //TODO connect to google maps by locationString to get coordinates then write it to $scope.location
+
+
+        geocoder.geocode( { 'address' : locationString}, function( results, status ) {
+                if( status == google.maps.GeocoderStatus.OK ) {
+                    $scope.location= (results[0].geometry.location.lat(), results[0].geometry.location.lng())
+                    console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+
+                } else {
+                    alert( 'Geocode was not successful for the following reason: ' + status );
+                }
+            } );
+
+
+
+
+
+
+
       }
       //Radius
       if (radius){
