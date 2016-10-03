@@ -14,13 +14,13 @@
     <ion-item ng-repeat="item in concerts | limitTo:numLimit"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome">
       <h2 class = "white">{{item.TITRPROG}}</h2>
-      <p><span class="left"><strong>{{item.DATDBTDIF|date:'mediumDate':'+0000'}}</strong></span>
+      <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
         <span class = "right">{{item.NOM}}</span> <span class = "right">{{item.ADR}} - {{item.VILLE}}</span> </p>
 
 
       <div>
         <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,date:item.DATDBTDIF,location:item.NOM+item.VILLE})">
-          Lire plus
+          Programme
         </button>
         <button id="page-button2" class="button button-planning"
                 ng-click="addPlanning(item.DATDBTDIF.yyyymmdd(), item.VILLE, item.TITRPROG, item.CDEPROG, item.id_bit, item)"

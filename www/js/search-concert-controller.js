@@ -9,6 +9,7 @@ angular.module('starter.controllers')
     $scope.search = function(locationString,geolocation,radius,start,end){
       //Get location
       if (geolocation){
+
               var options = {timeout: 10000, enableHighAccuracy: true};
         $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
         $scope.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
