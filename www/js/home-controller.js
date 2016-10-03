@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT,$stateParams) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT,$stateParams,$ionicPopup) {
 
 
     //Initialisation des variables d'affichage
@@ -18,9 +18,8 @@ angular.module('starter.controllers')
     };
 
 //Chargement des concerts
-    $scope.cdeprog = "0008201463";
     $scope.charging = true;
-    $isConcertHome = false;
+    $scope.isConcertHome = false;
     $scope.location="";
     $scope.radius="";
     $scope.start="";
@@ -51,7 +50,6 @@ angular.module('starter.controllers')
       if ($scope.answer.error == "") {
         $scope.concerts = $scope.answer.concerts;
         console.log($scope.concerts);
-
         if ($scope.concerts.length != 0) {
 
           $scope.isConcertHome = true;
@@ -85,14 +83,9 @@ angular.module('starter.controllers')
               length = item.ADR.length;
               item.ADR=item.ADR.slice(0,length-2);
               }
-
           }
-
-
           item.DATDBTDIF = new Date(item.DATDBTDIF);
-          AuthService.isInPlanning(item.CDEPROG, item.id_bit, function (isInPlanning) {
-            item.isInPlanning = isInPlanning;
-          })
+          //item.id_bit is undefined 'cause these concerts come from Eliza
         });
 
 
@@ -112,8 +105,6 @@ angular.module('starter.controllers')
             var map = infoWindow.getMap();
             return (map !== null && typeof map !== "undefined");
           }
-
-
           google.maps.event.addListenerOnce($scope.map, 'idle', function () {
 
             $scope.concerts.forEach(function (item, index) {
@@ -213,54 +204,53 @@ angular.module('starter.controllers')
              }*/
           }, function (error) {
           });
-
-
         });
-
-
       }
 
     }, function errorCallback(response) {
     });
 
-
-    $scope.addPlanning = function (date, location, title, cdeprog, id_bit, item) {
-
-
-      AuthService.addPlanning(date, location, title, cdeprog, id_bit, function (result) {
-        if (!result.auth) {
-
-
-          var confirmPopup = $ionicPopup.confirm({
-            title: 'Oups !',
-            template: 'Please sign in to do this action',
-            okText: 'Sign in'
-          });
-
-          confirmPopup.then(function (res) {
-            if (res) {
-              $state.go('tab.profil');
-            } else {
-              console.log('Action annulé');
-            }
-            item.isInPlanning = false;
-
-          });
-        }
-      });
-
-
+//===============PLANNING MANAGER===================
+    var foo = AuthService.getPlanning(); //update planning for one fisrt time
+    $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
+      AuthService.addPlanning(date, location, title, cdeprog, id_bit, verifyAction);
     };
     $scope.removePlanning = function (cdeprog, id_bit) {
       console.log("removing concert from planning with id" + id_bit);
-
-      AuthService.delPlanning(cdeprog, id_bit);
-
-
+      AuthService.delPlanning(cdeprog, id_bit,verifyAction);
     };
+    $scope.isInPlanning = function(cdeprog, id_bit){
+      return AuthService.isInPlanning(cdeprog, id_bit);
+    };
+    function verifyAction(authorized,actionSucceed){
+      if (!authorized) {
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Oups !',
+          template: 'Please sign in to do this action',
+          okText:'Sign in'
+        });
 
-    //for the quicksearch modal
-    $ionicModal.fromTemplateUrl('templates/quicksearch.html', {
+        confirmPopup.then(function(res) {
+          if(res) {
+            $state.go('tab.profil');
+          } else {
+            console.log('Action annulé');
+          }
+        });
+      } else if (!actionSucceed){
+        var alertPopup = $ionicPopup.alert({
+          title: "Oups !",
+          template: "There is a problem while connecting to server. Please try again later"
+        });
+        alertPopup.then(function (res) {
+          console.log($scope.error);
+        });
+      } else {
+        $scope.planning = AuthService.getPlanning(); // We don't use $scope.planning, but this action refresh the userPlanning in AuthService
+      }
+    }
+    //===========for the quicksearch modal
+    /*$ionicModal.fromTemplateUrl('templates/quicksearch.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function (modal) {
@@ -288,7 +278,7 @@ angular.module('starter.controllers')
     // Execute action on remove modal
     $scope.$on('modal.removed', function () {
       // Execute action
-    });
+    });*/
 
 
         $scope.printMore = function () {

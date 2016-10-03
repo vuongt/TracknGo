@@ -23,13 +23,13 @@
           Lire plus
         </button>
         <button id="page-button2" class="button button-planning"
-                ng-click="addPlanning(item.DATDBTDIF.yyyymmdd(), item.VILLE, item.TITRPROG, item.CDEPROG, item.id_bit, item); item.isInPlanning = true"
-                ng-show="!item.isInPlanning" style="margin-left: 5%">
+                ng-click="addPlanning(item.DATDBTDIF.yyyymmdd(), item.VILLE, item.TITRPROG, item.CDEPROG, item.id_bit, item)"
+                ng-show="!isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%">
           Ajouter à mon planning
         </button>
         <button class="button button-planning"
-                ng-click="removePlanning(item.CDEPROG, item.id_bit);item.isInPlanning = false"
-                ng-show="item.isInPlanning" style="margin-left: 5%">
+                ng-click="removePlanning(item.CDEPROG, item.id_bit)"
+                ng-show="isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%">
           Retirer de mon planning
         </button>
       </div>

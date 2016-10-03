@@ -53,6 +53,7 @@ angular.module('starter.controllers').controller('ArtistCtrl', function ($scope,
       });
     } else {
       $scope.userdata = AuthService.getUserInfo();
+      $scope.userPlanning= AuthService.getPlanning();
     }
   }
 
@@ -134,44 +135,20 @@ $scope.charging=false;
 
   });
 
-  //add planning
+//============PLANNING MANAGER=========================
 
   $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
     console.log("adding concert with location:" + location);
-
-    AuthService.addPlanning(date, location, title, cdeprog, id_bit,function (result) {
-      if (!result.auth) {
-
-
-        var confirmPopup = $ionicPopup.confirm({
-          title: 'Oups !',
-          template: 'Please sign in to do this action',
-          okText: 'Sign in'
-        });
-
-        confirmPopup.then(function (res) {
-          if (res) {
-            $state.go('tab.profil');
-          } else {
-            console.log('Action annulé');
-          }
-          item.isInPlanning = false;
-
-        });
-      }
-    });
-
-
+    AuthService.addPlanning(date, location, title, cdeprog, id_bit,verifyAction);
   };
   $scope.removePlanning = function ( cdeprog, id_bit) {
     console.log("removing concert from planning with id" + id_bit);
-
-    AuthService.delPlanning(cdeprog, id_bit);
-
-
+    AuthService.delPlanning(cdeprog, id_bit,verifyAction);
   };
-
-
+  $scope.isInPlanning = function(cdeprog,idBit){
+    return AuthService.isInPlanning(cdeprog,idBit);
+  };
+  //===================================================
   $scope.myGoBack = function () {
     $ionicHistory.goBack();
     console.log($ionicHistory.viewHistory());
@@ -200,8 +177,6 @@ $scope.charging=false;
   };
 
 });
-
-
 function compare(a, b) {
   if (a.title < b.title)
     return -1;

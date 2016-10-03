@@ -8,6 +8,7 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
 
 
   $scope.userdata = AuthService.getUserInfo();
+  $scope.userPlanning = AuthService.getPlanning();
   $scope.isLiked = function(iswc){return(AuthService.isLiked(iswc, $scope.userdata));};
   $scope.delFavorites = function(iswc, name){
       AuthService.delFavorites(iswc, name);
@@ -16,6 +17,16 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
   $scope.addFavorites = function(iswc, name){
        AuthService.addFavorites(iswc, name);
        $scope.userdata = AuthService.getUserInfo();
+  };
+  $scope.addPlanning = function (date, location, title, cdeprog,idBit) {
+    AuthService.addPlanning(date, location, title, cdeprog, idBit, verifyAction);
+  };
+  $scope.removePlanning = function (cdeprog, idBit) {
+    console.log("removing concert from planning");
+    AuthService.delPlanning(cdeprog, idBit,verifyAction);
+  };
+  $scope.isInPlanning = function(cdeprog,idBit){
+    return AuthService.isInPlanning(cdeprog,idBit);
   };
 
   $scope.noProgram = false;
@@ -60,7 +71,7 @@ $http({
 
   $scope.comments = [];
   $scope.empty ="";
-// Gestion des commentaires
+//====================COMMENT=======================
 //get commentaire
   var getComment = function(){
     $http({
@@ -74,6 +85,7 @@ $http({
         console.log(response.data.error);
       } else {
         $scope.comments = response.data;
+        console.log("comments: ");
         console.log($scope.comments);
       }
     }, function errorCallback(error) {
@@ -121,7 +133,8 @@ $http({
     this.contentComment = null;
     //TODO clear field after sending
     getComment();
-  };
+  }
+
   function verifyAction(authorized,actionSucceed){
     if (!authorized) {
       var confirmPopup = $ionicPopup.confirm({
@@ -147,6 +160,7 @@ $http({
       });
     } else {
       $scope.userdata = AuthService.getUserInfo();
+      $scope.userPlanning = AuthService.getPlanning();
     }
   }
 

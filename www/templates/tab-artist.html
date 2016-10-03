@@ -26,20 +26,20 @@
       <ion-item class="item-divider" id="page-list-item-divider1">Morceaux</ion-item>
       <ion-item ng-repeat="song in answer.works | limitTo:numLimit">
 
-        <i id="liked" class="ion-ios-star star" ng-click= "delFavorites(song.iswc, song.title)"
+        <i class="ion-ios-star star" ng-click= "delFavorites(song.iswc, song.title)"
             ng-show="isLiked(song.iswc)"></i>
 
-        <i id="liked" ng-click= "addFavorites(song.iswc, song.title)"
+        <i ng-click= "addFavorites(song.iswc, song.title)"
            class="ion-ios-star-outline star" ng-show="!isLiked(song.iswc)"></i>
 
         <i id="info" class="info ion-ios-information-outline"  ng-show="song.isInfo"></i>
 
-        <div  id="link" class="elipse" ui-sref= "tab.musique({iswc: song.iswc, title:song.title})" ng-if="song.isInfo">
+        <div class="elipse" ui-sref= "tab.musique({iswc: song.iswc, title:song.title})" ng-if="song.isInfo">
           {{song.title}}
 
         </div>
 
-        <div  id="link" class="elipse" ng-if="!song.isInfo">
+        <div  class="elipse" ng-if="!song.isInfo">
           {{song.title}}
 
         </div>
@@ -56,10 +56,10 @@
         <p><h3>{{item.title}}</h3><span class="right">{{item.datetime.toLocaleDateString()}}</span> </p>
         <p>{{item.venue}}</p>
         <div>
-          <button class="button button-planning" ng-click="addPlanning(item.datetime.yyyymmdd(), item.venue, item.title, item.cdeprog, item.id_bit); item.isInPlanning = true" ng-show="!item.isInPlanning" style="margin-left: 5%">
+          <button class="button button-planning" ng-click="addPlanning(item.datetime.yyyymmdd(), item.venue, item.title, null, item.id_bit)" ng-show="!isInPlanning(null,item.id_bit)" style="margin-left: 5%">
             Ajouter à mon planning
           </button>
-          <button class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit);item.isInPlanning = false" ng-show="item.isInPlanning" style="margin-left: 5%">
+          <button class="button button-planning" ng-click="removePlanning(null, item.id_bit)" ng-show="isInPlanning(null,item.id_bit)" style="margin-left: 5%">
             Retirer de mon planning
           </button>
         </div>

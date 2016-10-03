@@ -5,7 +5,7 @@ angular.module('starter.services', [])
     var isAuthenticated = false;
     var authToken;
     var userInfo = {};
-    var userPlanning={};
+    var userPlanning=[];
 
     function loadUserCredentials() {
       var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
@@ -30,6 +30,8 @@ angular.module('starter.services', [])
     function destroyUserCredentials() {
       authToken = undefined;
       isAuthenticated = false;
+      userInfo = {};
+      userPlanning =[];
       $http.defaults.headers.common.Authorization = undefined;
       window.localStorage.removeItem(LOCAL_TOKEN_KEY);
     }
@@ -64,6 +66,7 @@ angular.module('starter.services', [])
           if (result.data.success) {
             storeUserCredentials(result.data.token);
             storeUserInfo();
+            updatePlanning();
             resolve(result.data.msg);
           } else {
             reject(result.data.msg);
@@ -259,91 +262,8 @@ angular.module('starter.services', [])
     };
 
     //===================PLANNING=======================
-
-    var addPlanning = function (date, location, title, cdeprog, id_bit, callback) {
-      if (cdeprog) {
-        $http({
-          method: 'GET',
-          url: API_ENDPOINT.url + '/action/addevent?cdeprog=' + cdeprog + '&title=' + title + '&location=' + location + '&date=' + date,
-          header: {
-            Origin: 'http://localhost:8100'
-          }
-        }).then(function successCallback(response) {
-          console.log("This concert has been added");
-          var result = {action: response.data.actionSucceed, auth: response.data.authorized};
-
-          return (callback(result));
-
-
-        }, function errorCallback(response) {
-
-          console.log("! failed to delete this concert from your planning !");
-
-        });
-      }
-      else {
-        $http({
-          method: 'GET',
-          url: API_ENDPOINT.url + '/action/addevent?title=' + title + '&location=' + location + '&date=' + date +'&id_bit=' + id_bit,
-          header: {
-            Origin: 'http://localhost:8100'
-          }
-        }).then(function successCallback(response) {
-
-          console.log("This concert has been added with date: " + date);
-          var result = {action: response.data.actionSucceed, auth: response.data.authorized};
-          return (callback(result));
-
-
-        }, function errorCallback(response) {
-
-          console.log("! failed to delete this concert from your planning !");
-        });
-      }
-
-    };
-
-    var delPlanning = function (cdeprog, idBit) {
-      console.log("test service with cdeprog" + cdeprog);
-
-      if(cdeprog){
-        $http({
-          method: 'GET',
-          url: API_ENDPOINT.url + '/action/removeevent?cdeprog=' + cdeprog,
-          header: {
-            Origin: 'http://localhost:8100'
-          }
-        }).then(function successCallback(response) {
-
-          return ({action: response.data.actionSucceed, auth: response.data.authorized});
-
-
-        }, function errorCallback(response) {
-
-
-        });
-      } else {
-        $http({
-          method: 'GET',
-          url: API_ENDPOINT.url + '/action/removeevent?id_bit=' + idBit,
-          header: {
-            Origin: 'http://localhost:8100'
-          }
-        }).then(function successCallback(response) {
-          console.log("réussi? : " + response.data.actionSucceed);
-          return ({action: response.data.actionSucceed, auth: response.data.authorized});
-
-
-        }, function errorCallback(response) {
-
-
-        });
-      }
-
-
-    };
-
-    var isInPlanning = function (cdeprog, id_bit, callback) {
+    //This function must be called after each action add/remove!!!!
+    function updatePlanning() {
       $http({
         method: 'GET',
         url: API_ENDPOINT.url + '/planning',
@@ -351,25 +271,98 @@ angular.module('starter.services', [])
           Origin: 'http://localhost:8100'
         }
       }).then(function successCallback(response) {
-
-        var results = response.data.events;
-        if(results){
-          for (var i = 0; i < results.length; i++) {
-            if (cdeprog) {
-              if (results[i].cdeprog == cdeprog) {
-                return callback(true);
-              }
-            } else {
-              if (results[i].id_bit == id_bit) {
-                console.log("test");
-                return callback(true);
-              }
-            }
-          }
-
+        if (response.data.authorized){
+          userPlanning = [];
+          userPlanning.push.apply(userPlanning,response.data.events);
+          console.log("userPlanning updated : ")
+          console.log(userPlanning);
         }
-        return callback(false)
       });
+    }
+
+    var addPlanning = function (date, location, title, cdeprog, id_bit, callback) {
+      if (isAuthenticated){
+        if (cdeprog) {
+          $http({
+            method: 'GET',
+            url: API_ENDPOINT.url + '/action/addevent?cdeprog=' + cdeprog + '&title=' + title + '&location=' + location + '&date=' + date,
+            header: {
+              Origin: 'http://localhost:8100'
+            }
+          }).then(function successCallback(response) {
+            return (callback(response.data.authorized,response.data.actionSucceed));
+          }, function errorCallback(response) {
+            console.log("! failed to add this concert from your planning !");
+          });
+        }
+        else {
+          $http({
+            method: 'GET',
+            url: API_ENDPOINT.url + '/action/addevent?title=' + title + '&location=' + location + '&date=' + date +'&id_bit=' + id_bit,
+            header: {
+              Origin: 'http://localhost:8100'
+            }
+          }).then(function successCallback(response) {
+            return (callback(response.data.authorized,response.data.actionSucceed));
+          }, function errorCallback(response) {
+            console.log("! failed to add this concert from your planning !");
+          });
+        }
+      } else {
+        callback(false,false);
+      }
+    };
+
+    var delPlanning = function (cdeprog, idBit,callback) {
+      if (isAuthenticated){
+        console.log("delPlanning with cdeprog" + cdeprog);
+        if(cdeprog){
+          $http({
+            method: 'GET',
+            url: API_ENDPOINT.url + '/action/removeevent?cdeprog=' + cdeprog,
+            header: {
+              Origin: 'http://localhost:8100'
+            }
+          }).then(function successCallback(response) {
+            callback(response.data.authorized,response.data.actionSucceed);
+          }, function errorCallback(response) {
+          });
+        } else {
+          $http({
+            method: 'GET',
+            url: API_ENDPOINT.url + '/action/removeevent?id_bit=' + idBit,
+            header: {
+              Origin: 'http://localhost:8100'
+            }
+          }).then(function successCallback(response) {
+            callback (response.data.authorized,response.data.actionSucceed);
+          }, function errorCallback(response) {
+          });
+        }
+      } else {
+        callback(false,false);
+      }
+    };
+
+    var isInPlanning = function(cdeprog,idBit){
+      if (!isAuthenticated){
+        return false;
+      }
+      if (cdeprog && cdeprog !=="") {
+        for (var i = 0; i < userPlanning.length; i++) {
+          if (userPlanning[i]){
+            if (userPlanning[i].cdeprog == cdeprog)
+              return true;
+          }
+        }
+      } else if (idBit && idBit !=="") {
+        for (var i = 0; i < userPlanning.length; i++) {
+          if (userPlanning[i].id_bit) {
+            if (userPlanning[i].id_bit == idBit) return true;
+          }
+        }
+      }
+      return false;
     };
 
 
@@ -396,6 +389,10 @@ angular.module('starter.services', [])
       },
       isAuthenticated: function () {
         return isAuthenticated;
+      },
+      getPlanning:function(){
+        updatePlanning();
+        return userPlanning;
       }
     };
   })

@@ -16,8 +16,16 @@
 
       <br> <br>
       <br> <br>
-      <a href="#/tab/profil" id="concert-button1" class="button button-planning">Ajouter à mon planning</a>
-         <!--style="font-weight:lighter;font-size:-15px;border-radius:200px 200px 200px 200px; opacity: 0.7;);"-->
+      <button id="page-button2" class="button button-planning"
+              ng-click="addPlanning(date.yyyymmdd(), location, title, cdeprog, null, item)"
+              ng-show="!isInPlanning(cdeprog,null)" style="margin-left: 5%">
+        Ajouter à mon planning
+      </button>
+      <button class="button button-planning"
+              ng-click="removePlanning(cdeprog,null)"
+              ng-show="isInPlanning(cdeprog,null)" style="margin-left: 5%">
+        Retirer de mon planning
+      </button>
       </br> </br>
     </div>
 

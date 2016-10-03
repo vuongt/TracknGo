@@ -13,19 +13,17 @@
       <ion-item class="item-divider">{{monthNames[month.getMonth()]}}</ion-item>
 
       <ion-item ng-repeat="item in results"
-                item="item"
-                class="concertbackground"
-                ng-show="(item.prog_date.getMonth() == month.getMonth()) && (item.prog_date.getFullYear()== month.getFullYear()) ">
+                class="concertbackground" ng-show="(item.prog_date.getMonth() == month.getMonth()) && (item.prog_date.getFullYear()== month.getFullYear()) &&isInPlanning(item.cdeprog, item.id_bit)">
         <p>
         <h3>{{item.title}}</h3><span class="right">      {{item.prog_date.toLocaleDateString()}}</span></p>
         <p>{{item.location}}</p>
         <div>
-          <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title ,datedbt:item.date,location:item.location})">
+          <button id="page-button1" class="button button-planning" ng-show = "!item.id_bit" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title ,date:item.prog_date,location:item.location})">
             Lire plus
           </button>
           <button id="page-button2" class="button button-planning"
-                  ng-click="removePlanning(item.cdeprog, item.id_bit);item.isInPlanning = false"
-                  ng-show="item.isInPlanning" style="margin-left: 5%">
+                  ng-click="removePlanning(item.cdeprog, item.id_bit)"
+                  style="margin-left: 5%">
             Retirer de mon planning
           </button>
         </div>
