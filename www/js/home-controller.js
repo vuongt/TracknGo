@@ -65,25 +65,26 @@ angular.module('starter.controllers')
        item.VILLE = item.VILLE.charAt(0).toUpperCase() + item.VILLE.substring(1).toLowerCase();
 
           if (item.TITRPROG == "Manifestation de _artiste a preciser ..."){
-              if(item.NOM=="Salle non referencee" || item.NOM==""){
+              if(item.NOM=="Salle non referencee" || item.NOM==""||item.NOM==" . . ."){
                  item.TITRPROG = "Manifestation à "+item.VILLE;
 
                  item.NOM="";
               }
               else{
-                  item.TITRPROG = "Manifestation à "+item.NOM;
+                  item.TITRPROG = item.NOM;
 
                   item.NOM="";
               }
-              if(item.ADR==" . . ."){
+              }
+          if(item.ADR==" . . ."){
                    item.ADR="";
 
-              }
-              else{
+          }
+          else{
               length = item.ADR.length;
               item.ADR=item.ADR.slice(0,length-2);
               }
-          }
+
           item.DATDBTDIF = new Date(item.DATDBTDIF);
           //item.id_bit is undefined 'cause these concerts come from Eliza
         });
