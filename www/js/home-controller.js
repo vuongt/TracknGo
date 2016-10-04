@@ -26,7 +26,7 @@ angular.module('starter.controllers')
     $scope.start="";
     $scope.end="";
     $scope.timeCriteria="aujourd'hui";
-    if($stateParams.lat && $stateParams.lat!=="") {$scope.lat=$stateParams.lat;}
+    if($stateParams.lat && $stateParams.lat!=="") {$scope.lat=$stateParams.lat; console.log($scope.lat)}
     if($stateParams.lng && $stateParams.lng!=="") {$scope.lng=$stateParams.lng;}
 
 
@@ -96,6 +96,8 @@ angular.module('starter.controllers')
 
         //initialisation google maps
         var options = {timeout: 10000, enableHighAccuracy: true};
+        console.log($scope.lat);
+
         $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
           var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           var mapOptions = {

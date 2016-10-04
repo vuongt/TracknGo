@@ -430,6 +430,14 @@ body {
   display: inline-block;
   width: 100%;
 }
+.quick-search-container{
+  margin: 0 auto;
+  margin-top: 20%;
+  height: 30px;
+  width: 60%;
+  border-bottom: 1px solid #aaa;
+}
+
 .label-search{
 width: 100%;
 }
