@@ -9,7 +9,8 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   token = require('./server/token.controller.js'),
   jwt = require('jsonwebtoken'),
-  async = require('async');
+  async = require('async'),
+  bcrypt = require('bcryptjs');
 
 var app = express();
 var config = require('./config-dev.js'); //config file contains all tokens and other private info
@@ -68,36 +69,47 @@ passport.use('local-signup', new LocalStrategy(
       if (err) return done(err);
       else {
         connection.query("SELECT * FROM users WHERE email=?", [email], function (err, rows, fields) {
-          console.log("rows object when checking email: ");
-          console.log(rows[0]);
           if (err) return done(err);
           if (!rows.length) {
             //If there is no user with that email
             // create the user
             var newUser = {};
             newUser.email = email;
-            newUser.password = password;
             newUser.name = req.body.name;
-            var prep = 'INSERT INTO users (name,email,password) VALUES (?,?,?)';
-            var insert = [req.body.name, email, password];
-            var sql = mysql.format(prep, insert);
-            mariaClient.getConnection(function (err, connection2) {
+            newUser.password = password;
+            console.log('user password : '+newUser.password);
+            bcrypt.genSalt(10, function (err, salt) {
               if (err) {
-                return done(err);
+                return next(err);
               }
-              connection2.query(sql, function (err, rows, fields) {
+              bcrypt.hash(newUser.password, salt, function (err, hash) {
                 if (err) {
-                  return done(err);
+                  return next(err);
                 }
-                console.log('row insert result: ');
-                console.dir(rows);
-                newUser.id = rows.insertId;
-                console.log("newUser object: ");
-                console.dir(newUser);
-                return done(null, newUser);
+                newUser.password = hash;
+                console.log("hash :" + newUser.password);
+                var prep = 'INSERT INTO users (name,email,password) VALUES (?,?,?)';
+                var insert = [newUser.name, newUser.email, newUser.password];
+                var sql = mysql.format(prep, insert);
+                mariaClient.getConnection(function (err, connection2) {
+                  if (err) {
+                    return done(err);
+                  }
+                  connection2.query(sql, function (err, rows, fields) {
+                    if (err) {
+                      return done(err);
+                    }
+                    console.log('row insert result: ');
+                    console.dir(rows);
+                    newUser.id = rows.insertId;
+                    console.log("newUser object: ");
+                    console.dir(newUser);
+                    return done(null, newUser);
+                  });
+                  connection2.release();
+                })
               });
-              connection2.release();
-            })
+            });
           } else {
             return done(null, false, {msg: 'This email has been registered'});
           }
@@ -125,11 +137,13 @@ passport.use('local-signin', new LocalStrategy({
             return (done(null, false, {msg: 'No account is registered with this email !'}));
           }
           //if the user is found but the password is wrong
-          if (rows[0].password !== password)
-            return done(null, false, {msg: 'Wrong password'});
-          // all is well, return successful user
-          console.log("Login succeded");
-          return done(null, rows[0]);
+          bcrypt.compare(password, rows[0].password, function(err, isMatch) {
+            if (!isMatch)
+              return done(null, false, {msg: 'Wrong password'});
+               // all is well, return successful user
+            console.log("Login succeded");
+            return done(null, rows[0]);
+          });
         });
       }
       connection.release();
@@ -323,7 +337,7 @@ app.post('/signin', function (req, res, next) {
   })(req, res, next);
 });
 //logs user out of site, deleting them from the session, and returns to homepage
-app.get('/signout', authentication.signout);
+app.get('/logout', authentication.signout);
 /*function(req, res) {
  /*var name = req.user.name;
  console.log("LOG OUT " + req.user.name);
@@ -333,14 +347,31 @@ app.get('/signout', authentication.signout);
  });*/
 
 //---------------research concert---------------
+var rad = function(x) {
+  return x * Math.PI / 180;
+};
+
+var getDistance = function(lng1, lat1, lng2,lat2) {
+  var R = 6378137; // Earth’s mean radius in meter
+  var dLat = rad(lat2 - lat1);
+  var dLong = rad(lng2 - lng1);
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(lat1)) * Math.cos(rad(lat2)) *
+    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d; // returns the distance in meter
+};
+
 app.get('/search/concerts', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  //params : position, radius, start,end
-  //TODO Verify if the query is correct !
-  var position = {};
-  var radius = 0;
-  if (req.query.position !== "") {
-    position = req.query.position;
+  //params : lng, lat, radius, start,end
+  var lng = "";
+  var lat = "";
+  var radius = "6800000"; //100km by default
+  if (req.query.lng !== "" && req.query.lat !=="") {
+    lng = req.query.lng;
+    lat = req.query.lat;
   }
   if (req.query.radius !== "") {
     radius = req.query.radius;
@@ -353,8 +384,11 @@ app.get('/search/concerts', function (req, res) {
   }
   var results = {
     error: "",
-    concerts: []
+    concerts: [],
+    restrictedConcerts:[]
   };
+  console.log(lng);
+  console.log(lat);
   if (today) {
     optionEliza.uri = config.eliza.uri + "/date/" + today.toISOString();
     request(optionEliza, function (error, response, body) {
@@ -365,10 +399,11 @@ app.get('/search/concerts', function (req, res) {
       }
       res.send(JSON.stringify(results));
     });
-  } else if (start && end) {
+  }
+  else if (start && end) {
     console.log("start day" + start);
     console.log("end day" + end);
-    var dateList = [];
+    /*var dateList = [];
     var date = start;
     while (date <= end) {
       dateList.push(new String(date.toISOString()));
@@ -397,8 +432,74 @@ app.get('/search/concerts', function (req, res) {
       //This function is call when all the functions in calls have finished
       if (err) {
         return console.log(err);
+      }*/
+    optionEliza.uri = config.eliza.uri + "/dates/deb="+start+"&fin="+end;
+    request(optionEliza, function (error, response, body) {
+      if (error) {
+        results.error = "Error when searching in Eliza";
+      } else {
+        results.concerts = JSON.parse(body);
       }
       res.send(JSON.stringify(results));
+    });
+
+      console.log("get concerts from Eliza. Next : look for position");
+      if (lng!=="" && lat!=="" && radius !==""){
+        console.log("param query existent");
+        var calls2 = [];
+        results.concerts.forEach(function (c) {
+          if (c.LAT !== "No result found" && c.LNG !== "No result found") {
+            calls2.push(function (callback) {
+              var lngEliza = Number(c.LNG);
+              var latEliza = Number(c.LAT);
+              var lngUser = Number(lng);
+              var latUser = Number(lat);
+              var limit = Number(radius);
+              console.log("latUser" + latUser);
+              console.log("lngUser" + lngUser);
+              console.log("lngEliza" + lngEliza);
+              console.log("latEliza" + latEliza);
+              console.log(getDistance(lngEliza,latEliza,lngUser,latUser));
+              if (getDistance(lngEliza,latEliza,lngUser,latUser) < limit){
+                console.log(getDistance(lngEliza,latEliza,lngUser,latUser));
+                results.restrictedConcerts.push(c);
+                console.log("restricted contains " + results.restrictedConcerts.length);
+              }
+            })
+          }
+        });
+        console.log("done calls2.starting async");
+        async.parallel(calls2, function(err2,result2){
+          if (err2) {
+            return console.log(err2);
+          }
+          console.log("about to send");
+          res.send(JSON.stringify(results));
+        });
+        /*for (var i =0,len=results.concerts.length; i<len;i++){
+          var foo = results.concerts[i];
+          if (foo.LAT !== "No result found") var latEliza = Number(foo.LAT);
+          else break;
+          if (foo.LNG !== "No result found") var lngEliza = Number(foo.LNG);
+          else break;
+          var lngUser = Number(lng);
+          var latUser = Number(lat);
+          var limit = Number(radius);
+          console.log("lngEliza" + lngEliza);
+          console.log("latEliza" + latEliza);
+          console.log("lngUser" + lngUser);
+          console.log("latUser" + latUser);
+          console.log(getDistance(lngEliza,latEliza,lngUser,latUser));
+          if (getDistance(lngEliza,latEliza,lngUser,latUser) > limit){
+            var index = results.concerts.indexOf(foo);
+            results.concerts.splice(index,1);
+            console.log("reduce results");
+          }
+        }*/
+
+      } else {
+        res.send(JSON.stringify(results));
+      }
     })
   }
 });
@@ -726,7 +827,7 @@ app.get('/program', function (req, res) {
 app.get('/profile', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
-  console.log(req.headers);
+  console.log('profile request');
   try {
     var requestToken = token.extractToken(req.headers);
   } catch (err) {

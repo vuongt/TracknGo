@@ -3,10 +3,10 @@ angular.module('starter.controllers').controller('SignupCtrl', function($scope,$
     name: "",
     email:"",
     password:""
-  }
+  };
   $scope.signup = function(){
     AuthService.register($scope.data).then(function(msg) {
-      $state.go('tab.profil');
+      $state.go('tab.profil', {}, {reload: true });
       var alertPopup = $ionicPopup.alert({
         title: 'Register success!',
         template: msg

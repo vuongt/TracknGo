@@ -94,7 +94,7 @@ function expireToken(headers, cb) {
           return cb(null, true);
         });
       }
-      connection.release()
+      connection.release();
     });
   } catch (err) {
     return cb(err);
