@@ -21,8 +21,8 @@ angular.module('starter.controllers')
 //Chargement des concerts
     $scope.charging = true;
     $scope.isConcertHome = false;
-    $scope.lat;
-    $scope.lng;
+    $scope.lat="";
+    $scope.lng="";
     $scope.radius="";
     $scope.start="";
     $scope.end="";
@@ -35,12 +35,12 @@ angular.module('starter.controllers')
     if($stateParams.start && $stateParams.start!=="" && $stateParams.end && $stateParams.end!=="") {
       $scope.start=$stateParams.start;
       $scope.end=$stateParams.end;
-      $scope.timeCriteria = "du " + $stateParams.start.slice(0,15) + " au " + $stateParams.end.slice(0,15);
+      $scope.timeCriteria = "du " + $stateParams.start.slice(0,15) + " au " + $stateParams.end.slice(0,15) + " dans un rayon de 50km";
     }
 
   $http({
   method: 'GET',
-  url: API_ENDPOINT.url + '/search/concerts?lng='+$scope.lng+'&lat='+$scope.lng+'&radius='+$scope.radius+'&start='+$scope.start+'&end='+$scope.end,
+  url: API_ENDPOINT.url + '/search/concerts?lng='+$scope.lng+'&lat='+$scope.lat+'&radius='+$scope.radius+'&start='+$scope.start+'&end='+$scope.end,
   header:{
     Origin:'http://localhost:8100'
   }
@@ -53,7 +53,9 @@ angular.module('starter.controllers')
 
 
       if ($scope.answer.error == "") {
-        $scope.concerts = $scope.answer.concerts;
+        if ($scope.lat ==""){
+          $scope.concerts = $scope.answer.concerts;
+        } else $scope.concerts = $scope.answer.restrictedConcerts;
         console.log($scope.concerts);
         if ($scope.concerts.length != 0) {
 

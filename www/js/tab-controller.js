@@ -17,8 +17,8 @@ angular.module('starter.controllers').controller('TabCtrl', function ($scope,$io
   };
 
   $scope.goProfil = function () {
-    $ionicHistory.clearHistory();
-    $state.go("tab.profil");
+    //$ionicHistory.clearHistory();
+    $state.go("tab.profil",{},{reload:true});
   };
 
 });

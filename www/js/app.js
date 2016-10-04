@@ -53,7 +53,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       // Each tab has its own nav history stack:
 
       .state('tab.home', {
-        url: '/home?location&radius&start&end',
+        url: '/home?lng&lat&radius&start&end',
         views: {
           'tab-home': {
             templateUrl: 'templates/tab-home.html',
@@ -152,13 +152,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       })
 
-
       .state('tab.profil', {
         url: '/profil',
         views: {
           'tab-profil': {
             templateUrl: 'templates/tab-profil.html',
-            controller: 'ProfilCtrl'
+            controller: 'ProfilCtrl',
+            cache: false
           }
         }
       })

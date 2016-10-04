@@ -28,6 +28,9 @@ angular.module('starter.services', [])
     }
 
     function destroyUserCredentials() {
+      $http.get(API_ENDPOINT.url + '/logout').then(function(response){
+        console.log('logout request sent to server');
+      });
       authToken = undefined;
       isAuthenticated = false;
       userInfo = {};
@@ -37,11 +40,12 @@ angular.module('starter.services', [])
     }
 
     function storeUserInfo() {
-      $http.get(API_ENDPOINT.url + '/profile').then(function (response) {
+      $http.get(API_ENDPOINT.url+'/profile').then(function (response) {
           userInfo.name = response.data.name;
           userInfo.works = response.data.works;
           userInfo.authors = response.data.authors;
           userInfo.artists =response.data.artists;
+        console.log('store user Info:');
           console.log(userInfo);
       });
     }
@@ -228,7 +232,7 @@ angular.module('starter.services', [])
       });
     }
 
-    var isLiked = function (iswc, userdata) {
+    var isLiked = function (iswc,userdata) {
       if (isAuthenticated){
         for (var l = 0; l < userdata.works.length; l++) {
           if (iswc == userdata.works[l].iswc) {
@@ -239,8 +243,8 @@ angular.module('starter.services', [])
       return false;
     };
 
-    var isLikedAuth = function (name, userdata) {
-      if (isAuthenticated){
+    var isLikedAuth = function (name,userdata) {
+      if (isAuthenticated ){
         for (var k = 0; k < userdata.authors.length; k++) {
           if (name == userdata.authors[k].name) {
             return true;
@@ -250,8 +254,8 @@ angular.module('starter.services', [])
       return false;
     };
 
-    var isLikedArt = function (name, userdata) {
-      if (isAuthenticated){
+    var isLikedArt = function (name,userdata) {
+      if (isAuthenticated ){
         for (var k=0;k<userdata.artists.length;k++){
           if (name == userdata.artists[k].name){
             return true;
