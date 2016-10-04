@@ -1,5 +1,6 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT,$stateParams,$ionicPopup) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation,$http, $ionicModal, AuthService, API_ENDPOINT,$stateParams,$ionicPopup) {
+
 
 
     //Initialisation des variables d'affichage

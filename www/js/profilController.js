@@ -1,15 +1,13 @@
 angular.module('starter.controllers')
-  .run(function($rootScope,AuthService){
-    $rootScope.userdata = AuthService.getUserInfo();
-  })
-  .controller('ProfilCtrl',function($state,$scope,AuthService,$rootScope) {
-    $scope.userdata = $rootScope.userdata;
-    console.log('userdata in profile');
-    console.log($scope.userdata);
+  .controller('ProfilCtrl', function($scope,AuthService,API_ENDPOINT,$http,$state) {
+    $scope.userdata = AuthService.getUserInfo();
+
+
+
     //================Favorite Manager===============
-    $scope.isLikedAuth = function(name){return(AuthService.isLikedAuth(name,$scope.userdata));};
-    $scope.isLiked = function(iswc){return(AuthService.isLiked(iswc,$scope.userdata));};
-    $scope.isLikedArt = function(name){return(AuthService.isLikedArt(name,$scope.userdata));};
+    $scope.isLikedAuth = function(name){return(AuthService.isLikedAuth(name, $scope.userdata));    };
+    $scope.isLiked = function(iswc){return(AuthService.isLiked(iswc, $scope.userdata));    };
+    $scope.isLikedArt = function(name){return(AuthService.isLikedArt(name, $scope.userdata));    };
     $scope.delFavorites = function(iswc, name){
       AuthService.delFavorites(iswc, name,verifyAction);
     };
@@ -59,8 +57,10 @@ angular.module('starter.controllers')
 //==============Authentication manager===============
   $scope.logout = function() {
     AuthService.logout();
-    $scope.userdata={};
     $state.go('tab.home');
+  };
+  $scope.destroySession = function() {
+    AuthService.logout();
   };
 //==============Navigation===================
   $scope.myGoBack = function() {
