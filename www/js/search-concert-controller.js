@@ -4,6 +4,8 @@
 angular.module('starter.controllers')
   .controller('SearchConcertCtrl',function($rootScope,$scope,$cordovaGeolocation, $ionicPopup,$state){
     var geocoder = new google.maps.Geocoder();
+     $scope.charging=false;
+
     var getDate = function(start,end){
       if (start && end && start <= end){
         $scope.start = start;
@@ -36,6 +38,7 @@ angular.module('starter.controllers')
       } else {
         geocoder.geocode( { 'address' : locationString}, function( results, status ) {
           if( status == google.maps.GeocoderStatus.OK ) {
+          $scope.charging=true;
             $scope.location= (results[0].geometry.location.lat(), results[0].geometry.location.lng())
             $scope.lng=results[0].geometry.location.lng();
             $scope.lat=results[0].geometry.location.lat();
@@ -55,6 +58,7 @@ angular.module('starter.controllers')
     };
     $scope.search = function(locationString,geolocation,radius,start,end){
       if (geolocation){
+      $scope.charging=true;
         var options = {timeout: 10000, enableHighAccuracy: true};
         $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
           //$scope.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
