@@ -2,6 +2,8 @@ angular.module('starter.controllers')
   .controller('ProfilCtrl', function($scope,AuthService,API_ENDPOINT,$http,$state) {
     $scope.userdata = AuthService.getUserInfo();
 
+
+
     //================Favorite Manager===============
     $scope.isLikedAuth = function(name){return(AuthService.isLikedAuth(name, $scope.userdata));    };
     $scope.isLiked = function(iswc){return(AuthService.isLiked(iswc, $scope.userdata));    };
