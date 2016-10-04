@@ -23,7 +23,7 @@ angular.module('starter.controllers')
     $scope.isConcertHome = false;
     $scope.lat="";
     $scope.lng="";
-    $scope.radius="";
+    $scope.radius="50";
     $scope.start="";
     $scope.end="";
     $scope.timeCriteria="aujourd'hui";
