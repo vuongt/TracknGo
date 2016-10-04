@@ -20,12 +20,16 @@ angular.module('starter.controllers')
 //Chargement des concerts
     $scope.charging = true;
     $scope.isConcertHome = false;
-    $scope.location="";
+    $scope.lat;
+    $scope.lng;
     $scope.radius="";
     $scope.start="";
     $scope.end="";
     $scope.timeCriteria="aujourd'hui";
-    if($stateParams.location && $stateParams.location!=="") {$scope.location=$stateParams.location;}
+    if($stateParams.lat && $stateParams.lat!=="") {$scope.lat=$stateParams.lat;}
+    if($stateParams.lng && $stateParams.lng!=="") {$scope.lng=$stateParams.lng;}
+
+
     if($stateParams.radius && $stateParams.radius!=="") {$scope.radius=$stateParams.radius;}
     if($stateParams.start && $stateParams.start!=="" && $stateParams.end && $stateParams.end!=="") {
       $scope.start=$stateParams.start;
@@ -35,7 +39,7 @@ angular.module('starter.controllers')
 
   $http({
   method: 'GET',
-  url: API_ENDPOINT.url + '/search/concerts?position='+$scope.location+'&radius='+$scope.radius+'&start='+$scope.start+'&end='+$scope.end,
+  url: API_ENDPOINT.url + '/search/concerts?lng='+$scope.lng+'&lat='+$scope.lng+'&radius='+$scope.radius+'&start='+$scope.start+'&end='+$scope.end,
   header:{
     Origin:'http://localhost:8100'
   }
@@ -284,7 +288,7 @@ angular.module('starter.controllers')
 
         $scope.printMore = function () {
           $scope.numLimit = $scope.numLimit + 5;
-          if ($scope.numLimit >= $scope.maxResults) {
+          if ($scope.numLimit > $scope.concerts.length) {
             $scope.isPlus = false;
           }
         };

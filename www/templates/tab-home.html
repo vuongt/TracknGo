@@ -6,8 +6,8 @@
     <p ng-show="charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Qu'allez-vous écouter aujourd'hui ?</p>
 
 
-    <div class='comment' ng-show="isConcertHome">
-        <p>{{concerts.length}} concerts autour de vous {{timeCriteria}}</p>
+    <div style="color:grey;" class='comment' ng-show="isConcertHome">
+       <p> {{concerts.length}} concerts autour de vous {{timeCriteria}}</p>
       <!-- <i class="ion-ios-search-strong icon-right" ui-sref="tab.searchConcert" style="float: right; font-size: 130%"></i>
      <!-- <i class="ion-ios-search-strong icon-right" ng-click="openModal()" style="float: right; font-size: 130%"></i> -->
     </div>
