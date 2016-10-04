@@ -17,7 +17,7 @@
           <li class="item item-toggle">
          Me géolocaliser
             <label class="toggle toggle-assertive">
-              <input type="checkbox" ng-model="geolocation">
+              <input type="checkbox" ng-init="geolocation=true" ng-model="geolocation">
               <div class="track">
                 <div class="handle"></div>
               </div>
@@ -25,15 +25,15 @@
           </li>
         </ul>
 
+        <div class="quick-search-container">
+          <input name="search" id="search" type="text" placeholder="Rayon (km)" class="quicksearch-bar" ng-model = "radius">
 
-        <!--
-                  <div>
-                  <span style="font-size:100%;">Rayon </span>
-                  <label style="border: none;" class="item item-input">
-                  <input style="padding-bottom:3%;" type="text" placeholder="Par défaut, 50km" ng-model="radius">
-                  </label>
-                </div>
-                -->
+
+        </div>
+
+
+
+
 
 
                 <div>
