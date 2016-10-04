@@ -98,15 +98,25 @@ angular.module('starter.controllers')
 
         //initialisation google maps
         var options = {timeout: 10000, enableHighAccuracy: true};
-        console.log($scope.lat);
 
         $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
           var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          var mapOptions = {
-            center: latLng,
-            zoom: 11,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
+          console.log(latLng.lat());
+          if($scope.lat){
+            var mapOptions = {
+              center: {lat: $scope.lat, lng: $scope.lng},
+              zoom: 11,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+          } else {
+            var mapOptions = {
+              center: latLng,
+              zoom: 11,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+          }
+
+
           var geocoder = new google.maps.Geocoder();
           $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
           //creation de la fonction isOpen a infowindow
