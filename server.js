@@ -454,12 +454,8 @@ app.get('/search/concerts', function (req, res) {
                 var lngUser = parseFloat(lng);
                 var latUser = parseFloat(lat);
                 var limit = parseFloat(radius);
-                console.log("latUser" + latUser);
-                console.log("lngUser" + lngUser);
-                console.log("lngEliza" + lngEliza);
-                console.log("latEliza" + latEliza);
                 console.log(getDistance(latUser, lngUser,latEliza,lngEliza));
-                if (getDistance(latUser, lngUser,lngEliza,latEliza) < limit) {
+                if (getDistance(latUser, lngUser,latEliza,lngEliza) < limit) {
                   return results.restrictedConcerts.push(c);
                   console.log("restricted contains " + results.restrictedConcerts.length);
                 } else return 1;
@@ -475,7 +471,7 @@ app.get('/search/concerts', function (req, res) {
           });
           console.log("about to send");
           res.send(JSON.stringify(results));
-          console.log(results);
+          //console.log(results);
         }
         else {
           res.send(JSON.stringify(results));

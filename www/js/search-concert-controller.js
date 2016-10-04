@@ -62,8 +62,8 @@ angular.module('starter.controllers')
         var options = {timeout: 10000, enableHighAccuracy: true};
         $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
           //$scope.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          $scope.lng= position.coords.latitude;
-          $scope.lat= position.coords.longitude;
+          $scope.lat= position.coords.latitude;
+          $scope.lng= position.coords.longitude;
           console.log("Searching for your location");
           console.log(position.coords.latitude, position.coords.longitude);
           getRadius(radius);
