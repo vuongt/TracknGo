@@ -8478,7 +8478,6 @@ input:checked + .checkbox-icon:after {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
@@ -8498,7 +8497,6 @@ input:checked + .checkbox-icon:after {
   .item-select option {
     direction: ltr; }
   .item-select:after {
-    position: absolute;
     top: 50%;
     right: 16px;
     margin-top: -3px;

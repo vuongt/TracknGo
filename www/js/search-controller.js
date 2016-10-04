@@ -1,18 +1,17 @@
 angular.module('starter.controllers')
 
 
-.controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", "$state", function($rootScope,$scope,$http, AuthService,$stateParams, $ionicPopup,$state){
+  .controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", "$state", function ($rootScope, $scope, $http, AuthService, $stateParams, $ionicPopup, $state) {
 
 
-
-  $scope.isSong = false;
-  $scope.isPlus = false;
-  $scope.numLimit = 5;
-  $scope.filter= "all";
-  $scope.nbrPage=1;
-  $scope.charging=false;
-  $scope.api = AuthService.api;
-  //$scope.concerts == [];
+    $scope.isSong = false;
+    $scope.isPlus = false;
+    $scope.numLimit = 5;
+    $scope.filter = "all";
+    $scope.nbrPage = 1;
+    $scope.charging = false;
+    $scope.api = AuthService.api;
+    //$scope.concerts == [];
 
     $scope.userdata = AuthService.getUserInfo();
 
@@ -54,22 +53,22 @@ angular.module('starter.controllers')
     }
 
 
-    $scope.submitSearch = function(search, filter,api){
-        $scope.charging=true;
+    $scope.submitSearch = function (search, filter, api) {
+      $scope.charging = true;
 
-            $http({
-              method: 'GET',
-              url: api +'/search/works?query='+search+'&filters='+filter+'&page='+$scope.nbrPage,
-              header:{
-              Origin:'http://localhost:8100'
-            }
-}).then(function successCallback(response) {
-     $scope.charging=false;
-    $scope.answer = response.data.results;
-    $scope.error = response.data.error;
-     $scope.isSong = false;
-     $scope.isPlus= false;
-   $scope.numLimit=5;
+      $http({
+        method: 'GET',
+        url: api + '/search/works?query=' + search + '&filters=' + filter + '&page=' + $scope.nbrPage,
+        header: {
+          Origin: 'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
+        $scope.charging = false;
+        $scope.answer = response.data.results;
+        $scope.error = response.data.error;
+        $scope.isSong = false;
+        $scope.isPlus = false;
+        $scope.numLimit = 5;
 
 
         if (response.data.error == "") {
@@ -115,7 +114,7 @@ angular.module('starter.controllers')
       }, function errorCallback(response) {
 
       });
-    }
+    };
 
     $scope.printMore = function () {
       $scope.numLimit = $scope.numLimit + 5;
