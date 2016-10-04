@@ -35,7 +35,7 @@ angular.module('starter.controllers')
     if($stateParams.start && $stateParams.start!=="" && $stateParams.end && $stateParams.end!=="") {
       $scope.start=$stateParams.start;
       $scope.end=$stateParams.end;
-      $scope.timeCriteria = "du " + $stateParams.start.slice(0,15) + " au " + $stateParams.end.slice(0,15) + " dans un rayon de 50km";
+      $scope.timeCriteria = "du " + $stateParams.start.slice(0,15) + " au " + $stateParams.end.slice(0,15) + " dans un rayon de "+$scope.radius +" km";
     }
 
   $http({
@@ -58,12 +58,13 @@ angular.module('starter.controllers')
         } else $scope.concerts = $scope.answer.restrictedConcerts;
         console.log($scope.concerts);
         if ($scope.concerts.length != 0) {
-
           $scope.isConcertHome = true;
           if ($scope.numLimit <= $scope.concerts.length) {
                           $scope.isPlus = true;
                         }
 
+        } else {
+          $scope.charging=false;
         }
         $scope.concerts.forEach(function (item, index) {
 

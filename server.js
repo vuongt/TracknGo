@@ -347,28 +347,30 @@ app.get('/logout', authentication.signout);
  });*/
 
 //---------------research concert---------------
-var rad = function(x) {
-  return x * Math.PI / 180;
-};
+function getDistance(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1);
+  var a =
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+    ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c; // Distance in km
+  return d; //in km
+}
 
-var getDistance = function(lng1, lat1, lng2,lat2) {
-  var R = 6378137; // Earth’s mean radius in meter
-  var dLat = rad(lat2 - lat1);
-  var dLong = rad(lng2 - lng1);
-  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(rad(lat1)) * Math.cos(rad(lat2)) *
-    Math.sin(dLong / 2) * Math.sin(dLong / 2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c;
-  return d; // returns the distance in meter
-};
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
 
 app.get('/search/concerts', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   //params : lng, lat, radius, start,end
   var lng = "";
   var lat = "";
-  var radius = "6800000"; //100km by default
+  var radius = "50"; //50km by default
   if (req.query.lng !== "" && req.query.lat !=="") {
     lng = req.query.lng;
     lat = req.query.lat;
@@ -433,74 +435,53 @@ app.get('/search/concerts', function (req, res) {
       if (err) {
         return console.log(err);
       }*/
-    optionEliza.uri = config.eliza.uri + "/dates/deb="+start+"&fin="+end;
+    optionEliza.uri = config.eliza.uri + "/dates/deb="+start.toISOString()+"&fin="+end.toISOString();
     request(optionEliza, function (error, response, body) {
       if (error) {
         results.error = "Error when searching in Eliza";
+        res.send(JSON.stringify(results));
       } else {
         results.concerts = JSON.parse(body);
-      }
-      res.send(JSON.stringify(results));
-    });
-
-      console.log("get concerts from Eliza. Next : look for position");
-      if (lng!=="" && lat!=="" && radius !==""){
-        console.log("param query existent");
-        var calls2 = [];
-        results.concerts.forEach(function (c) {
-          if (c.LAT !== "No result found" && c.LNG !== "No result found") {
-            calls2.push(function (callback) {
-              var lngEliza = Number(c.LNG);
-              var latEliza = Number(c.LAT);
-              var lngUser = Number(lng);
-              var latUser = Number(lat);
-              var limit = Number(radius);
-              console.log("latUser" + latUser);
-              console.log("lngUser" + lngUser);
-              console.log("lngEliza" + lngEliza);
-              console.log("latEliza" + latEliza);
-              console.log(getDistance(lngEliza,latEliza,lngUser,latUser));
-              if (getDistance(lngEliza,latEliza,lngUser,latUser) < limit){
-                console.log(getDistance(lngEliza,latEliza,lngUser,latUser));
-                results.restrictedConcerts.push(c);
-                console.log("restricted contains " + results.restrictedConcerts.length);
-              }
-            })
-          }
-        });
-        console.log("done calls2.starting async");
-        async.parallel(calls2, function(err2,result2){
-          if (err2) {
-            return console.log(err2);
-          }
+        console.log("got concerts from Eliza. Next : look for position");
+        if (lng !== "" && lat !== "" && radius !== "") {
+          console.log("param query existent");
+          var calls2 = [];
+          results.concerts.forEach(function (c) {
+            if (c.LAT !== "No result found" && c.LNG !== "No result found") {
+              calls2.push(function () {
+                var lngEliza = parseFloat(c.LNG);
+                var latEliza = parseFloat(c.LAT);
+                var lngUser = parseFloat(lng);
+                var latUser = parseFloat(lat);
+                var limit = parseFloat(radius);
+                console.log("latUser" + latUser);
+                console.log("lngUser" + lngUser);
+                console.log("lngEliza" + lngEliza);
+                console.log("latEliza" + latEliza);
+                console.log(getDistance(latUser, lngUser,latEliza,lngEliza));
+                if (getDistance(latUser, lngUser,lngEliza,latEliza) < limit) {
+                  return results.restrictedConcerts.push(c);
+                  console.log("restricted contains " + results.restrictedConcerts.length);
+                } else return 1;
+              });
+            }
+          });
+          console.log("done calls2. Starting async");
+          async.parallel(calls2, function (err, result) {
+            if (err) {
+              console.log("error");
+              return console.log(err);
+            }
+          });
           console.log("about to send");
           res.send(JSON.stringify(results));
-        });
-        /*for (var i =0,len=results.concerts.length; i<len;i++){
-          var foo = results.concerts[i];
-          if (foo.LAT !== "No result found") var latEliza = Number(foo.LAT);
-          else break;
-          if (foo.LNG !== "No result found") var lngEliza = Number(foo.LNG);
-          else break;
-          var lngUser = Number(lng);
-          var latUser = Number(lat);
-          var limit = Number(radius);
-          console.log("lngEliza" + lngEliza);
-          console.log("latEliza" + latEliza);
-          console.log("lngUser" + lngUser);
-          console.log("latUser" + latUser);
-          console.log(getDistance(lngEliza,latEliza,lngUser,latUser));
-          if (getDistance(lngEliza,latEliza,lngUser,latUser) > limit){
-            var index = results.concerts.indexOf(foo);
-            results.concerts.splice(index,1);
-            console.log("reduce results");
-          }
-        }*/
-
-      } else {
-        res.send(JSON.stringify(results));
+          console.log(results);
+        }
+        else {
+          res.send(JSON.stringify(results));
+        }
       }
-    })
+    });
   }
 });
 
