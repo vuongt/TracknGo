@@ -70,12 +70,12 @@ angular.module('starter.controllers')
 
           if (item.TITRPROG == "Manifestation de _artiste a preciser ..."){
               if(item.NOM=="Salle non referencee" || item.NOM==""||item.NOM==" . . ."){
-                 item.TITRPROG = "Manifestation à "+item.VILLE;
+                 item.TITRPROG = "Manifestation @ "+item.VILLE;
 
                  item.NOM="";
               }
               else{
-                  item.TITRPROG = item.NOM;
+                  item.TITRPROG = "Manifestation @ "+item.NOM;
 
                   item.NOM="";
               }
