@@ -30,6 +30,7 @@
   </div>
 
   <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
+  <p ng-show="!isSong && !charging" style="padding-left: 40%; float: center; padding-top:50px;" class="lighter">Aucun résultat</p>
 
     <ion-list ng-show="isSong">
       <ion-item ng-repeat="song in answer | limitTo:numLimit">
