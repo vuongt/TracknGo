@@ -7,8 +7,8 @@
 angular.module('starter.controllers', []);
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
-  .constant('AUTH_EVENTS', {
-    notAuthenticated: 'auth-not-authenticated'
+.constant('AUTH_EVENTS', {
+  notAuthenticated: 'auth-not-authenticated'
   })
 
   .constant('API_ENDPOINT', {
