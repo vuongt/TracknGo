@@ -1,22 +1,25 @@
 <ion-view view-title="Dashboard" xmlns="http://www.w3.org/1999/html">
   <ion-content class="">
-    <div id="map" data-tap-disabled="true"></div>
-
-    <ion-spinner ng-show="!isConcertHome && charging" style="padding-left: 50%; float: center;" icon="spiral"></ion-spinner>
-    <p ng-show="charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Qu'allez-vous écouter aujourd'hui ?</p>
+    <div class="map-container">
+      <div id="map" data-tap-disabled="true"></div>
+    </div>
+    <ion-spinner ng-show="!isConcertHome && charging" style="padding-left: 50%; float: center;"
+                 icon="spiral"></ion-spinner>
+    <p ng-show="charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Qu'allez-vous
+      écouter aujourd'hui ?</p>
 
 
     <div style="color:grey;" class='comment' ng-show="isConcertHome">
-       <p> {{concerts.length}} concerts autour de vous {{timeCriteria}}</p>
+      <p> {{concerts.length}} concerts autour de vous {{timeCriteria}}</p>
       <!-- <i class="ion-ios-search-strong icon-right" ui-sref="tab.searchConcert" style="float: right; font-size: 130%"></i>
      <!-- <i class="ion-ios-search-strong icon-right" ng-click="openModal()" style="float: right; font-size: 130%"></i> -->
     </div>
     <ion-item ng-repeat="item in concerts | limitTo:numLimit"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome">
-      <h2 class = "white">{{item.TITRPROG}}</h2>
+      <h2 class="white">{{item.TITRPROG}}</h2>
       <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
-        <span class = "right">{{item.NOM}}</span> <span class = "right"> - {{item.VILLE}}</span>
-       <span> {{item.ADR}}</span></p>
+        <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}}</span>
+        <span> {{item.ADR}}</span></p>
 
 
       <div>
@@ -36,9 +39,12 @@
       </div>
     </ion-item>
 
-    <button style="border:none;" ng-show="isPlus" class="button button-block button-light lighter" ng-click="printMore()">Afficher plus de résultats... </button>
+    <button style="border:none;" ng-show="isPlus" class="button button-block button-light lighter"
+            ng-click="printMore()">Afficher plus de résultats...
+    </button>
 
-      <p ng-show="!charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Bienvenue sur Track&Go</p>
+    <p ng-show="!charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Bienvenue sur
+      Track&Go</p>
 
   </ion-content>
 </ion-view>
