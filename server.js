@@ -787,7 +787,14 @@ app.get('/program', function (req, res) {
             var oeuvre = {};
             oeuvre.title = list[i].TITR;
             var iswcEliza = list[i].ISWC;
-            oeuvre.iswc = iswcEliza.substring(0, 1) + "-" + iswcEliza.substring(1, 4) + "." + iswcEliza.substring(4, 7) + "." + iswcEliza.substring(7, 10) + "." + iswcEliza.substring(10);
+            if (iswcEliza.charAt(0) == "T" && iswcEliza.length == 11){
+              oeuvre.iswc = iswcEliza.substring(0, 1) + "-" + iswcEliza.substring(1, 4) + "." + iswcEliza.substring(4, 7) + "." + iswcEliza.substring(7, 10) + "." + iswcEliza.substring(10);
+            } else if (iswcEliza.length == 10){
+              oeuvre.iswc = "T-" + iswcEliza.substring(0, 3) + "." + iswcEliza.substring(3, 6) + "." + iswcEliza.substring(6, 9) + "." + iswcEliza.substring(9);
+            }
+            else {
+              oeuvre.iswc="";
+            }
             program.setList.push(oeuvre);
           }
         }
