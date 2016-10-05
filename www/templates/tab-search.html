@@ -32,13 +32,14 @@
   <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
   <p ng-show="!isSong && !charging" style="padding-left: 40%; float: center; padding-top:50px;" class="lighter">Aucun résultat</p>
 
-  <div  ng-show="!charging && !isSong" class="lighter" style="padding-top:50%;padding-left:25%;">
+  <div  ng-show="!charging && !isSearch" class="lighter" style="text-align: center;padding-top:50%;">
 
   Retrouvez vos morceaux favoris </br>
   Explorez les concerts où ils annoncés
-
+    </br>
   </div>
-  <i ng-show="!charging && !isSong" class="ion-search" style="color:grey;font-size:40px;padding-left:50%;"> <i>
+  </br>
+  <i ng-show="!charging && !isSearch" class="ion-search" style="text-align: center;color:grey;font-size:40px;padding-left:50%;"> <i>
 
 
   <ion-list ng-show="isSong">
