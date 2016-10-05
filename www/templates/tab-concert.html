@@ -65,7 +65,7 @@
       </form>
     </div>
     <ion-list ng-repeat="comment in comments">
-      <div class="comment"><span class="iconeperso">{{comment.sender.charAt(0).toUpperCase()}}</span> &nbsp <strong>{{comment.sender}} &nbsp </strong> <span class="lighter">{{comment.date|date:'medium'}}</span>
+      <div class="comment"><span class="iconeperso">{{comment.sender.charAt(0).toUpperCase()}}</span> &nbsp <strong>{{comment.sender}} &nbsp </strong> <span class="lighter">{{comment.date|date:'dd/MM/yyyy'}}</span>
         </br> </br>
         <p> {{comment.content}} </p>
       </div>
