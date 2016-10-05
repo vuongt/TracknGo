@@ -8,7 +8,7 @@ angular.module('starter.controllers').controller('TabCtrl', function ($scope,$io
 
   $scope.goHome = function () {
     $ionicHistory.clearHistory();
-    $state.go("tab.home");
+    $state.go("tab.home", {lat : 0, lng: 0});
   };
 
   $scope.goConcert = function () {
