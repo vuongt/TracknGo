@@ -38,6 +38,16 @@ angular.module('starter.controllers')
       $scope.timeCriteria = "du " + $stateParams.start.slice(0,15) + " au " + $stateParams.end.slice(0,15) + " dans un rayon de "+$scope.radius +" km";
     }
 
+  attentionAuTemps = setTimeout(function(){
+
+  $scope.charging=false;
+  $scope.isConcertHome=false;
+$scope.isPlus=false;
+
+  },1000)
+
+
+
   $http({
   method: 'GET',
   url: API_ENDPOINT.url + '/search/concerts?lng='+$scope.lng+'&lat='+$scope.lat+'&radius='+$scope.radius+'&start='+$scope.start+'&end='+$scope.end,
@@ -46,7 +56,7 @@ angular.module('starter.controllers')
   }
   }).then(function successCallback(response) {
 
-
+      clearTimeout(attentionAuTemps);
       $scope.charging = false;
       $scope.isPlus= false;
       $scope.answer = response.data;
