@@ -63,13 +63,15 @@
 
 .concertbackground {
   background-image: url('../img/concerta.jpg');
-  height: 60%;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   padding-bottom: 10px;
   padding-left: 10px;
 }
+
+
+
 
 .concertbackground p {
   color: white;
