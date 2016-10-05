@@ -1,23 +1,16 @@
 <ion-content  cache-view="false">
     <form>
-      <div>
-        <h2>Recherche</h2>
-      </div>
-
+      <div style="padding-top:0px;">
       <div class="quick-search-container">
-        <input name="search" id="search" type="text" placeholder="Rechercher un lieu..." class="quicksearch-bar" ng-model = "locationString">
+        <input name="search" type="text" placeholder="Rechercher un lieu..." class="quicksearch-bar" ng-model = "locationString">
         <i class="ion-ios-search-strong"></i>
-
-      </div style:"padding-top:100px;">
-      <div class="quick-search-container">
-        <input style="width:90%;" name="search" id="search" type="text" placeholder="Rayon de recherche (km)" class="quicksearch-bar" ng-model = "radius">
-
-
       </div>
-
-
-
-
+      </div>
+      <div style="padding-top:0px;">
+      <div class="quick-search-container">
+        <input style="width:90%;" name="search" type="text" placeholder="Rayon de recherche (km)" class="quicksearch-bar" ng-model = "radius">
+      </div>
+      </div>
       <div class ="form-container">
 
         <ul class="list" style="padding-right:10%;">
@@ -32,11 +25,6 @@
             </label>
           </li>
         </ul>
-
-
-
-
-
                 <div>
                   <label style="border: none;" class="item item-input">
                     <span class="input-label">Du</span>
@@ -62,9 +50,7 @@
               </div>
                 </br></br>
                 <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
-
               </div>
-
     </form>
 
 </ion-content>
