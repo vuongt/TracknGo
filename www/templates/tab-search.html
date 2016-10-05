@@ -9,18 +9,18 @@
               <input  style="width:90%;" class="item item-input" type="text" placeholder="Quel morceau recherchez-vous?" ng-model="search">
 
         </div>
-        <div class="large-select">
+        <div style="width:80%;" class="large-select">
           <label class=" col item-select label-search">
-            <select ng-model="filter" class="input-search">
+            <select ng-model="filter"  class="input-search">
               <option value="all">tout</option>
-              <option value="parties">Auteurs/Compositeurs</option>
+              <option value="parties">Auteurs</option>
               <option value="titles,subtitles">Chansons</option>
               <option value="performers">Interprètes</option>
             </select>
           </label>
         </div>
         <div class="button-search-container">
-          <button ng-click="submitSearch(search,filter, api)" class="button button-stable">Track</button>
+          <button  style="width:20%;" ng-click="submitSearch(search,filter, api)"  class="button button-stable">Track</button>
 
         </div>
       </div>
