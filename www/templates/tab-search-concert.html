@@ -1,4 +1,4 @@
-<ion-content  cache-view="false">
+<ion-scroll  cache-view="false">
     <form>
       <div>
         <h2>Recherche</h2>
@@ -55,16 +55,19 @@
               <div class="quicksearch">
               <div >
               <div>
-                <button class="button-container button button-validate" ng-click="search(locationString,geolocation,radius,start,end)">
+                <button ng-show="!charging" style="font-color:white;background-color:black;"class="button-container button button-validate" ng-click="search(locationString,geolocation,radius,start,end)">
                   Go !
                 </button>
+
               </div>
+
               </div>
                 </br></br>
                 <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
+
 
               </div>
 
     </form>
 
-</ion-content>
+</ion-scroll>
