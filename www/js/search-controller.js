@@ -69,15 +69,8 @@ angular.module('starter.controllers')
         $scope.answer = response.data.results;
         $scope.error = response.data.error;
         $scope.numLimit = 5;
-        if ($scope.answer.length != 0) {
-          $scope.isSong = true;
-          if ($scope.numLimit <= len) {
-            $scope.isPlus = true;
-          }
-        } else {
-          $scope.isSong = false;
-          $scope.isPlus = false;
-        }
+        $scope.isSong = false;
+        $scope.isPlus = false;
 
         if (response.data.error == "") {
           console.log($scope.answer);
@@ -89,7 +82,12 @@ angular.module('starter.controllers')
               $scope.answer[i].isInfo = true;
             }
           }
-
+          if ($scope.answer.length != 0) {
+            $scope.isSong = true;
+            if ($scope.numLimit <= len) {
+              $scope.isPlus = true;
+            }
+          }
           if ($scope.answer.length < 100) {
             $scope.maxResults = $scope.answer.length;
           }
