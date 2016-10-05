@@ -166,6 +166,11 @@ $scope.isPlus=false;
 
             google.maps.event.addListenerOnce($scope.map, 'idle', function () {
 
+
+              google.maps.event.trigger($scope.map, 'resize');
+
+
+
               $scope.concerts.forEach(function (item, index) {
                 var marker = new google.maps.Marker({
                   map: $scope.map,
