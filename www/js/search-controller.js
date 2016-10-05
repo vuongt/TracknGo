@@ -82,9 +82,10 @@ angular.module('starter.controllers')
               $scope.answer[i].isInfo = true;
             }
           }
+
           if ($scope.answer.length != 0) {
             $scope.isSong = true;
-            if ($scope.numLimit <= len) {
+            if ($scope.numLimit <= $scope.answer.length) {
               $scope.isPlus = true;
             }
           }
