@@ -4,7 +4,7 @@ angular.module('starter.controllers')
   .controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", "$state", function ($rootScope, $scope, $http, AuthService, $stateParams, $ionicPopup, $state) {
 
 
-    $scope.isSong = false;
+    $scope.isSong = true;
     $scope.isPlus = false;
     $scope.numLimit = 5;
     $scope.filter = "all";
