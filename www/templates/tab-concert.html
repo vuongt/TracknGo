@@ -38,14 +38,17 @@
     <ion-list ng-repeat="object in setList" id="page-list2">
       <ion-item id="page-list-item4">
         <i class="ion-ios-star star" ng-click= "delFavorites(object.iswc, object.title)"
-           ng-show="isLiked(object.iswc)"></i>
+           ng-show="isLiked(object.iswc) && object.isInfo"></i>
 
         <i ng-click= "addFavorites(object.iswc, object.title)"
-           class="ion-ios-star-outline star" ng-show="!isLiked(object.iswc)"></i>
+           class="ion-ios-star-outline star" ng-show="!isLiked(object.iswc) && object.isInfo"></i>
 
         <i id="info" class="info ion-ios-information-outline"  ng-show="object.isInfo"></i>
 
         <div  id="link" class="elipse" ui-sref= "tab.musique({iswc: object.iswc, title:object.title})" ng-if="object.isInfo">
+          {{object.title}}
+        </div>
+        <div class="elipse" ng-if="!object.isInfo">
           {{object.title}}
 
         </div>
