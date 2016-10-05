@@ -7,7 +7,7 @@ angular.module('starter.controllers')
     $scope.isSong = true;
     $scope.isSearch=false;
     $scope.isPlus = false;
-    $scope.numLimit = 5;
+    $scope.numLimit = 100;
     $scope.filter = "all";
     $scope.nbrPage = 1;
     $scope.charging = false;
@@ -68,7 +68,7 @@ angular.module('starter.controllers')
         $scope.isSearch=true;
         $scope.answer = response.data.results;
         $scope.error = response.data.error;
-        $scope.numLimit = 5;
+        $scope.numLimit = 100;
         $scope.isSong = false;
         $scope.isPlus = false;
 

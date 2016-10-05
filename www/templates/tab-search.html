@@ -8,8 +8,8 @@
         </div>
         <div class="large-select">
           <label class=" col item-select label-search">
-            <select ng-model="filter" class="input-search">
-              <option value="all">tout</option>
+            <select ng-model="filter" ng-init= "all" class="input-search">
+              <option value="all">Tout</option>
               <option value="parties">Auteurs/Compositeurs</option>
               <option value="titles,subtitles">Chansons</option>
               <option value="performers">Interprètes</option>
@@ -38,7 +38,7 @@
 
 
   <ion-list ng-show="isSong">
-      <ion-item ng-repeat="song in answer | limitTo:numLimit">
+      <ion-item ng-repeat="song in answer">
 
       <i class="ion-ios-star star" ng-click="delFavorites(song.iswc, song.title)"
          ng-show="isLiked(song.iswc) && song.isInfo"></i>
