@@ -44,7 +44,7 @@ angular.module('starter.controllers')
   $scope.isConcertHome=false;
 $scope.isPlus=false;
 
-  },1000)
+  },15000)
 
 
 
