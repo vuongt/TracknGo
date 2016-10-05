@@ -23,6 +23,8 @@ angular.module('starter.controllers')
       }
     };
     var getLocation = function(locationString,geolocation){
+
+
       if (geolocation){
         var options = {timeout: 10000, enableHighAccuracy: true};
         $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
@@ -56,42 +58,63 @@ angular.module('starter.controllers')
         $scope.radius = "";
       }
     };
+
+
     $scope.search = function(locationString,geolocation,radius,start,end){
-      if (geolocation){
-      $scope.charging=true;
-        var options = {timeout: 10000, enableHighAccuracy: true};
-        $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-          //$scope.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          $scope.lat= position.coords.latitude;
-          $scope.lng= position.coords.longitude;
-          console.log("Searching for your location");
-          console.log(position.coords.latitude, position.coords.longitude);
-          getRadius(radius);
-          //Get and verify date
-          getDate(start,end);
-          //passe parameter to home page
-          $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end});
-        }, function(err) {
-          $ionicLoading.hide();
-          console.log(err);
-        });
-      } else {
-        $scope.location="";
-        geocoder.geocode( { 'address' : locationString}, function( results, status ) {
-          if( status == google.maps.GeocoderStatus.OK ) {
-            //$scope.location= (results[0].geometry.location.lat(), results[0].geometry.location.lng());
-            $scope.lng=results[0].geometry.location.lng();
-            $scope.lat=results[0].geometry.location.lat();
-            console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+      if (start && end && start <= end){
+        $scope.start = start;
+        $scope.end = end;
+        if (geolocation && locationString) {
+          //Show an alert that user has to choose a date
+          var alert1 = $ionicPopup.alert({
+            title: "Attention !",
+            template: "L'option géolocalisation est activée!"
+          });
+          alertPopup.then(function (res) {
+            console.log("Geolocalisation et le lieu défini à la fois ");
+          });
+        }
+        if (geolocation){
+          $scope.charging=true;
+          var options = {timeout: 10000, enableHighAccuracy: true};
+          $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
+            //$scope.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            $scope.lat= position.coords.latitude;
+            $scope.lng= position.coords.longitude;
+            console.log("Searching for your location");
+            console.log(position.coords.latitude, position.coords.longitude);
             getRadius(radius);
-            //Get and verify date
-            getDate(start,end);
             //passe parameter to home page
             $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end});
-          } else {
-            alert( 'Geocode was not successful for the following reason: ' + status );
-          }
-        } );
+          }, function(err) {
+            $ionicLoading.hide();
+            console.log(err);
+          });
+        } else {
+          $scope.location="";
+          geocoder.geocode( { 'address' : locationString}, function( results, status ) {
+            if( status == google.maps.GeocoderStatus.OK ) {
+              //$scope.location= (results[0].geometry.location.lat(), results[0].geometry.location.lng());
+              $scope.lng=results[0].geometry.location.lng();
+              $scope.lat=results[0].geometry.location.lat();
+              console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+              getRadius(radius);
+              //passe parameter to home page
+              $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end});
+            } else {
+              alert( 'Geocode was not successful for the following reason: ' + status );
+            }
+          } );
+        }
+      } else {
+        //Show an alert that user has to choose a date
+        var alertPopup = $ionicPopup.alert({
+          title: "Oups !",
+          template: "Choissiez une date de début et une date de fin valide!"
+        });
+        alertPopup.then(function (res) {
+          console.log("Date entrée non valide");
+        });
       }
     };
   });

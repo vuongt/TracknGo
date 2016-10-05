@@ -47,7 +47,7 @@ angular.module('starter.controllers')
       $scope.timeCriteria = "du " + $scope.start.toLocaleDateString() + " au " + $scope.end.toLocaleDateString() + " dans un rayon de "+$scope.radius +" km";
     }
 
-  attentionAuTemps = setTimeout(function(){
+  var attentionAuTemps = setTimeout(function(){
 
   $scope.charging=false;
   $scope.isConcertHome=false;
