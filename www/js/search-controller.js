@@ -5,6 +5,7 @@ angular.module('starter.controllers')
 
 
     $scope.isSong = true;
+    $scope.isSearch=false;
     $scope.isPlus = false;
     $scope.numLimit = 5;
     $scope.filter = "all";
@@ -64,6 +65,7 @@ angular.module('starter.controllers')
         }
       }).then(function successCallback(response) {
         $scope.charging = false;
+        $scope.isSearch=true;
         $scope.answer = response.data.results;
         $scope.error = response.data.error;
         $scope.isSong = false;
