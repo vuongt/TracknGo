@@ -68,10 +68,16 @@ angular.module('starter.controllers')
         $scope.isSearch=true;
         $scope.answer = response.data.results;
         $scope.error = response.data.error;
-        $scope.isSong = false;
-        $scope.isPlus = false;
         $scope.numLimit = 5;
-
+        if ($scope.answer.length != 0) {
+          $scope.isSong = true;
+          if ($scope.numLimit <= len) {
+            $scope.isPlus = true;
+          }
+        } else {
+          $scope.isSong = false;
+          $scope.isPlus = false;
+        }
 
         if (response.data.error == "") {
           console.log($scope.answer);
@@ -79,16 +85,8 @@ angular.module('starter.controllers')
             var temp = $scope.answer[i].title.trim();
             $scope.answer[i].title = temp.charAt(0).toUpperCase() + temp.substring(1).toLowerCase();
             $scope.answer[i].isInfo = false;
-
             if ($scope.answer[i].iswc.length != 0) {
               $scope.answer[i].isInfo = true;
-            }
-            if ($scope.answer.length != 0) {
-
-              $scope.isSong = true;
-              if ($scope.numLimit <= len) {
-                $scope.isPlus = true;
-              }
             }
           }
 

@@ -22,12 +22,12 @@
         <p>{{item.location}}</p>
         <div>
           <button id="page-button1" class="button button-planning" ng-show = "!item.id_bit" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title ,date:item.prog_date,location:item.location})">
-            Lire plus
+            Programme
           </button>
           <button id="page-button2" class="button button-planning"
                   ng-click="removePlanning(item.cdeprog, item.id_bit)"
                   style="margin-left: 5%">
-            Retirer de mon planning
+            Retirer du planning
           </button>
         </div>
       </ion-item>

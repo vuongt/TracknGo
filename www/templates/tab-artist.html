@@ -57,10 +57,10 @@
         <p>{{item.venue}}</p>
         <div>
           <button class="button button-planning" ng-click="addPlanning(item.datetime.yyyymmdd(), item.venue, item.title, null, item.id_bit)" ng-show="!isInPlanning(null,item.id_bit)" style="margin-left: 5%">
-            Ajouter à mon planning
+            Ajouter au planning
           </button>
           <button class="button button-planning" ng-click="removePlanning(null, item.id_bit)" ng-show="isInPlanning(null,item.id_bit)" style="margin-left: 5%">
-            Retirer de mon planning
+            Retirer du planning
           </button>
         </div>
       </ion-item>

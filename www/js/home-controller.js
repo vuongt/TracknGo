@@ -33,9 +33,9 @@ angular.module('starter.controllers')
 
     if($stateParams.radius && $stateParams.radius!=="") {$scope.radius=$stateParams.radius;}
     if($stateParams.start && $stateParams.start!=="" && $stateParams.end && $stateParams.end!=="") {
-      $scope.start=$stateParams.start;
-      $scope.end=$stateParams.end;
-      $scope.timeCriteria = "du " + $stateParams.start.slice(0,15) + " au " + $stateParams.end.slice(0,15) + " dans un rayon de "+$scope.radius +" km";
+      $scope.start=new Date($stateParams.start);
+      $scope.end= new Date($stateParams.end);
+      $scope.timeCriteria = "du " + $scope.start.toLocaleDateString() + " au " + $scope.end.toLocaleDateString() + " dans un rayon de "+$scope.radius +" km";
     }
 
   attentionAuTemps = setTimeout(function(){

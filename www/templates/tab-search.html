@@ -2,18 +2,15 @@
 
   <div class="row">
     <div class="col item">
-
       <div class="col search-container">
         <div class="col div-search">
-
               <input  style="width:90%;" class="item item-input" type="text" placeholder="Quel morceau recherchez-vous?" ng-model="search">
-
         </div>
-        <div style="width:80%;" class="large-select">
+        <div class="large-select">
           <label class=" col item-select label-search">
-            <select ng-model="filter"  class="input-search">
+            <select ng-model="filter" class="input-search">
               <option value="all">tout</option>
-              <option value="parties">Auteurs</option>
+              <option value="parties">Auteurs/Compositeurs</option>
               <option value="titles,subtitles">Chansons</option>
               <option value="performers">Interprètes</option>
             </select>
@@ -24,9 +21,7 @@
 
         </div>
       </div>
-
     </div>
-
   </div>
 
   <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
@@ -39,12 +34,11 @@
     </br>
   </div>
   </br>
-  <i ng-show="!charging && !isSearch" class="ion-search" style="text-align: center;color:grey;font-size:40px;padding-left:50%;"> <i>
+  <i ng-show="!charging && !isSearch" class="ion-search" style="text-align: center;color:grey;font-size:40px;padding-left:50%;"> </i>
 
 
   <ion-list ng-show="isSong">
       <ion-item ng-repeat="song in answer | limitTo:numLimit">
-
 
       <i class="ion-ios-star star" ng-click="delFavorites(song.iswc, song.title)"
          ng-show="isLiked(song.iswc) && song.isInfo"></i>
@@ -56,40 +50,15 @@
 
       <div class="elipse" ui-sref="tab.musique({iswc: song.iswc, title:song.title})" ng-if="song.isInfo">
         {{song.title}}
-
       </div>
-
       <div class="elipse" ng-if="!song.isInfo">
         {{song.title}}
-
       </div>
-
     </ion-item>
   </ion-list>
-
 
   <button style="border:none;" ng-show="isPlus" class="button button-block button-light lighter" ng-click="printMore()">
     Afficher plus de résultats...
   </button>
-
-
-  <ion-list ng-show="isConcert">
-    <ion-item class="item-divider" id="page-list-item-divider1">Concerts</ion-item>
-    <ion-item ng-repeat="item in concerts"
-              item="item"
-              ng-click="item.show = !item.show" class="item-remove-animate"
-              ng-class="{'concertbackground' : item.show}">
-      <p>
-      <h3>{{ item.titre}}</h3><span class="right" ng-show="item.show">     {{item.date}}</span></p>
-      <p ng-show="item.show">{{item.adresse}}</p>
-      <div>
-        <button id="page-button1" class="button button-planning" ng-show="item.show" ui-sref="tab.concertSearch">
-          J'y vais !
-        </button>
-      </div>
-    </ion-item>
-  </ion-list>
-
-
 </ion-content>
 
