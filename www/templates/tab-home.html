@@ -20,7 +20,7 @@
 
 
       <div>
-        <button style="font-size:90%;" id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,date:item.DATDBTDIF,location:item.NOM+item.VILLE})">
+        <button ng-show="item.haveProgram" style="font-size:90%;" id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,date:item.DATDBTDIF,location:item.NOM+item.VILLE})">
           Programme
         </button>
         <button id="page-button2" class="button button-planning"

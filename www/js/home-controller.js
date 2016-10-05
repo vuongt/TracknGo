@@ -67,8 +67,10 @@ $scope.isPlus=false;
           $scope.concerts = $scope.answer.concerts;
         } else $scope.concerts = $scope.answer.restrictedConcerts;
         console.log($scope.concerts);
+
         if ($scope.concerts.length != 0) {
           $scope.isConcertHome = true;
+
           if ($scope.numLimit <= $scope.concerts.length) {
                           $scope.isPlus = true;
                         }
@@ -77,6 +79,9 @@ $scope.isPlus=false;
           $scope.charging=false;
         }
         $scope.concerts.forEach(function (item, index) {
+
+        if (item.haveProgram=="NO"){item.haveProgram=false};
+        if (item.haveProgram=="YES"){item.haveProgram=true};
 
        item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
        item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
