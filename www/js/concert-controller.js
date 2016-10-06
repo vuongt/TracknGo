@@ -1,7 +1,7 @@
 angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams,$ionicPopup,API_ENDPOINT) {
 
   $scope.cdeprog= $stateParams.cdeprog;
-  $scope.date= $stateParams.date;
+  $scope.date= new Date($stateParams.date);
   $scope.title= $stateParams.title;
   $scope.location= $stateParams.location;
   console.log($scope.title);

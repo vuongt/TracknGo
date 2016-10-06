@@ -174,14 +174,50 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
 
 
   };
-
+  var foo = AuthService.getPlanning(); //update planning for one fisrt time
   $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
+    AuthService.addPlanning(date, location, title, cdeprog, id_bit, verifyAction);
+  };
+  $scope.removePlanning = function (cdeprog, id_bit) {
+    console.log("removing concert from planning with id" + id_bit);
+    AuthService.delPlanning(cdeprog, id_bit, verifyAction);
+  };
+  $scope.isInPlanning = function (cdeprog, id_bit) {
+    return AuthService.isInPlanning(cdeprog, id_bit);
+  };
+  function verifyAction(authorized, actionSucceed) {
+    if (!authorized) {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Oups !',
+        template: 'Please sign in to do this action',
+        okText: 'Sign in'
+      });
+
+      confirmPopup.then(function (res) {
+        if (res) {
+          $state.go('tab.profil');
+        } else {
+          console.log('Action annulé');
+        }
+      });
+    } else if (!actionSucceed) {
+      var alertPopup = $ionicPopup.alert({
+        title: "Oups !",
+        template: "There is a problem while connecting to server. Please try again later"
+      });
+      alertPopup.then(function (res) {
+        console.log($scope.error);
+      });
+    } else {
+      $scope.planning = AuthService.getPlanning(); // We don't use $scope.planning, but this action refresh the userPlanning in AuthService
+    }
+  }
+
+  /*$scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
     console.log("adding concert with location:" + location);
 
     AuthService.addPlanning(date, location, title, cdeprog, id_bit, function (result) {
       if (!result.auth) {
-
-
         var confirmPopup = $ionicPopup.confirm({
           title: 'Oups !',
           template: 'Please sign in to do this action',
@@ -204,9 +240,8 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
   };
   $scope.removePlanning = function ( cdeprog, id_bit) {
     console.log("removing concert from planning with id" + id_bit);
-
     AuthService.delPlanning(cdeprog, id_bit);
-  };
+  };*/
 
 
 });

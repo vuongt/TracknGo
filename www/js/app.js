@@ -14,7 +14,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   .constant('API_ENDPOINT', {
     url: 'http://149.202.167.34:8080'
   })
-
+  .constant('HEADER_ORIGIN', {
+    url: 'http//dty.sacem.fr'
+  })
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -179,7 +181,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         views: {
           'tab-profil': {
             templateUrl: 'templates/tab-planning.html',
-            controller: 'PlanningCtrl'
+            controller: 'PlanningCtrl',
+            cache :null
           }
         }
       });

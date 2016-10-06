@@ -8,14 +8,14 @@
       <div class="rightheader" style="color: #FFFFFF;">
 
         <h1>{{title}}</h1>
-        <p class = "left"> <strong> {{date.slice(0,15)}} </strong>  </p>
+        <p class = "left"> <strong> {{date.toLocaleDateString()}} </strong>  </p>
         <br><br>
         <p class = "left"> <span class="ion-location"> </span> &nbsp <strong> {{location}} </strong>  </p>
 
       </div>
 
       <button id="page-button2" class="button button-planning"
-              ng-click="addPlanning(date.yyyymmdd(), location, title, cdeprog, null, item)"
+              ng-click="addPlanning(date.toISOString(), location, title, cdeprog, null, item)"
               ng-show="!isInPlanning(cdeprog,null)" style="margin-left: 5%">
         Ajouter au planning
       </button>

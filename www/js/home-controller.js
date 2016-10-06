@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT, $stateParams, $ionicPopup) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT,HEADER_ORIGIN, $stateParams, $ionicPopup) {
 
 
     //Initialisation des variables d'affichage
@@ -73,7 +73,7 @@ console.log($scope.radius);
         method: 'GET',
         url: API_ENDPOINT.url + '/search/concerts?lng=' + $scope.lng + '&lat=' + $scope.lat + '&radius=' + $scope.radius + '&start=' + $scope.start + '&end=' + $scope.end,
         header: {
-          Origin: 'http://localhost:8100'
+          Origin: 'HEADER_ORIGIN.url'
         }
       }).then(function successCallback(response) {
 

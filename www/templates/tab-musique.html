@@ -46,12 +46,12 @@
 
 
     </ion-list>
-    <ion-spinner style="padding-left: 50%; float: center;" ng-show="chargingbeg" icon="spiral"></ion-spinner>
+    <ion-spinner style="padding-left: 50%;" ng-show="chargingbeg" icon="spiral"></ion-spinner>
 
     <button ng-show="!isCharged && !charging" class="button button-full button-stable" ng-click="chargeConcerts(iswc)"> <span class="ion-ios-search"></span> &nbsp;&nbsp;Chercher des concerts
       &nbsp;&nbsp;&nbsp;&nbsp;
     </button>
-    <div ng-show="!isCharged && charging"  style="padding-left: 50%; float: center; padding-top:50px;">
+    <div ng-show="!isCharged && charging"  style="padding-left: 50%; padding-top:50px;">
       <ion-spinner icon="spiral"></ion-spinner>
 
     </div>
@@ -72,10 +72,10 @@
           <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title,date:item.date,location:item.location})">
            Programme
           </button>
-          <button  class="button button-planning" ng-click="addPlanning(item.date.yyyymmdd(), item.location, item.title, item.cdeprog, item.id_bit); item.isInPlanning = true" ng-show="!item.isInPlanning" style="margin-left: 5%">
+          <button  class="button button-planning" ng-click="addPlanning(item.date.yyyymmdd(), item.location, item.title, item.cdeprog, item.id_bit)" ng-show="!isInPlanning(item.cdeprog, item.id_bit)" style="margin-left: 5%">
             Ajouter au planning
           </button>
-          <button class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit); item.isInPlanning = false" ng-show="item.isInPlanning" style="margin-left: 5%">
+          <button class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit)" ng-show="isInPlanning(item.cdeprog, item.id_bit)" style="margin-left: 5%">
             Retirer du planning
           </button>
         </div>
@@ -83,7 +83,7 @@
 
     </ion-list>
 
-    <p ng-show="!isConcert && isCharged" style="padding-left: 40%; float: center; padding-top:50px;" class="lighter">Aucun résultat</p>
+    <p ng-show="!isConcert && isCharged" style="padding-left: 40%; padding-top:50px;" class="lighter">Aucun résultat</p>
 
 
 

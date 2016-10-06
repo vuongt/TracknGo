@@ -1,4 +1,4 @@
-<ion-view can-swipe-back="false">
+<ion-view can-swipe-back="false" cache-view="false">
   <ion-content>
     <div class="big-header">
       <div>
@@ -16,7 +16,7 @@
       <ion-item class="item-divider">{{monthNames[month.getMonth()]}}</ion-item>
 
       <ion-item ng-repeat="item in results"
-                class="concertbackground" ng-show="(item.prog_date.getMonth() == month.getMonth()) && (item.prog_date.getFullYear()== month.getFullYear()) &&isInPlanning(item.cdeprog, item.id_bit)">
+                class="concertbackground" ng-show="(item.prog_date.getMonth() == month.getMonth()) && (item.prog_date.getFullYear()== month.getFullYear()) && isInPlanning(item.cdeprog, item.id_bit)">
         <p>
         <h3>{{item.title}}</h3><span class="right">      {{item.prog_date.toLocaleDateString()}}</span></p>
         <p>{{item.location}}</p>
