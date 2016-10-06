@@ -208,6 +208,7 @@ $scope.isPlus=false;
     }, function errorCallback(response) {
     });
 
+
 //===============PLANNING MANAGER===================
     var foo = AuthService.getPlanning(); //update planning for one fisrt time
     $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
