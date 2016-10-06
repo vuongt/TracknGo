@@ -2,13 +2,13 @@
     <form>
       <div style="padding-top:20px;">
       <div class="quick-search-container">
-        <input name="search" type="text" placeholder="Rechercher un lieu..." class="quicksearch-bar" ng-model = "locationString">
+        <input name="search" type="text" placeholder="Rechercher un lieu..." class="quicksearch-bar" ng-model = "locationString" ng-focus="geolocationOff(geolocation)">
         <i class="ion-ios-search-strong"></i>
       </div>
       </div>
       <div style="padding-top:0px;">
       <div class="quick-search-container">
-        <input style="width:90%;" name="search" type="text" placeholder="Rayon de recherche (km), par défaut 50" class="quicksearch-bar" ng-model = "radius">
+        <input style="width:100%;" name="search" type="text" placeholder="Rayon de recherche (km), par défaut 50" class="quicksearch-bar" ng-model = "radius">
       </div>
       </div>
       <div class ="form-container">
