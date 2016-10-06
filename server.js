@@ -454,10 +454,11 @@ app.get('/search/concerts', function (req, res) {
                 var lngUser = parseFloat(lng);
                 var latUser = parseFloat(lat);
                 var limit = parseFloat(radius);
-                console.log(getDistance(latUser, lngUser,latEliza,lngEliza));
-                if (getDistance(latUser, lngUser,latEliza,lngEliza) < limit) {
-                  return results.restrictedConcerts.push(c);
+                var distance = getDistance(latUser, lngUser,latEliza,lngEliza);
+                if (distance < limit) {
                   console.log("restricted contains " + results.restrictedConcerts.length);
+                  c.distance = distance;
+                  return results.restrictedConcerts.push(c);
                 } else return 1;
               });
             }

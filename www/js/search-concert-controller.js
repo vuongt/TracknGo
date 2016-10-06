@@ -55,7 +55,7 @@ angular.module('starter.controllers')
       if (radius){
         $scope.radius= radius; //en km
       } else {
-        $scope.radius = "";
+        $scope.radius = "50";
       }
     };
 

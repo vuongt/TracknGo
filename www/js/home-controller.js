@@ -20,15 +20,13 @@ angular.module('starter.controllers')
 
 
 
-
-
 //Chargement des concerts
     $scope.charging = true;
     $scope.chargingMap = true;
     $scope.isConcertHome = false;
     $scope.lat = "";
     $scope.lng = "";
-    $scope.radius = "50";
+    $scope.radius = "30000";
     $scope.start = "";
     $scope.end = "";
     $scope.timeCriteria = "aujourd'hui";
@@ -70,6 +68,7 @@ $scope.isPlus=false;
       $scope.charging = false;
       $scope.isPlus = false;
       $scope.answer = response.data;
+      console.log($scope.answer);
 
 
       if ($scope.answer.error == "") {
@@ -158,7 +157,8 @@ $scope.isPlus=false;
             }
 
 
-            console.log($scope.map.center.lat());
+            console.log("lat" + $scope.map.center.lat());
+            console.log("lng" + $scope.map.center.lng());
             //creation de la fonction isOpen a infowindow
             function isInfoWindowOpen(infoWindow) {
               var map = infoWindow.getMap();

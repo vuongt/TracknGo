@@ -97,7 +97,6 @@ angular.module('starter.controllers')
           //$scope.answer.sort(compare);
         }
 
-
         else {
           //Show an alert of the error
           if (response.data.error == "") {

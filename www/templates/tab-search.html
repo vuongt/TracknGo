@@ -8,9 +8,9 @@
         </div>
         <div class="large-select">
           <label class=" col item-select label-search">
-            <select ng-model="filter" ng-init= "all" class="input-search">
-              <option value="all">Tout</option>
-              <option value="parties">Auteurs</option>
+            <select ng-model="filter" ng-init="all" class="input-search">
+              <option value="all">tout</option>
+              <option value="parties">Auteurs/Compositeurs</option>
               <option value="titles,subtitles">Chansons</option>
               <option value="performers">Interprètes</option>
             </select>
@@ -24,8 +24,8 @@
     </div>
   </div>
 
-  <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
-  <p ng-show="!isSong && !charging" style="padding-left: 40%; float: center; padding-top:50px;" class="lighter">Aucun résultat</p>
+  <ion-spinner style="padding-left: 50%;" ng-show="charging" icon="spiral"></ion-spinner>
+  <p ng-show="!isSong && !charging" style="padding-left: 40%; padding-top:50px;" class="lighter">Aucun résultat</p>
 
   <div  ng-show="!charging && !isSearch" class="lighter" style="text-align: center;padding-top:50%;">
 
