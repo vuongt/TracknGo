@@ -65,17 +65,18 @@
       </ion-item>
       <ion-item ng-repeat="item in concerts"
                 ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'">
-        <h2 class ="white">{{item.title}}</h2>
-        <p><span class="left"><strong>{{item.date.toLocaleDateString()}}</strong></span>
-          <span class = "right">{{item.location}}</span></p>
+        <h2 class ="white">{{item.TITRPROG}}</h2>
+        <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
+          <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}} </span>
+          <span> {{item.ADR}}</span>  </p>
         <div>
-          <button id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.cdeprog, title:item.title,date:item.date,location:item.location})">
+          <button  id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,date:item.DATDBTDIF,location:item.NOM + item.ADR + item.VILLE})">
            Programme
           </button>
-          <button  class="button button-planning" ng-click="addPlanning(item.date.yyyymmdd(), item.location, item.title, item.cdeprog, item.id_bit)" ng-show="!isInPlanning(item.cdeprog, item.id_bit)" style="margin-left: 5%">
+          <button  class="button button-planning" ng-click="addPlanning(item.DATDBDIF.yyyymmdd(), item.NOM + item.ADR + item.VILLE, item.TITRPROG, item.CDEPROG, item.id_bit)" ng-show="!isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%">
             Ajouter au planning
           </button>
-          <button class="button button-planning" ng-click="removePlanning(item.cdeprog, item.id_bit)" ng-show="isInPlanning(item.cdeprog, item.id_bit)" style="margin-left: 5%">
+          <button class="button button-planning" ng-click="removePlanning(item.CDEPROG, item.id_bit)" ng-show="isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%">
             Retirer du planning
           </button>
         </div>
