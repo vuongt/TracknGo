@@ -1,7 +1,7 @@
 module.exports = {
-	"port":"8080",
-	"secret":"FollowZBeat",
-	"mariasql":{
+	port:"8080",
+	secret:"FollowZBeat",
+	mariasql:{
 		"host":"149.202.167.34",
 		"user":"dty",
 		"password":"dty",
@@ -17,7 +17,7 @@ module.exports = {
   eliza:{
 	  uri: "http://149.202.167.34:3000",
   },
-	accessControl:"http://localhost:8100",
+	accessControl:"*",
   token: {
 	  secret: "Track&Go",
     expiration:"24:00:00",
