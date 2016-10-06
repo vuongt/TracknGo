@@ -110,7 +110,7 @@ $scope.charging=false;
       }
 
 
-      $scope.answer.works.sort(compare);
+      //$scope.answer.works.sort(compare);
       $scope.maxResults = $scope.answer.works.length;
 
 

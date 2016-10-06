@@ -93,7 +93,8 @@ angular.module('starter.controllers')
             $scope.maxResults = $scope.answer.length;
           }
 
-          $scope.answer.sort(compare);
+          // Cette commande permet le tri alphabétique de la liste de résultats
+          //$scope.answer.sort(compare);
         }
 
 
