@@ -503,7 +503,15 @@ label.month-select {
 .comment {
   padding: 20px;
 }
+.comment2{
 
+  padding-left:20px;
+   padding-right:20px;
+  padding-top:5px;
+ border-top:1px;
+ border-style:solid;
+ border-color:grey;
+ }
 
 .quicksearch{
   height:300px;

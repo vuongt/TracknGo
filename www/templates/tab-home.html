@@ -18,15 +18,21 @@
 
     </div>
 
+    <div style="color:grey;" class='comment2' ng-show="isConcertHome">
+      <i class="ion-ios-bookmarks-outline icon-right"  style="float: right; font-size: 150%"></i>
+      <p> Avec un programme annoncé </p>
+
+    </div>
 
 
 
-    <ion-item ng-repeat="item in concerts"
+    <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome && item.haveProgram">
-      <h2 class="white">{{item.TITRPROG}}</h2>
+      <h4 class=" white right">{{item.distance}} km</h4> <h2 class="white">{{item.TITRPROG}}</h2>
       <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
-        <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}}</span>
-        <span> {{item.ADR}}</span></p>
+        <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}} </span>
+        <span> {{item.ADR}}</span>  </p>
+
 
 
       <div>
@@ -46,13 +52,19 @@
       </div>
     </ion-item>
 
+    <div style="color:grey;" class='comment2' ng-show="isConcertHome">
+      <i class="ion-music-note"  style="float: right; font-size: 130%"></i>
+      <p> Sans programme annoncé </p>
 
-    <ion-item ng-repeat="item in concerts"
+    </div>
+
+
+    <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome && !item.haveProgram">
-      <h2 class="white">{{item.TITRPROG}}</h2>
+      <h4 class=" white right">{{item.distance}} km</h4>  <h2 class="white">{{item.TITRPROG}}</h2>
       <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
         <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}}</span>
-        <span> {{item.ADR}}</span></p>
+        <span> {{item.ADR}}</span> </p>
 
 
       <div>

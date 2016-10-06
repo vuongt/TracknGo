@@ -20,6 +20,7 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
   };
   $scope.addPlanning = function (date, location, title, cdeprog,idBit) {
     AuthService.addPlanning(date, location, title, cdeprog, idBit, verifyAction);
+    console.log("added to Planning!!");
   };
   $scope.removePlanning = function (cdeprog, idBit) {
     console.log("removing concert from planning");

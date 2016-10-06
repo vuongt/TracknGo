@@ -112,6 +112,7 @@ console.log($scope.radius);
             item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
             item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
             item.VILLE = item.VILLE.charAt(0).toUpperCase() + item.VILLE.substring(1).toLowerCase();
+            item.distance = parseInt(item.distance);
 
             if (item.TITRPROG == "Manifestation de _artiste a preciser ...") {
               if (item.NOM == "Salle non referencee" || item.NOM == "" || item.NOM == " . . .") {
