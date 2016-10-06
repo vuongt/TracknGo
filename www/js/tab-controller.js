@@ -2,17 +2,14 @@ angular.module('starter.controllers').controller('TabCtrl', function ($scope,$io
   console.log("test tab controller");
 
   $scope.goSearch = function () {
-    $ionicHistory.clearHistory();
     $state.go("tab.search");
   };
 
   $scope.goHome = function () {
-    $ionicHistory.clearHistory();
-    $state.go("tab.home", {lat : 0, lng: 0});
+    $ionicHistory.clearCache().then(function(){ $state.go("tab.home", {lat : 0, lng: 0})});
   };
 
   $scope.goConcert = function () {
-    $ionicHistory.clearHistory();
     $state.go("tab.searchConcert");
   };
 

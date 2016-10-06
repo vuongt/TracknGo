@@ -1,4 +1,4 @@
-angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams,$ionicPopup,API_ENDPOINT) {
+angular.module('starter.controllers').controller('ConcertCtrl', function (AuthService,$scope, $ionicModal, $state, $http,$stateParams,$ionicPopup,API_ENDPOINT, $ionicHistory) {
 
   $scope.cdeprog= $stateParams.cdeprog;
   $scope.date= new Date($stateParams.date);
@@ -67,7 +67,7 @@ $http({
 //Revenir en arrière
 
   $scope.myGoBack = function () {
-    window.history.back()
+    $ionicHistory.goBack();
   };
 
   $scope.comments = [];

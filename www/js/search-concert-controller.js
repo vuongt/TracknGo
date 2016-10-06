@@ -1,8 +1,6 @@
-/**
- * Created by vuong on 30/09/2016.
- */
+
 angular.module('starter.controllers')
-  .controller('SearchConcertCtrl',function($rootScope,$scope,$cordovaGeolocation, $ionicPopup,$state){
+  .controller('SearchConcertCtrl',function($rootScope,$scope,$cordovaGeolocation, $ionicPopup,$state, $ionicHistory){
     var geocoder = new google.maps.Geocoder();
      $scope.charging=false;
     var getRadius = function(radius){
@@ -40,7 +38,7 @@ angular.module('starter.controllers')
             console.log(position.coords.latitude, position.coords.longitude);
             getRadius(radius);
             //passe parameter to home page
-            $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end});
+            $ionicHistory.clearCache().then(function(){ $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end}) })
           }, function(err) {
             $ionicLoading.hide();
             console.log(err);
@@ -55,7 +53,7 @@ angular.module('starter.controllers')
               console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
               getRadius(radius);
               //passe parameter to home page
-              $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end});
+              $ionicHistory.clearCache().then(function(){ $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end}) })
             } else {
               alert( 'Geocode was not successful for the following reason: ' + status );
             }

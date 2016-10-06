@@ -145,6 +145,7 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
       console.log(response.data);
       if ($scope.answer.error == "") {
         $scope.isCharged = true;
+        console.log($scope.concerts);
         if ($scope.concerts.length != 0) {
           $scope.isConcert = true;
 
