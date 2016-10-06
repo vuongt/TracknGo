@@ -158,6 +158,11 @@ console.log($scope.radius);
                 item.NOM = "";
               }
             }
+
+             if (item.TITRPROG == "") {
+             item.TITRPROG="Manifestation @ " + item.NOM;
+             }
+
             if (item.ADR == " . . .") {
               item.ADR = "";
 
