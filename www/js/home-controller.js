@@ -49,12 +49,14 @@ angular.module('starter.controllers')
     }
 
     if ($stateParams.programmes && $stateParams.programmes !== "") {
-      $scope.programmes = $stateParams.programmes;
+      $scope.programmes = JSON.parse($stateParams.programmes);
     }
 
     if ($stateParams.interpret && $stateParams.interpret !== "") {
-      $scope.interpret = $stateParams.interpret;
+      $scope.interpret = JSON.parse($stateParams.interpret);
     }
+
+    console.log('programmes sur home : ' + $scope.programmes);
 
     if ($stateParams.start && $stateParams.start !== "" && $stateParams.end && $stateParams.end !== "") {
       $scope.start = new Date($stateParams.start);
