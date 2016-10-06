@@ -29,7 +29,7 @@
 
     <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'"
-              ng-show="isConcertHome && item.haveProgram">
+              ng-show="isConcertHome && item.haveProgram && hasToBeShown(item.hasArtist)">
       <h4 class=" white right">{{item.distance}} km</h4>
       <h2 class="white">{{item.TITRPROG}}</h2>
       <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
@@ -65,7 +65,7 @@
 
       <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
                 ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'"
-                ng-show="isConcertHome && !item.haveProgram">
+                ng-show="isConcertHome && !item.haveProgram && hasToBeShown(item.hasArtist)">
         <h4 class=" white right">{{item.distance}} km</h4>
         <h2 class="white">{{item.TITRPROG}}</h2>
         <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>

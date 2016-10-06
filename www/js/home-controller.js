@@ -18,8 +18,6 @@ angular.module('starter.controllers')
     };
 
 
-
-
 //Chargement des concerts
     $scope.charging = true;
     $scope.chargingMap = true;
@@ -56,13 +54,28 @@ angular.module('starter.controllers')
       $scope.interpret = JSON.parse($stateParams.interpret);
     }
 
-    console.log('programmes sur home : ' + $scope.programmes);
+    console.log($scope.interpret);
+
 
     if ($stateParams.start && $stateParams.start !== "" && $stateParams.end && $stateParams.end !== "") {
       $scope.start = new Date($stateParams.start);
       $scope.end = new Date($stateParams.end);
       $scope.timeCriteria = "du " + $scope.start.toLocaleDateString() + " au " + $scope.end.toLocaleDateString() + " dans un rayon de " + $scope.radius + " km";
     }
+
+    //Fonction pour savoir si un concert doit être affiché par la recherche par interprète. itemProperty === item.hasArtist
+    $scope.hasToBeShown = function(itemProperty) {
+      if ($scope.interpret === true) {
+        if (itemProperty) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    }
+
 
     var attentionAuTemps = setTimeout(function () {
 
@@ -126,13 +139,14 @@ console.log($scope.radius);
 
             };
 
-
+            item.hasArtist = true;
             item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
             item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
             item.VILLE = item.VILLE.charAt(0).toUpperCase() + item.VILLE.substring(1).toLowerCase();
             item.distance = parseInt(item.distance);
 
             if (item.TITRPROG == "Manifestation de _artiste a preciser ...") {
+              item.hasArtist = false;
               if (item.NOM == "Salle non referencee" || item.NOM == "" || item.NOM == " . . .") {
                 item.TITRPROG = "Manifestation @ " + item.VILLE;
 
