@@ -1,19 +1,21 @@
-<ion-scroll  cache-view="false">
-    <form>
-      <div style="padding-top:20px;">
+<ion-scroll cache-view="false">
+  <form>
+    <div style="padding-top:20px;">
       <div class="quick-search-container">
-        <input name="search" type="text" placeholder="Rechercher un lieu..." class="quicksearch-bar" ng-model = "locationString" ng-focus="geolocationOff(geolocation)">
+        <input name="search" type="text" placeholder="Rechercher un lieu..." class="quicksearch-bar"
+               ng-model="locationString" ng-focus="geolocationOff(geolocation)">
         <i class="ion-ios-search-strong"></i>
       </div>
-      </div>
-      <div style="padding-top:0px;">
+    </div>
+    <div style="padding-top:0px;">
       <div class="quick-search-container">
-        <input style="width:100%;" name="search" type="text" placeholder="Rayon (km), par défaut 50" class="quicksearch-bar" ng-model = "radius">
+        <input style="width:100%;" name="search" type="text" placeholder="Rayon (km), par défaut 50"
+               class="quicksearch-bar" ng-model="radius">
       </div>
-      </div>
-      <div class ="form-container">
+    </div>
+    <div class="form-container">
 
-        <ul class="list" style="padding-right:10%;">
+      <ul class="list" style="padding-right:10%;">
 
         <li class="item item-toggle">
           Me géolocaliser
@@ -41,12 +43,15 @@
       </br>
       <div>
         <label class="checkbox">
-          <input type = "checkbox" ng-model="interpret">
-          Interprètes uniquement
-        </label>
-        <label class="checkbox">
-          <input type = "checkbox" ng-model="programmes">
+          <input type="checkbox" ng-model="programmes">
           Programmes uniquement
+        </label>
+      </div>
+      </br>
+      <div>
+        <label class="checkbox">
+          <input type="checkbox" ng-model="interpret">
+          Interprètes uniquement
         </label>
       </div>
     </div>
