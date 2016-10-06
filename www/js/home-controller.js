@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT,HEADER_ORIGIN, $stateParams, $ionicPopup) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT, HEADER_ORIGIN, $stateParams, $ionicPopup) {
 
 
     //Initialisation des variables d'affichage
@@ -23,10 +23,10 @@ angular.module('starter.controllers')
     $scope.chargingMap = true;
     $scope.isConcertHome = false;
     $scope.lat = "";
-    var count =0;
+    var count = 0;
     $scope.lng = "";
     $scope.radius = "30000";
-    $scope.is1prog=false;
+    $scope.is1prog = false;
     $scope.start = "";
     $scope.end = "";
     $scope.timeCriteria = "aujourd'hui";
@@ -64,7 +64,7 @@ angular.module('starter.controllers')
     }
 
     //Fonction pour savoir si un concert doit être affiché par la recherche par interprète. itemProperty === item.hasArtist
-    $scope.hasToBeShown = function(itemProperty) {
+    $scope.hasToBeShown = function (itemProperty) {
       if ($scope.interpret === true) {
         if (itemProperty) {
           return true;
@@ -95,7 +95,7 @@ angular.module('starter.controllers')
         $scope.lng = position.coords.longitude;
       }
 
-console.log($scope.radius);
+      console.log($scope.radius);
       $http({
         method: 'GET',
         url: API_ENDPOINT.url + '/search/concerts?lng=' + $scope.lng + '&lat=' + $scope.lat + '&radius=' + $scope.radius + '&start=' + $scope.start + '&end=' + $scope.end,
@@ -104,11 +104,11 @@ console.log($scope.radius);
         }
       }).then(function successCallback(response) {
 
-      clearTimeout(attentionAuTemps);
-      $scope.charging = false;
-      $scope.isPlus = false;
-      $scope.answer = response.data;
-      console.log($scope.answer);
+        clearTimeout(attentionAuTemps);
+        $scope.charging = false;
+        $scope.isPlus = false;
+        $scope.answer = response.data;
+        console.log($scope.answer);
 
 
         if ($scope.answer.error == "") {
@@ -133,11 +133,13 @@ console.log($scope.radius);
             if (item.haveProgram == "NO") {
               item.haveProgram = false;
               count = count + 1;
-            };
+            }
+            ;
             if (item.haveProgram == "YES") {
               item.haveProgram = true
 
-            };
+            }
+            ;
 
             item.hasArtist = true;
             item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
@@ -159,9 +161,10 @@ console.log($scope.radius);
               }
             }
 
-             if (item.TITRPROG == "") {
-             item.TITRPROG="Manifestation @ " + item.NOM;
-             }
+            if (item.TITRPROG == "") {
+              item.hasArtist = false;
+              item.TITRPROG = "Manifestation @ " + item.NOM;
+            }
 
             if (item.ADR == " . . .") {
               item.ADR = "";
@@ -176,9 +179,9 @@ console.log($scope.radius);
             //item.id_bit is undefined 'cause these concerts come from Eliza
           });
           console.log(count);
-          if (count==$scope.concerts.length){
-            $scope.is1prog=true;
-            }
+          if (count == $scope.concerts.length) {
+            $scope.is1prog = true;
+          }
 
 
           //initialisation google maps
@@ -195,8 +198,6 @@ console.log($scope.radius);
             $scope.map = new google.maps.Map(div, mapOptions);
 
             console.log(div);
-
-
 
 
             $scope.map.setCenter({lat: $scope.lat, lng: $scope.lng});
@@ -218,24 +219,87 @@ console.log($scope.radius);
               $scope.chargingMap = false;
 
               $scope.concerts.forEach(function (item, index) {
-                var marker = new google.maps.Marker({
-                  map: $scope.map,
-                  animation: google.maps.Animation.DROP,
-                  position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
-                });
-                var infoWindow = new google.maps.InfoWindow({
-                  content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
-                });
-                google.maps.event.addListener(marker, 'click', function () {
-                  if (isInfoWindowOpen(infoWindow)) {
-                    infoWindow.close();
-                  }
-                  else {
-                    infoWindow.open($scope.map, marker);
-                  }
+                if ($scope.programmes && $scope.interpret) {
+                  if (item.haveProgram && $scope.hasToBeShown(item.hasArtist)) {
+                    var marker = new google.maps.Marker({
+                      map: $scope.map,
+                      animation: google.maps.Animation.DROP,
+                      position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
+                    });
+                    var infoWindow = new google.maps.InfoWindow({
+                      content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
+                    });
+                    google.maps.event.addListener(marker, 'click', function () {
+                      if (isInfoWindowOpen(infoWindow)) {
+                        infoWindow.close();
+                      }
+                      else {
+                        infoWindow.open($scope.map, marker);
+                      }
 
-                });
+                    });
+                  }
+                } else {
+                  if ($scope.programmes) {
+                    if (item.haveProgram) {
+                      var marker = new google.maps.Marker({
+                        map: $scope.map,
+                        animation: google.maps.Animation.DROP,
+                        position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
+                      });
+                      var infoWindow = new google.maps.InfoWindow({
+                        content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
+                      });
+                      google.maps.event.addListener(marker, 'click', function () {
+                        if (isInfoWindowOpen(infoWindow)) {
+                          infoWindow.close();
+                        }
+                        else {
+                          infoWindow.open($scope.map, marker);
+                        }
+                      });
+                    }
+                  } else {
+                    if ($scope.interpret) {
+                      if ($scope.hasToBeShown(item.hasArtist)) {
+                        var marker = new google.maps.Marker({
+                          map: $scope.map,
+                          animation: google.maps.Animation.DROP,
+                          position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
+                        });
+                        var infoWindow = new google.maps.InfoWindow({
+                          content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
+                        });
+                        google.maps.event.addListener(marker, 'click', function () {
+                          if (isInfoWindowOpen(infoWindow)) {
+                            infoWindow.close();
+                          }
+                          else {
+                            infoWindow.open($scope.map, marker);
+                          }
+                        });
+                      }
+                    } else {
+                      var marker = new google.maps.Marker({
+                        map: $scope.map,
+                        animation: google.maps.Animation.DROP,
+                        position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
+                      });
+                      var infoWindow = new google.maps.InfoWindow({
+                        content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
+                      });
+                      google.maps.event.addListener(marker, 'click', function () {
+                        if (isInfoWindowOpen(infoWindow)) {
+                          infoWindow.close();
+                        }
+                        else {
+                          infoWindow.open($scope.map, marker);
+                        }
 
+                      });
+                    }
+                  }
+                }
               });
 
             }, function (error) {
