@@ -383,6 +383,8 @@ app.get('/search/concerts', function (req, res) {
     var end = new Date(req.query.end);
   } else {
     var today = new Date();
+    start = today;
+    end = today;
   }
   var results = {
     error: "",
@@ -391,95 +393,82 @@ app.get('/search/concerts', function (req, res) {
   };
   console.log(lng);
   console.log(lat);
-  if (today) {
-    optionEliza.uri = config.eliza.uri + "/date/" + today.toISOString();
-    request(optionEliza, function (error, response, body) {
-      if (error) {
-        results.error = "Error when searching in Eliza";
-      } else {
-        results.concerts = JSON.parse(body);
-      }
-      res.send(JSON.stringify(results));
-    });
+  console.log("start day" + start);
+  console.log("end day" + end);
+  /*var dateList = [];
+  var date = start;
+  while (date <= end) {
+    dateList.push(new String(date.toISOString()));
+    date.setDate(date.getDate() + 1);
   }
-  else if (start && end) {
-    console.log("start day" + start);
-    console.log("end day" + end);
-    /*var dateList = [];
-    var date = start;
-    while (date <= end) {
-      dateList.push(new String(date.toISOString()));
-      date.setDate(date.getDate() + 1);
-    }
-    console.log(dateList);
-    var calls = [];
-    dateList.forEach(function (d) {
-      calls.push(function (callback) {
-        optionEliza.uri = config.eliza.uri + "/date/" + d;
-        request(optionEliza, function (error, response, body) {
-          if (error) {
-            results.error = "Error when searching in Eliza";
-            return callback(error);
-          } else {
-            results.concerts.push.apply(results.concerts, JSON.parse(body).slice());
-            console.log("result for: " + d);
-            console.log(results.concerts.length);
-            callback(null, body);
+  console.log(dateList);
+  var calls = [];
+  dateList.forEach(function (d) {
+    calls.push(function (callback) {
+      optionEliza.uri = config.eliza.uri + "/date/" + d;
+      request(optionEliza, function (error, response, body) {
+        if (error) {
+          results.error = "Error when searching in Eliza";
+          return callback(error);
+        } else {
+          results.concerts.push.apply(results.concerts, JSON.parse(body).slice());
+          console.log("result for: " + d);
+          console.log(results.concerts.length);
+          callback(null, body);
+        }
+      });
+    })
+  });
+
+  async.parallel(calls, function (err, result) {
+    //This function is call when all the functions in calls have finished
+    if (err) {
+      return console.log(err);
+    }*/
+  optionEliza.uri = config.eliza.uri + "/dates/deb="+start.toISOString()+"&fin="+end.toISOString();
+  request(optionEliza, function (error, response, body) {
+    if (error) {
+      results.error = "Error when searching in Eliza";
+      res.send(JSON.stringify(results));
+    } else {
+      results.concerts = JSON.parse(body);
+      console.log("got concerts from Eliza. Next : look for position");
+      if (lng !== "" && lat !== "" && radius !== "") {
+        console.log("param query existent");
+        var calls2 = [];
+        results.concerts.forEach(function (c) {
+          if (c.LAT !== "No result found" && c.LNG !== "No result found") {
+            calls2.push(function () {
+              var lngEliza = parseFloat(c.LNG);
+              var latEliza = parseFloat(c.LAT);
+              var lngUser = parseFloat(lng);
+              var latUser = parseFloat(lat);
+              var limit = parseFloat(radius);
+              var distance = getDistance(latUser, lngUser,latEliza,lngEliza);
+              if (distance < limit) {
+                console.log("restricted contains " + results.restrictedConcerts.length);
+                c.distance = distance;
+                return results.restrictedConcerts.push(c);
+              } else return 1;
+            });
           }
         });
-      })
-    });
-
-    async.parallel(calls, function (err, result) {
-      //This function is call when all the functions in calls have finished
-      if (err) {
-        return console.log(err);
-      }*/
-    optionEliza.uri = config.eliza.uri + "/dates/deb="+start.toISOString()+"&fin="+end.toISOString();
-    request(optionEliza, function (error, response, body) {
-      if (error) {
-        results.error = "Error when searching in Eliza";
+        console.log("done calls2. Starting async");
+        async.parallel(calls2, function (err, result) {
+          if (err) {
+            console.log("error");
+            return console.log(err);
+          }
+        });
+        console.log("about to send");
         res.send(JSON.stringify(results));
-      } else {
-        results.concerts = JSON.parse(body);
-        console.log("got concerts from Eliza. Next : look for position");
-        if (lng !== "" && lat !== "" && radius !== "") {
-          console.log("param query existent");
-          var calls2 = [];
-          results.concerts.forEach(function (c) {
-            if (c.LAT !== "No result found" && c.LNG !== "No result found") {
-              calls2.push(function () {
-                var lngEliza = parseFloat(c.LNG);
-                var latEliza = parseFloat(c.LAT);
-                var lngUser = parseFloat(lng);
-                var latUser = parseFloat(lat);
-                var limit = parseFloat(radius);
-                var distance = getDistance(latUser, lngUser,latEliza,lngEliza);
-                if (distance < limit) {
-                  console.log("restricted contains " + results.restrictedConcerts.length);
-                  c.distance = distance;
-                  return results.restrictedConcerts.push(c);
-                } else return 1;
-              });
-            }
-          });
-          console.log("done calls2. Starting async");
-          async.parallel(calls2, function (err, result) {
-            if (err) {
-              console.log("error");
-              return console.log(err);
-            }
-          });
-          console.log("about to send");
-          res.send(JSON.stringify(results));
-          //console.log(results);
-        }
-        else {
-          res.send(JSON.stringify(results));
-        }
+        //console.log(results);
       }
-    });
-  }
+      else {
+        res.send(JSON.stringify(results));
+      }
+    }
+  });
 });
 
 //----------------research work------------------
