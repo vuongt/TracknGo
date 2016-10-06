@@ -25,8 +25,10 @@ angular.module('starter.controllers')
     $scope.chargingMap = true;
     $scope.isConcertHome = false;
     $scope.lat = "";
+    var count =0;
     $scope.lng = "";
     $scope.radius = "30000";
+    $scope.is1prog=false;
     $scope.start = "";
     $scope.end = "";
     $scope.timeCriteria = "aujourd'hui";
@@ -98,16 +100,18 @@ console.log($scope.radius);
           } else {
             $scope.charging = false;
           }
+
           $scope.concerts.forEach(function (item, index) {
 
             if (item.haveProgram == "NO") {
-              item.haveProgram = false
-            }
-            ;
+              item.haveProgram = false;
+              count = count + 1;
+            };
             if (item.haveProgram == "YES") {
               item.haveProgram = true
-            }
-            ;
+
+            };
+
 
             item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
             item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
@@ -138,6 +142,10 @@ console.log($scope.radius);
             item.DATDBTDIF = new Date(item.DATDBTDIF);
             //item.id_bit is undefined 'cause these concerts come from Eliza
           });
+          console.log(count);
+          if (count==$scope.concerts.length){
+            $scope.is1prog=true;
+            }
 
 
           //initialisation google maps

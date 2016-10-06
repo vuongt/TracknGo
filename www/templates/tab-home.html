@@ -18,12 +18,14 @@
 
     </div>
 
-    <div style="color:grey;" class='comment2' ng-show="isConcertHome">
+
+
+    <div style="color:grey;" class='comment2' ng-show="isConcertHome && !is1prog">
       <i class="ion-ios-bookmarks-outline icon-right"  style="float: right; font-size: 150%"></i>
       <p> Avec un programme annoncé </p>
 
-    </div>
 
+    </div>
 
 
     <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
