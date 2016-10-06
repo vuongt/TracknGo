@@ -24,6 +24,7 @@ angular.module('starter.controllers')
 
 //Chargement des concerts
     $scope.charging = true;
+    $scope.chargingMap = true;
     $scope.isConcertHome = false;
     $scope.lat = "";
     $scope.lng = "";
@@ -169,7 +170,7 @@ $scope.isPlus=false;
 
               google.maps.event.trigger($scope.map, 'resize');
 
-
+              $scope.chargingMap = false;
 
               $scope.concerts.forEach(function (item, index) {
                 var marker = new google.maps.Marker({

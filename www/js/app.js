@@ -7,8 +7,8 @@
 angular.module('starter.controllers', []);
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
-.constant('AUTH_EVENTS', {
-  notAuthenticated: 'auth-not-authenticated'
+  .constant('AUTH_EVENTS', {
+    notAuthenticated: 'auth-not-authenticated'
   })
 
   .constant('API_ENDPOINT', {
@@ -19,10 +19,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
-                  ionic.Platform.fullScreen();
-                  if (window.StatusBar) {
-                    return StatusBar.hide();
-                  }
+
+      if (window.StatusBar) {
+        StatusBar.hide();
+        ionic.Platform.fullScreen();
+      }
+      ionic.Platform.isFullScreen = true;
+      if (ionic.Platform.isAndroid()) {
+        window.addEventListener("native.hidekeyboard", function () {
+          //show stuff on keyboard hide
+          StatusBar.hide();
+          window.AndroidFullScreen.immersiveMode(false, false);
+        });
+      }
+
 
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -79,7 +89,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         views: {
           'tab-home': {
             templateUrl: 'templates/tab-concert.html',
-            params: {cdeprog: null },
+            params: {cdeprog: null},
             controller: 'ConcertCtrl'
           }
         }
@@ -108,13 +118,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       })
 
 
-
       .state('tab.artist', {
         url: '/artist/?name',
         views: {
           'tab-search': {
             templateUrl: 'templates/tab-artist.html',
-            params: {name: null },
+            params: {name: null},
             controller: 'ArtistCtrl'
           }
         }
@@ -126,7 +135,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         views: {
           'tab-search': {
             templateUrl: 'templates/tab-musique.html',
-            params: {iswc: "",title :""},
+            params: {iswc: "", title: ""},
             controller: 'MusiqueCtrl'
           }
         }
@@ -177,8 +186,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     $urlRouterProvider.otherwise('/tab/home');
 
   })
-  .controller('AppCtrl', function($scope, $state, $ionicPopup, AuthService, AUTH_EVENTS) {
-    $scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
+  .controller('AppCtrl', function ($scope, $state, $ionicPopup, AuthService, AUTH_EVENTS) {
+    $scope.$on(AUTH_EVENTS.notAuthenticated, function (event) {
       AuthService.logout();
       $state.go('outside.login');
       var alertPopup = $ionicPopup.alert({
@@ -188,10 +197,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     });
   })
   .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
-    $rootScope.$on('$stateChangeStart', function (event,next, nextParams, fromState) {
+    $rootScope.$on('$stateChangeStart', function (event, next, nextParams, fromState) {
       if (!AuthService.isAuthenticated()) {
         console.log("next is " + next.name);
-        if (next.name == 'tab.profil' || next.name == 'tab.planning'){
+        if (next.name == 'tab.profil' || next.name == 'tab.planning') {
           event.preventDefault();
           $state.go('tab.signin');
         }
