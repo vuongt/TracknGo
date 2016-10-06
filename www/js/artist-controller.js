@@ -65,7 +65,6 @@ $http({
     Origin:'http://localhost:8100'
   }
 }).then(function successCallback(response) {
-console.log(response.data);
 $scope.charging=false;
     $scope.answer = response.data;
     $scope.numLimit = 5;
@@ -77,7 +76,6 @@ $scope.charging=false;
       if ($scope.answer.works.length !== 0) {
         $scope.isSong = true;
         for (var i = 0, len = $scope.answer.works.length; i < len; i++) {
-        console.log($scope.answer.works[i]);
           $scope.answer.works[i].title = $scope.answer.works[i].title.charAt(0).toUpperCase() + $scope.answer.works[i].title.substring(1).toLowerCase();
           $scope.answer.works[i].isInfo = false;
           if ($scope.answer.works[i].iswc.length != 0) {
@@ -151,7 +149,6 @@ $scope.charging=false;
   //===================================================
   $scope.myGoBack = function () {
     $ionicHistory.goBack();
-    console.log($ionicHistory.viewHistory());
 
     if ($ionicHistory.viewHistory().backViewId.length == 1) {
       $ionicHistory.clearHistory();
@@ -160,7 +157,6 @@ $scope.charging=false;
     }
 
 
-    console.log($ionicHistory.viewHistory());
 
   };
 

@@ -1,5 +1,4 @@
 angular.module('starter.controllers').controller('TabCtrl', function ($scope,$ionicHistory,$state) {
-  console.log("test tab controller");
 
   $scope.goSearch = function () {
     $state.go("tab.search");

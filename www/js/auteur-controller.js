@@ -55,7 +55,6 @@ $http({
     $scope.charging=false;
     $scope.answer = response.data.works;
     $scope.error= response.data.error;
-    console.log($scope.answer);
     $scope.isSong = false;
     $scope.isPlus= false;
        $scope.numLimit=5;

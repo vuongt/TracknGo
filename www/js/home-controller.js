@@ -39,7 +39,6 @@ angular.module('starter.controllers')
     if ($stateParams.lng && $stateParams.lng !== "") {
       $scope.lng = parseFloat($stateParams.lng);
     }
-    console.log($scope.lat);
 
 
     if ($stateParams.radius && $stateParams.radius !== "") {
@@ -54,7 +53,6 @@ angular.module('starter.controllers')
       $scope.interpret = JSON.parse($stateParams.interpret);
     }
 
-    console.log($scope.interpret);
 
 
     if ($stateParams.start && $stateParams.start !== "" && $stateParams.end && $stateParams.end !== "") {
@@ -91,11 +89,9 @@ angular.module('starter.controllers')
 
       if (!$scope.lat) {
         $scope.lat = position.coords.latitude;
-        console.log($scope.lat);
         $scope.lng = position.coords.longitude;
       }
 
-      console.log($scope.radius);
       $http({
         method: 'GET',
         url: API_ENDPOINT.url + '/search/concerts?lng=' + $scope.lng + '&lat=' + $scope.lat + '&radius=' + $scope.radius + '&start=' + $scope.start + '&end=' + $scope.end,
@@ -108,14 +104,12 @@ angular.module('starter.controllers')
         $scope.charging = false;
         $scope.isPlus = false;
         $scope.answer = response.data;
-        console.log($scope.answer);
 
 
         if ($scope.answer.error == "") {
           if ($scope.lat == "") {
             $scope.concerts = $scope.answer.concerts;
           } else $scope.concerts = $scope.answer.restrictedConcerts;
-          console.log($scope.concerts);
 
           if ($scope.concerts.length != 0) {
             $scope.isConcertHome = true;
@@ -178,7 +172,6 @@ angular.module('starter.controllers')
             item.DATDBTDIF = new Date(item.DATDBTDIF);
             //item.id_bit is undefined 'cause these concerts come from Eliza
           });
-          console.log(count);
           if (count == $scope.concerts.length) {
             $scope.is1prog = true;
           }
@@ -193,18 +186,13 @@ angular.module('starter.controllers')
             };
 
             var div = document.getElementById('map');
-            console.log(div);
 
             $scope.map = new google.maps.Map(div, mapOptions);
 
-            console.log(div);
 
 
             $scope.map.setCenter({lat: $scope.lat, lng: $scope.lng});
 
-
-            console.log("lat" + $scope.map.center.lat());
-            console.log("lng" + $scope.map.center.lng());
             //creation de la fonction isOpen a infowindow
             function isInfoWindowOpen(infoWindow) {
               var map = infoWindow.getMap();
@@ -343,7 +331,7 @@ angular.module('starter.controllers')
           if (res) {
             $state.go('tab.profil');
           } else {
-            console.log('Action annulé');
+            console.log('Action annulée');
           }
         });
       } else if (!actionSucceed) {

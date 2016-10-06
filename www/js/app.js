@@ -51,7 +51,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
     // Set up the various states which the app can be in.
-    // Each state's controller can be found in controllers.js
     $stateProvider
 
     // setup an abstract state for the tabs directive
@@ -202,7 +201,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
     $rootScope.$on('$stateChangeStart', function (event, next, nextParams, fromState) {
       if (!AuthService.isAuthenticated()) {
-        console.log("next is " + next.name);
         if (next.name == 'tab.profil' || next.name == 'tab.planning') {
           event.preventDefault();
           $state.go('tab.signin');

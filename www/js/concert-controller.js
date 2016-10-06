@@ -4,7 +4,6 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
   $scope.date= new Date($stateParams.date);
   $scope.title= $stateParams.title;
   $scope.location= $stateParams.location;
-  console.log($scope.title);
 
 
   $scope.userdata = AuthService.getUserInfo();
@@ -40,7 +39,6 @@ $http({
   }
 }).then(function successCallback(response) {
   $scope.answer = response.data;
-  console.log(response.data);
   $scope.setList = $scope.answer.setList;
   $scope.charging=false;
     if ($scope.setList.length!==0 && $scope.answer.error==""){
@@ -86,8 +84,7 @@ $http({
         console.log(response.data.error);
       } else {
         $scope.comments = response.data;
-        console.log("comments: ");
-        console.log($scope.comments);
+
       }
     }, function errorCallback(error) {
       console.log(error);
@@ -102,8 +99,6 @@ $http({
   };
 
   function send(contentComment,verifyAction){
-    console.log(contentComment);
-    console.log(new Date());
     if(contentComment && contentComment!==""){
       $http({
         method: 'POST',

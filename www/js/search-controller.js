@@ -74,7 +74,6 @@ angular.module('starter.controllers')
         $scope.isPlus = false;
 
         if (response.data.error == "") {
-          console.log($scope.answer);
           for (var i = 0, len = $scope.answer.length; i < len; i++) {
             var temp = $scope.answer[i].title.trim();
             $scope.answer[i].title = temp.charAt(0).toUpperCase() + temp.substring(1).toLowerCase();

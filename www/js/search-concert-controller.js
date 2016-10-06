@@ -24,7 +24,6 @@ angular.module('starter.controllers')
             template: "Vous n'avez pas défini le lieu de recherche !"
           });
           alertPopup.then(function (res) {
-            console.log("without location");
           });
         }
         if (geolocation && locationString){
@@ -37,11 +36,8 @@ angular.module('starter.controllers')
             //$scope.location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             $scope.lat= position.coords.latitude;
             $scope.lng= position.coords.longitude;
-            console.log("Searching for your location");
-            console.log(position.coords.latitude, position.coords.longitude);
             getRadius(radius);
             //passe parameter to home page
-            console.log('programmes : ' + programmes);
             $ionicHistory.clearCache().then(function(){ $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end, programmes:programmes, interpret:interpret}) })
           }, function(err) {
             $ionicLoading.hide();
@@ -54,13 +50,11 @@ angular.module('starter.controllers')
               //$scope.location= (results[0].geometry.location.lat(), results[0].geometry.location.lng());
               $scope.lng=results[0].geometry.location.lng();
               $scope.lat=results[0].geometry.location.lat();
-              console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
               getRadius(radius);
               //passe parameter to home page
-              console.log('programmes : ' + programmes);
               $ionicHistory.clearCache().then(function(){ $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end, programmes:programmes, interpret:interpret}) })
             } else {
-              alert( 'Geocode was not successful for the following reason: ' + status );
+              console.log( 'Geocode was not successful for the following reason: ' + status );
             }
           } );
         }

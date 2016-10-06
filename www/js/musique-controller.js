@@ -102,7 +102,6 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
         var temp = $scope.answer.performer[i].trim();
         $scope.answer.performer[i] = temp.charAt(0).toUpperCase() + temp.substring(1).toLowerCase();
       }
-      console.log($scope.answer);
 
       $scope.isCharged = false;
 
@@ -115,7 +114,6 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
       alertPopup.then(function (res) {
         console.log($scope.answer.error);
       });
-      console.log($scope.answer);
     }
   }, function errorCallback(response) {
   });
@@ -142,10 +140,8 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
       }
     }).then(function successCallback(response) {
       $scope.concerts = response.data.concerts;
-      console.log(response.data);
       if ($scope.answer.error == "") {
         $scope.isCharged = true;
-        console.log($scope.concerts);
         if ($scope.concerts.length != 0) {
           $scope.isConcert = true;
 

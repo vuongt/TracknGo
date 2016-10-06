@@ -105,8 +105,9 @@ angular.module('starter.services', [])
         }
         cb(response.data.authorized,response.data.actionSucceed);
       }, function errorCallback(response) {
-        console.log(response);
+
         console.log("error when connecting to server");
+        console.log(response);
       });
     }
 
