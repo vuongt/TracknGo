@@ -13,15 +13,14 @@
 
 
     <div style="color:grey;" class='comment' ng-show="isConcertHome">
-      <i class="ion-ios-search-strong icon-right"  style="float: right; font-size: 130%"></i>
+      <i class="ion-ios-search-strong icon-right" style="float: right; font-size: 130%"></i>
       <p> {{concerts.length}} concerts autour de vous {{timeCriteria}}</p>
 
     </div>
 
 
-
-    <div style="color:grey;" class='comment2' ng-show="isConcertHome && !is1prog">
-      <i class="ion-ios-bookmarks-outline icon-right"  style="float: right; font-size: 150%"></i>
+    <div style="color:grey;" class='comment2' ng-show="isConcertHome && !is1prog && !programmes">
+      <i class="ion-ios-bookmarks-outline icon-right" style="float: right; font-size: 150%"></i>
       <p> Avec un programme annoncé </p>
 
 
@@ -29,16 +28,18 @@
 
 
     <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
-              ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome && item.haveProgram">
-      <h4 class=" white right">{{item.distance}} km</h4> <h2 class="white">{{item.TITRPROG}}</h2>
+              ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'"
+              ng-show="isConcertHome && item.haveProgram">
+      <h4 class=" white right">{{item.distance}} km</h4>
+      <h2 class="white">{{item.TITRPROG}}</h2>
       <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
         <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}} </span>
-        <span> {{item.ADR}}</span>  </p>
-
+        <span> {{item.ADR}}</span></p>
 
 
       <div>
-        <button ng-show="item.haveProgram" style="font-size:90%;" id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,date:item.DATDBTDIF,location:item.NOM+item.VILLE})">
+        <button ng-show="item.haveProgram" style="font-size:90%;" id="page-button1" class="button button-planning"
+                ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,date:item.DATDBTDIF,location:item.NOM+item.VILLE})">
           Programme
         </button>
         <button class="button button-planning"
@@ -54,38 +55,38 @@
       </div>
     </ion-item>
 
-    <div style="color:grey;" class='comment2' ng-show="isConcertHome">
-      <i class="ion-music-note"  style="float: right; font-size: 130%"></i>
-      <p> Sans programme annoncé </p>
+    <div ng-hide = "programmes">
+      <div style="color:grey;" class='comment2' ng-show="isConcertHome">
+        <i class="ion-music-note" style="float: right; font-size: 130%"></i>
+        <p> Sans programme annoncé </p>
 
-    </div>
-
-
-    <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
-              ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'" ng-show="isConcertHome && !item.haveProgram">
-      <h4 class=" white right">{{item.distance}} km</h4>  <h2 class="white">{{item.TITRPROG}}</h2>
-      <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
-        <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}}</span>
-        <span> {{item.ADR}}</span> </p>
-
-
-      <div>
-        <button id="page-button2" class="button button-planning"
-                ng-click="addPlanning(item.DATDBTDIF.yyyymmdd(), item.NOM +item.VILLE, item.TITRPROG, item.CDEPROG, item.id_bit, item)"
-                ng-show="!isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%; font-size:90%;">
-          Ajouter à Planning
-        </button>
-        <button class="button button-planning"
-                ng-click="removePlanning(item.CDEPROG, item.id_bit)"
-                ng-show="isInPlanning(item.CDEPROG, item.id_bit)" style="font-size:90%;">
-          Retirer du Planning
-        </button>
       </div>
-    </ion-item>
 
 
+      <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
+                ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'"
+                ng-show="isConcertHome && !item.haveProgram">
+        <h4 class=" white right">{{item.distance}} km</h4>
+        <h2 class="white">{{item.TITRPROG}}</h2>
+        <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
+          <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}}</span>
+          <span> {{item.ADR}}</span></p>
 
 
+        <div>
+          <button id="page-button2" class="button button-planning"
+                  ng-click="addPlanning(item.DATDBTDIF.yyyymmdd(), item.NOM +item.VILLE, item.TITRPROG, item.CDEPROG, item.id_bit, item)"
+                  ng-show="!isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%; font-size:90%;">
+            Ajouter à Planning
+          </button>
+          <button class="button button-planning"
+                  ng-click="removePlanning(item.CDEPROG, item.id_bit)"
+                  ng-show="isInPlanning(item.CDEPROG, item.id_bit)" style="font-size:90%;">
+            Retirer du Planning
+          </button>
+        </div>
+      </ion-item>
+    </div>
 
 
     <p ng-show="!charging && !isConcertHome" style="text-align:center; padding-top:50px;" class="lighter">Bienvenue sur

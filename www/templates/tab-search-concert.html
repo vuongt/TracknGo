@@ -15,47 +15,59 @@
 
         <ul class="list" style="padding-right:10%;">
 
-          <li class="item item-toggle">
-         Me géolocaliser
-            <label class="toggle toggle-assertive">
-              <input type="checkbox" ng-init="geolocation=true" ng-model="geolocation">
-              <div class="track">
-                <div class="handle"></div>
-              </div>
-            </label>
-          </li>
-        </ul>
-                <div>
-                  <label style="border: none;" class="item item-input">
-                    <span class="input-label">Du</span>
-                  <input type="date" ng-model="start">
-                  </label>
-                </div>
-                </br>
-                <div>
-                  <label style="border: none;" class="item item-input">
-                    <span class="input-label">Au</span>
-                  <input type="date" placeholder="optionnel" ng-model="end">
-                  </label>
+        <li class="item item-toggle">
+          Me géolocaliser
+          <label class="toggle toggle-assertive">
+            <input type="checkbox" ng-init="geolocation=true" ng-model="geolocation">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </li>
+      </ul>
+      <div>
+        <label style="border: none;" class="item item-input">
+          <span class="input-label">Du</span>
+          <input type="date" ng-model="start">
+        </label>
+      </div>
+      </br>
+      <div>
+        <label style="border: none;" class="item item-input">
+          <span class="input-label">Au</span>
+          <input type="date" placeholder="optionnel" ng-model="end">
+        </label>
+      </div>
+      </br>
+      <div>
+        <label class="checkbox">
+          <input type = "checkbox" ng-model="programmes">
+          Programmes uniquement
+        </label>
+        <label class="checkbox">
+          <input type = "checkbox" ng-model="interpret">
+          Interprètes uniquement
+        </label>
+      </div>
+    </div>
+    <div class="quicksearch">
+      <div>
+        <div>
+          <button ng-show="!charging" style="font-color:white;background-color:black;"
+                  class="button-container button button-validate"
+                  ng-click="search(locationString,geolocation,radius,start,end, programmes, interpret)">
+            Go !
+          </button>
 
-                </div>
-              </div>
-              <div class="quicksearch">
-              <div >
-              <div>
-                <button ng-show="!charging" style="font-color:white;background-color:black;"class="button-container button button-validate" ng-click="search(locationString,geolocation,radius,start,end)">
-                  Go !
-                </button>
+        </div>
 
-              </div>
-
-              </div>
-                </br></br>
-                <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
+      </div>
+      </br></br>
+      <ion-spinner style="padding-left: 50%; float: center;" ng-show="charging" icon="spiral"></ion-spinner>
 
 
-              </div>
+    </div>
 
-    </form>
+  </form>
 
 </ion-scroll>

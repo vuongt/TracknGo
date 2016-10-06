@@ -32,6 +32,9 @@ angular.module('starter.controllers')
     $scope.start = "";
     $scope.end = "";
     $scope.timeCriteria = "aujourd'hui";
+    $scope.programmes = false;
+    $scope.interpret = false;
+
     if ($stateParams.lat && $stateParams.lat !== "") {
       $scope.lat = parseFloat($stateParams.lat);
     }
@@ -44,6 +47,15 @@ angular.module('starter.controllers')
     if ($stateParams.radius && $stateParams.radius !== "") {
       $scope.radius = $stateParams.radius;
     }
+
+    if ($stateParams.programmes && $stateParams.programmes !== "") {
+      $scope.programmes = $stateParams.programmes;
+    }
+
+    if ($stateParams.interpret && $stateParams.interpret !== "") {
+      $scope.interpret = $stateParams.interpret;
+    }
+
     if ($stateParams.start && $stateParams.start !== "" && $stateParams.end && $stateParams.end !== "") {
       $scope.start = new Date($stateParams.start);
       $scope.end = new Date($stateParams.end);

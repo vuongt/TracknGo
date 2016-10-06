@@ -12,7 +12,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .constant('API_ENDPOINT', {
-    url: 'http://localhost:8080'
+    url: 'http://149.202.167.34:8080'
   })
   .constant('HEADER_ORIGIN', {
     url: 'http//dty.sacem.fr'
@@ -67,7 +67,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
       .state('tab.home', {
 
-        url: '/home?lng&lat&radius&start&end',
+        url: '/home?lng&lat&radius&start&end&programmes&interpret',
         views: {
           'tab-home': {
             templateUrl: 'templates/tab-home.html',

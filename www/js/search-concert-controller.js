@@ -3,6 +3,9 @@ angular.module('starter.controllers')
   .controller('SearchConcertCtrl',function($rootScope,$scope,$cordovaGeolocation, $ionicPopup,$state, $ionicHistory){
     var geocoder = new google.maps.Geocoder();
      $scope.charging=false;
+     $scope.programmes = false;
+     $scope.interpret = false;
+
     var getRadius = function(radius){
       if (radius){
         $scope.radius= radius; //en km
@@ -10,7 +13,7 @@ angular.module('starter.controllers')
         $scope.radius = "50";
       }
     };
-    $scope.search = function(locationString,geolocation,radius,start,end){
+    $scope.search = function(locationString,geolocation,radius,start,end,programmes,interpret){
       if (start && end && start <= end){
         $scope.start = start;
         $scope.end = end;
@@ -38,7 +41,8 @@ angular.module('starter.controllers')
             console.log(position.coords.latitude, position.coords.longitude);
             getRadius(radius);
             //passe parameter to home page
-            $ionicHistory.clearCache().then(function(){ $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end}) })
+            console.log('programmes : ' + programmes);
+            $ionicHistory.clearCache().then(function(){ $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end, programmes:programmes, interpret:interpret}) })
           }, function(err) {
             $ionicLoading.hide();
             console.log(err);
@@ -53,7 +57,8 @@ angular.module('starter.controllers')
               console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
               getRadius(radius);
               //passe parameter to home page
-              $ionicHistory.clearCache().then(function(){ $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end}) })
+              console.log('programmes : ' + programmes);
+              $ionicHistory.clearCache().then(function(){ $state.go('tab.home',{lng: $scope.lng, lat:$scope.lat,radius:$scope.radius,start:$scope.start,end:$scope.end, programmes:programmes, interpret:interpret}) })
             } else {
               alert( 'Geocode was not successful for the following reason: ' + status );
             }
