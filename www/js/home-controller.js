@@ -1,5 +1,5 @@
 angular.module('starter.controllers')
-  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT, $stateParams, $ionicPopup ) {
+  .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT, $stateParams, $ionicPopup) {
 
 
     //Initialisation des variables d'affichage
@@ -39,30 +39,41 @@ angular.module('starter.controllers')
     console.log($scope.lat);
 
 
-    if($stateParams.radius && $stateParams.radius!=="") {$scope.radius=$stateParams.radius;}
-    if($stateParams.start && $stateParams.start!=="" && $stateParams.end && $stateParams.end!=="") {
-      $scope.start=new Date($stateParams.start);
-      $scope.end= new Date($stateParams.end);
-      $scope.timeCriteria = "du " + $scope.start.toLocaleDateString() + " au " + $scope.end.toLocaleDateString() + " dans un rayon de "+$scope.radius +" km";
+    if ($stateParams.radius && $stateParams.radius !== "") {
+      $scope.radius = $stateParams.radius;
+    }
+    if ($stateParams.start && $stateParams.start !== "" && $stateParams.end && $stateParams.end !== "") {
+      $scope.start = new Date($stateParams.start);
+      $scope.end = new Date($stateParams.end);
+      $scope.timeCriteria = "du " + $scope.start.toLocaleDateString() + " au " + $scope.end.toLocaleDateString() + " dans un rayon de " + $scope.radius + " km";
     }
 
-  var attentionAuTemps = setTimeout(function(){
+    var attentionAuTemps = setTimeout(function () {
 
-  $scope.charging=false;
-  $scope.isConcertHome=false;
-$scope.isPlus=false;
+      $scope.charging = false;
+      $scope.isConcertHome = false;
+      $scope.isPlus = false;
 
-  },15000);
+    }, 15000);
 
 
+    var options = {timeout: 10000, enableHighAccuracy: true};
+    $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
 
-  $http({
-  method: 'GET',
-  url: API_ENDPOINT.url + '/search/concerts?lng='+$scope.lng+'&lat='+$scope.lat+'&radius='+$scope.radius+'&start='+$scope.start+'&end='+$scope.end,
-  header:{
-    Origin:'http://localhost:8100'
-  }
-  }).then(function successCallback(response) {
+      if (!$scope.lat) {
+        $scope.lat = position.coords.latitude;
+        console.log($scope.lat);
+        $scope.lng = position.coords.longitude;
+      }
+
+console.log($scope.radius);
+      $http({
+        method: 'GET',
+        url: API_ENDPOINT.url + '/search/concerts?lng=' + $scope.lng + '&lat=' + $scope.lat + '&radius=' + $scope.radius + '&start=' + $scope.start + '&end=' + $scope.end,
+        header: {
+          Origin: 'http://localhost:8100'
+        }
+      }).then(function successCallback(response) {
 
       clearTimeout(attentionAuTemps);
       $scope.charging = false;
@@ -71,90 +82,82 @@ $scope.isPlus=false;
       console.log($scope.answer);
 
 
-      if ($scope.answer.error == "") {
-        if ($scope.lat == "") {
-          $scope.concerts = $scope.answer.concerts;
-        } else $scope.concerts = $scope.answer.restrictedConcerts;
-        console.log($scope.concerts);
+        if ($scope.answer.error == "") {
+          if ($scope.lat == "") {
+            $scope.concerts = $scope.answer.concerts;
+          } else $scope.concerts = $scope.answer.restrictedConcerts;
+          console.log($scope.concerts);
 
-        if ($scope.concerts.length != 0) {
-          $scope.isConcertHome = true;
+          if ($scope.concerts.length != 0) {
+            $scope.isConcertHome = true;
 
-          if ($scope.numLimit <= $scope.concerts.length) {
-            $scope.isPlus = true;
+            if ($scope.numLimit <= $scope.concerts.length) {
+              $scope.isPlus = true;
+            }
+
+          } else {
+            $scope.charging = false;
           }
+          $scope.concerts.forEach(function (item, index) {
 
-        } else {
-          $scope.charging = false;
-        }
-        $scope.concerts.forEach(function (item, index) {
+            if (item.haveProgram == "NO") {
+              item.haveProgram = false
+            }
+            ;
+            if (item.haveProgram == "YES") {
+              item.haveProgram = true
+            }
+            ;
 
-        if (item.haveProgram=="NO"){item.haveProgram=false};
-        if (item.haveProgram=="YES"){item.haveProgram=true};
+            item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
+            item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
+            item.VILLE = item.VILLE.charAt(0).toUpperCase() + item.VILLE.substring(1).toLowerCase();
 
-       item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
-       item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
-       item.VILLE = item.VILLE.charAt(0).toUpperCase() + item.VILLE.substring(1).toLowerCase();
+            if (item.TITRPROG == "Manifestation de _artiste a preciser ...") {
+              if (item.NOM == "Salle non referencee" || item.NOM == "" || item.NOM == " . . .") {
+                item.TITRPROG = "Manifestation @ " + item.VILLE;
 
-          if (item.TITRPROG == "Manifestation de _artiste a preciser ...") {
-            if (item.NOM == "Salle non referencee" || item.NOM == "" || item.NOM == " . . .") {
-              item.TITRPROG = "Manifestation @ " + item.VILLE;
+                item.NOM = "";
+              }
+              else {
+                item.TITRPROG = "Manifestation @ " + item.NOM;
 
-              item.NOM = "";
+                item.NOM = "";
+              }
+            }
+            if (item.ADR == " . . .") {
+              item.ADR = "";
+
             }
             else {
-              item.TITRPROG = "Manifestation @ " + item.NOM;
-
-              item.NOM = "";
+              length = item.ADR.length;
+              item.ADR = item.ADR.slice(0, length - 2);
             }
-          }
-          if (item.ADR == " . . .") {
-            item.ADR = "";
 
-          }
-          else {
-            length = item.ADR.length;
-            item.ADR = item.ADR.slice(0, length - 2);
-          }
-
-          item.DATDBTDIF = new Date(item.DATDBTDIF);
-          //item.id_bit is undefined 'cause these concerts come from Eliza
-        });
+            item.DATDBTDIF = new Date(item.DATDBTDIF);
+            //item.id_bit is undefined 'cause these concerts come from Eliza
+          });
 
 
-        //initialisation google maps
-        var init = function () {
+          //initialisation google maps
+          var init = function () {
 
-          var mapOptions = {
-            zoom: 11,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
+            var mapOptions = {
+              zoom: 11,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
 
-          var div = document.getElementById('map');
-          console.log(div);
+            var div = document.getElementById('map');
+            console.log(div);
 
-          $scope.map = new google.maps.Map(div, mapOptions);
+            $scope.map = new google.maps.Map(div, mapOptions);
 
-          console.log(div);
-
-          var options = {timeout: 10000, enableHighAccuracy: true};
+            console.log(div);
 
 
 
-          var mapOptions = {
-            zoom: 11,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
 
-
-          $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-
-            if($scope.lat){
-            $scope.map.setCenter({ lat:$scope.lat, lng:$scope.lng});
-            } else {
-              var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-              $scope.map.setCenter(latLng);
-            }
+            $scope.map.setCenter({lat: $scope.lat, lng: $scope.lng});
 
 
             console.log("lat" + $scope.map.center.lat());
@@ -176,7 +179,7 @@ $scope.isPlus=false;
                 var marker = new google.maps.Marker({
                   map: $scope.map,
                   animation: google.maps.Animation.DROP,
-                  position: {lat: parseFloat(item.LAT), lng : parseFloat(item.LNG)}
+                  position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
                 });
                 var infoWindow = new google.maps.InfoWindow({
                   content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
@@ -195,17 +198,18 @@ $scope.isPlus=false;
 
             }, function (error) {
             });
-          });
 
-          google.maps.event.trigger( $scope.map, 'resize');
 
-        };
+            google.maps.event.trigger($scope.map, 'resize');
 
-        init();
+          };
 
-      }
+          init();
 
-    }, function errorCallback(response) {
+        }
+
+      }, function errorCallback(response) {
+      });
     });
 
 
@@ -248,8 +252,6 @@ $scope.isPlus=false;
         $scope.planning = AuthService.getPlanning(); // We don't use $scope.planning, but this action refresh the userPlanning in AuthService
       }
     }
-
-
 
 
     $scope.printMore = function () {
