@@ -13,6 +13,7 @@ angular.module('starter.controllers')
     $scope.charging = false;
     $scope.api = AuthService.api;
     //$scope.concerts == [];
+    console.log($scope.filter);
 
     $scope.userdata = AuthService.getUserInfo();
 
