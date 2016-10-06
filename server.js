@@ -721,17 +721,7 @@ app.get('/work/program', function (req, res) {
       } else {
         var objEliza = JSON.parse(bodyEliza);
         var length = objEliza.length;
-        if (length) {
-          for (var i = 0; i < length; i++) {
-            var concert = {};
-            var elizaConcert = objEliza[i];
-            concert.title = elizaConcert.TITRPROG;
-            concert.cdeprog = elizaConcert.CDEPROG;
-            concert.date = elizaConcert.DATDBTDIF.replace(/T/, ' ').replace(/\..+/, '');
-            concert.location = elizaConcert.ADR + elizaConcert.VILLE;
-            work.concerts.push(concert);
-          }
-        }
+        work.concerts = objEliza;
         res.send(JSON.stringify(work));
       }
     });
