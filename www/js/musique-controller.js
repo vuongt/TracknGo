@@ -149,8 +149,37 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
           $scope.isConcert = true;
 
           $scope.concerts.forEach(function (item,index) {
-            item.title = item.title.charAt(0).toUpperCase() + item.title.substring(1).toLowerCase();
-            item.date = new Date(item.date);
+            item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
+            item.DATDBTDIF = new Date(item.DATDBTDIF);
+
+
+                    if (item.TITRPROG == "Manifestation de _artiste a preciser ...") {
+                                  if (item.NOM == "Salle non referencee" || item.NOM == "" || item.NOM == " . . .") {
+                                    item.TITRPROG = "Manifestation @ " + item.VILLE;
+
+                                    item.NOM = "";
+                                  }
+                                  else {
+                                    item.TITRPROG = "Manifestation @ " + item.NOM;
+
+                                    item.NOM = "";
+                                  }
+                                }
+                                if (item.ADR == " . . .") {
+                                  item.ADR = "";
+
+                                }
+                                else {
+                                  length = item.ADR.length;
+                                  item.ADR = item.ADR.slice(0, length - 2);
+                                }
+
+
+
+
+
+
+
             AuthService.isInPlanning(item.cdeprog, item.title,function (isInPlanning) {
               item.isInPlanning = isInPlanning;
             })
@@ -160,6 +189,9 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
             $scope.concerts[i].title = $scope.answer.concerts[i].title.charAt(0).toUpperCase() + $scope.concerts[i].title.substring(1).toLowerCase();
           }*/
         }
+
+
+
         else {
           $scope.isConcert = false;
 
