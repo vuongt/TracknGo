@@ -44,8 +44,6 @@ angular.module('starter.services', [])
           userInfo.works = response.data.works;
           userInfo.authors = response.data.authors;
           userInfo.artists =response.data.artists;
-        console.log('store user Info:');
-          console.log(userInfo);
       });
     }
 
