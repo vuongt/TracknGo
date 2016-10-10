@@ -162,6 +162,7 @@ angular.module('starter.controllers')
             item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
             item.VILLE = item.VILLE.charAt(0).toUpperCase() + item.VILLE.substring(1).toLowerCase();
             item.distance = parseInt(item.distance);
+            item.location = item.NOM + " " + item.ADR + " " + item.VILLE;
 
             if (item.TITRPROG == "Manifestation de _artiste a preciser ...") {
               item.hasArtist = false;

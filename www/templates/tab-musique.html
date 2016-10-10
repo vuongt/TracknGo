@@ -70,10 +70,10 @@
           <span class="right">{{item.NOM}}</span> <span class="right"> - {{item.VILLE}} </span>
           <span> {{item.ADR}}</span>  </p>
         <div>
-          <button  id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,date:item.DATDBTDIF,location:item.NOM + item.ADR + item.VILLE})">
+          <button  id="page-button1" class="button button-planning" ui-sref="tab.concertHome({cdeprog: item.CDEPROG, title:item.TITRPROG,date:item.DATDBTDIF,location:item.location})">
            Programme
           </button>
-          <button  class="button button-planning" ng-click="addPlanning(item.DATDBDIF.yyyymmdd(), item.NOM + item.ADR + item.VILLE, item.TITRPROG, item.CDEPROG, item.id_bit)" ng-show="!isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%">
+          <button  class="button button-planning" ng-click="addPlanning(item.DATDBDIF.yyyymmdd(), item.NOM + item.location, item.TITRPROG, item.CDEPROG, item.id_bit)" ng-show="!isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%">
             Ajouter au planning
           </button>
           <button class="button button-planning" ng-click="removePlanning(item.CDEPROG, item.id_bit)" ng-show="isInPlanning(item.CDEPROG, item.id_bit)" style="margin-left: 5%">

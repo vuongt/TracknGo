@@ -186,9 +186,7 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
                 item.TITRPROG = item.TITRPROG.charAt(0).toUpperCase() + item.TITRPROG.substring(1).toLowerCase();
                          item.NOM = item.NOM.charAt(0).toUpperCase() + item.NOM.substring(1).toLowerCase();
                          item.VILLE = item.VILLE.charAt(0).toUpperCase() + item.VILLE.substring(1).toLowerCase();
-            AuthService.isInPlanning(item.cdeprog, item.title,function (isInPlanning) {
-              item.isInPlanning = isInPlanning;
-            })
+            item.location = item.NOM + " " + item.ADR + " " + item.VILLE;
 
           });
           /*for (var i = 0, len = $scope.concerts.length; i < len; i++) {
