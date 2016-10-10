@@ -517,11 +517,11 @@ label.month-select {
   height:300px;
 
 
-background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1)), url('../img/map.png');
+  background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1)), url('../img/map.png');
 
-    background-size: cover;
+  background-size: cover;
 
- filter: grayscale(100%);
+  filter: grayscale(100%);
       -webkit-filter: grayscale(100%);
       -moz-filter: grayscale(100%);
       -ms-filter: grayscale(100%);
