@@ -621,3 +621,14 @@ text-align:right;
 padding-left:15%;
 
 }
+
+.concert-checkbox{
+  width: 100%;
+  margin-left: 14%;
+  margin-top: 1.8%;
+  margin-bottom: 0;
+}
+
+.search-label{
+  width: 100%
+}
