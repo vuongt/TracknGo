@@ -13,23 +13,20 @@
 
 
     <div style="color:grey;" class='comment' ng-show="isConcertHome">
-      <i class="ion-ios-search-strong icon-right" style="float: right; font-size: 130%"></i>
-      <p> {{concerts.length}} concerts autour de vous {{timeCriteria}}</p>
+      <p> {{nombreConcerts}} concerts autour de vous {{timeCriteria}}</p>
 
     </div>
 
-    <div ng-hide = programmes>
+    <div ng-hide=programmes>
       <div style="color:grey;" class='comment2' ng-show="isConcertHome && !is1prog">
-        <i class="ion-ios-bookmarks-outline icon-right" style="float: right; font-size: 150%"></i>
         <p> Avec un programme annoncé </p>
-    </div>
-
+      </div>
     </div>
 
 
     <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
               ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'"
-              ng-show="isConcertHome && item.haveProgram && hasToBeShown(item.hasArtist)">
+              ng-show="isConcertHome && item.haveProgram && item.hasToBeShown">
       <h4 class=" white right">{{item.distance}} km</h4>
       <h2 class="white">{{item.TITRPROG}}</h2>
       <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>
@@ -55,7 +52,7 @@
       </div>
     </ion-item>
 
-    <div ng-hide = "programmes">
+    <div ng-hide="programmes">
       <div style="color:grey;" class='comment2' ng-show="isConcertHome">
         <i class="ion-music-note" style="float: right; font-size: 130%"></i>
         <p> Sans programme annoncé </p>
@@ -65,7 +62,7 @@
 
       <ion-item ng-repeat="item in concerts | orderBy : 'distance'"
                 ng-class-even="'concertbackground'" ng-class-odd="'concertbackground-odd'"
-                ng-show="isConcertHome && !item.haveProgram && hasToBeShown(item.hasArtist)">
+                ng-show="isConcertHome && !item.haveProgram && item.hasToBeShown">
         <h4 class=" white right">{{item.distance}} km</h4>
         <h2 class="white">{{item.TITRPROG}}</h2>
         <p><span class="left"><strong>{{item.DATDBTDIF.toLocaleDateString()}}</strong></span>

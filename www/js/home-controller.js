@@ -32,6 +32,8 @@ angular.module('starter.controllers')
     $scope.timeCriteria = "aujourd'hui";
     $scope.programmes = false;
     $scope.interpret = false;
+    $scope.nombreConcerts = 0;
+    $scope.finished = false;
 
     if ($stateParams.lat && $stateParams.lat !== "") {
       $scope.lat = parseFloat($stateParams.lat);
@@ -54,7 +56,6 @@ angular.module('starter.controllers')
     }
 
 
-
     if ($stateParams.start && $stateParams.start !== "" && $stateParams.end && $stateParams.end !== "") {
       $scope.start = new Date($stateParams.start);
       $scope.end = new Date($stateParams.end);
@@ -62,17 +63,38 @@ angular.module('starter.controllers')
     }
 
     //Fonction pour savoir si un concert doit être affiché par la recherche par interprète. itemProperty === item.hasArtist
-    $scope.hasToBeShown = function (itemProperty) {
-      if ($scope.interpret === true) {
-        if (itemProperty) {
-          return true;
+    $scope.hasToBeShown = function (item) {
+      if (($scope.programmes === true) && ($scope.interpret === true)) {
+        if ((item.haveProgram === true) && (item.hasArtist === true)) {
+          $scope.nombreConcerts += 1;
+          item.hasToBeShown = true;
         } else {
-          return false;
+          item.hasToBeShown = false;
         }
       } else {
-        return true;
+        if ($scope.interpret === true) {
+          if (item.hasArtist === true) {
+            $scope.nombreConcerts += 1;
+            item.hasToBeShown = true;
+          } else {
+            item.hasToBeShown = false;
+          }
+
+        } else {
+          if ($scope.programmes === true) {
+            if (item.haveProgram === true) {
+              $scope.nombreConcerts += 1;
+              item.hasToBeShown = true;
+            } else {
+              item.hasToBeShown = false;
+            }
+          } else {
+            $scope.nombreConcerts += 1;
+            item.hasToBeShown = true;
+          }
+        }
       }
-    }
+    };
 
 
     var attentionAuTemps = setTimeout(function () {
@@ -170,6 +192,7 @@ angular.module('starter.controllers')
             }
 
             item.DATDBTDIF = new Date(item.DATDBTDIF);
+            $scope.hasToBeShown(item);
             //item.id_bit is undefined 'cause these concerts come from Eliza
           });
           if (count == $scope.concerts.length) {
@@ -190,7 +213,6 @@ angular.module('starter.controllers')
             $scope.map = new google.maps.Map(div, mapOptions);
 
 
-
             $scope.map.setCenter({lat: $scope.lat, lng: $scope.lng});
 
             //creation de la fonction isOpen a infowindow
@@ -207,8 +229,7 @@ angular.module('starter.controllers')
               $scope.chargingMap = false;
 
               $scope.concerts.forEach(function (item, index) {
-                if ($scope.programmes && $scope.interpret) {
-                  if (item.haveProgram && $scope.hasToBeShown(item.hasArtist)) {
+                  if (item.hasToBeShown === true) {
                     var marker = new google.maps.Marker({
                       map: $scope.map,
                       animation: google.maps.Animation.DROP,
@@ -224,71 +245,10 @@ angular.module('starter.controllers')
                       else {
                         infoWindow.open($scope.map, marker);
                       }
-
                     });
                   }
-                } else {
-                  if ($scope.programmes) {
-                    if (item.haveProgram) {
-                      var marker = new google.maps.Marker({
-                        map: $scope.map,
-                        animation: google.maps.Animation.DROP,
-                        position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
-                      });
-                      var infoWindow = new google.maps.InfoWindow({
-                        content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
-                      });
-                      google.maps.event.addListener(marker, 'click', function () {
-                        if (isInfoWindowOpen(infoWindow)) {
-                          infoWindow.close();
-                        }
-                        else {
-                          infoWindow.open($scope.map, marker);
-                        }
-                      });
-                    }
-                  } else {
-                    if ($scope.interpret) {
-                      if ($scope.hasToBeShown(item.hasArtist)) {
-                        var marker = new google.maps.Marker({
-                          map: $scope.map,
-                          animation: google.maps.Animation.DROP,
-                          position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
-                        });
-                        var infoWindow = new google.maps.InfoWindow({
-                          content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
-                        });
-                        google.maps.event.addListener(marker, 'click', function () {
-                          if (isInfoWindowOpen(infoWindow)) {
-                            infoWindow.close();
-                          }
-                          else {
-                            infoWindow.open($scope.map, marker);
-                          }
-                        });
-                      }
-                    } else {
-                      var marker = new google.maps.Marker({
-                        map: $scope.map,
-                        animation: google.maps.Animation.DROP,
-                        position: {lat: parseFloat(item.LAT), lng: parseFloat(item.LNG)}
-                      });
-                      var infoWindow = new google.maps.InfoWindow({
-                        content: item.TITRPROG + " @ " + item.VILLE.toLowerCase()
-                      });
-                      google.maps.event.addListener(marker, 'click', function () {
-                        if (isInfoWindowOpen(infoWindow)) {
-                          infoWindow.close();
-                        }
-                        else {
-                          infoWindow.open($scope.map, marker);
-                        }
-
-                      });
-                    }
-                  }
                 }
-              });
+              );
 
             }, function (error) {
             });
