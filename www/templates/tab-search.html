@@ -1,8 +1,9 @@
-<ion-content>
+<ion-content overflow-scroll="false">
 
   <div class="row">
     <div class="col item">
       <div class="col search-container">
+        <form>
         <div class="col div-search">
               <input  style="width:90%;" class="item item-input" type="text" placeholder="Quel morceau recherchez-vous?" ng-model="search">
         </div>
@@ -20,6 +21,7 @@
           <button  style="width:20%;" ng-click="submitSearch(search,filter, api)"  class="button button-stable">Track</button>
 
         </div>
+        </form>
       </div>
     </div>
   </div>
@@ -61,4 +63,3 @@
     Afficher plus de résultats...
   </button>
 </ion-content>
-

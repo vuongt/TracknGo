@@ -2,21 +2,17 @@ var express = require('express'),
 // logger = require('morgan'),
   cookieParser = require('cookie-parser'),
   session = require('express-session'),
-// TOD0 session not necessary
   passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy,
   request = require('request-promise'),
   bodyParser = require('body-parser'),
   token = require('./server/token.controller.js'),
   jwt = require('jsonwebtoken'),
-  async = require('async'),
-  bcrypt = require('bcryptjs');
+  async = require('async');
 
 var app = express();
 var config = require('./config-dev.js'); //config file contains all tokens and other private info
-var authentication = require('./server/authentication.controller.js');
+var authentication = require('./server/authentication.controller.js'); //handle all authentication operations
 
-//TODO verify if all connection has established before staring the server
 //=======================MARIADB======================
 /*Mariasql client to connect to the mariaDB*/
 var mysql = require("mysql");
@@ -26,156 +22,6 @@ var mariaClient = new mysql.createPool({
   user: config.mariasql.user,
   password: config.mariasql.password,
   database: config.mariasql.db
-});
-/*
- mariaClient.end();
- */
-//TODO : end of each request ?
-//===================PASSPORT======================
-/*Sign in/up strategy using passport.js*/
-//=================================================
-
-//Put user.id in session
-passport.serializeUser(function (user, done) {
-  console.log("serializing user id : " + user.id);
-  return done(null, user.id);
-});
-//Retrieve user's information from session cookie.
-passport.deserializeUser(function (id, done) {
-  console.log("deserializing user with id: " + id);
-  mariaClient.getConnection(function (err, connection) {
-    if (err) return done(err);
-    else {
-      connection.query("SELECT id, name, email FROM users WHERE id=?", [id], function (err, rows, fields) {
-        return done(err, rows[0]);
-      });
-    }
-    connection.release();
-  })
-});
-
-//--------Sign up strategy----------------
-passport.use('local-signup', new LocalStrategy(
-  {// by default, local strategy uses username and password, we will override with email
-    usernameField: 'email',
-    passwordField: 'password',
-    passReqToCallback: true //allows us to pass back the entire request to the callback
-  },
-  function (req, email, password, done) {
-    // find a user whose email is the same as the forms email
-    // we are checking to see if the user trying to sign up already exists
-    console.log('starting signup strategy' + req.body);
-    mariaClient.getConnection(function (err, connection) {
-      if (err) return done(err);
-      else {
-        connection.query("SELECT * FROM users WHERE email=?", [email], function (err, rows, fields) {
-          if (err) return done(err);
-          if (!rows.length) {
-            //If there is no user with that email
-            // create the user
-            var newUser = {};
-            newUser.email = email;
-            newUser.name = req.body.name;
-            newUser.password = password;
-            console.log('user password : '+newUser.password);
-            bcrypt.genSalt(10, function (err, salt) {
-              if (err) {
-                return next(err);
-              }
-              bcrypt.hash(newUser.password, salt, function (err, hash) {
-                if (err) {
-                  return next(err);
-                }
-                newUser.password = hash;
-                console.log("hash :" + newUser.password);
-                var prep = 'INSERT INTO users (name,email,password) VALUES (?,?,?)';
-                var insert = [newUser.name, newUser.email, newUser.password];
-                var sql = mysql.format(prep, insert);
-                mariaClient.getConnection(function (err, connection2) {
-                  if (err) {
-                    return done(err);
-                  }
-                  connection2.query(sql, function (err, rows, fields) {
-                    if (err) {
-                      return done(err);
-                    }
-                    console.log('row insert result: ');
-                    console.dir(rows);
-                    newUser.id = rows.insertId;
-                    console.log("newUser object: ");
-                    console.dir(newUser);
-                    return done(null, newUser);
-                  });
-                  connection2.release();
-                })
-              });
-            });
-          } else {
-            return done(null, false, {msg: 'This email has been registered'});
-          }
-        });
-      }
-      connection.release();
-    })
-  }
-));
-
-//---------------Sign in strategy----------------
-passport.use('local-signin', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password',
-    passReqToCallback: true
-  },
-  function (req, email, password, done) {
-    mariaClient.getConnection(function (err, connection) {
-      if (err) {
-        return done(err);
-      } else {
-        connection.query("SELECT * FROM users WHERE email=?", [email], function (err, rows) {
-          if (err) return done(err);
-          if (!rows.length) {
-            return (done(null, false, {msg: 'No account is registered with this email !'}));
-          }
-          //if the user is found but the password is wrong
-          bcrypt.compare(password, rows[0].password, function(err, isMatch) {
-            if (!isMatch)
-              return done(null, false, {msg: 'Wrong password'});
-               // all is well, return successful user
-            console.log("Login succeded");
-            return done(null, rows[0]);
-          });
-        });
-      }
-      connection.release();
-    })
-  }
-));
-//====================EXPRESS=======================
-// Express configuration
-//==================================================
-app.set('views', __dirname + '/server/views');
-//app.use(logger('combined'));// TODO logging
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: false})) /* Parser that only parses urlencoded body de type string*/
-  .use(bodyParser.json());
-
-app.use(session({ //Initiate a session
-  secret: config.secret,
-  resave: true,
-  saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", config.accessControl);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
-  if (req.method === 'OPTIONS') {
-    res.end();
-  } else {
-    next();
-  }
 });
 //======================API oeuvres===================
 // Establish connection with API oeuvres
@@ -196,6 +42,7 @@ var optionSacem = {
     'Origin': config.sacem.headerOrigin
   }
 };
+//options to get details of a work
 var optionSacemDetail = {
   method: 'GET',
   uri: config.sacem.uri_detail,
@@ -217,9 +64,8 @@ var optionEliza = {
   uri: config.eliza.uri
 };
 
-
 //=======================API BandsInTown===============
-//Connect to BandsInTown V2 API
+//Option to connect to BandsInTown V2 API
 //=====================================================
 var artist = '';
 var optionBIT = {
@@ -230,123 +76,46 @@ var optionBIT = {
     app_id: 'Sacem'
   }
 };
-//=======================ROUTES========================
-// Express routing
-//=====================================================
-//---------------Home page-----------------------
-app.get("/home", function (req, res) {
-  res.setHeader('Content-Type', 'text/html');
-  console.log('user in session: ');
-  console.log(req.user);
-  if (req.user) {
-    res.render('index.ejs', {name: req.user.name});
+
+//====================EXPRESS=======================
+// Express configuration
+//==================================================
+//app.use(logger('combined'));// TODO logging
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: false})) /* Parser that only parses urlencoded body de type string*/
+  .use(bodyParser.json());
+
+app.use(passport.initialize())
+  .use(passport.session());
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", config.accessControl);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.end();
   } else {
-    res.redirect("/signin");
+    next();
   }
 });
 
-//---------------Sign in, log out---------------
-
-//sends the request through our local signup strategy, and if successful takes user to homepage,
-// otherwise returns then to signin page
+//=======================ROUTES========================
+// Express routing
+//=====================================================
+//---------------Sign in, sign up, sign out---------------
+//See function in details in authentication.controller.js
+//sends the request through our local sign up strategy
 //Token created with email
-/*app.post("/signup", passport.authenticate('local-signup', {session: false}),
- function (req, res) {
- // If this function gets called, authentication was successful.
- // `req.user` contains the authenticated user.
- res.setHeader('Content-Type', 'application/json');
- console.log('Authentication succeeded');
- token.createToken({email: req.user.email, id: req.user.id, name: req.user.name}, function (res, err, token) {
- if (err) {
- return res.status(400).send(err);
- }
- res.status(201).json({success: true, token: 'JWT ' + token});
- console.log('token sent');
- }.bind(null, res));
- });*/
-
-app.post('/signup', function (req, res, next) {
-  passport.authenticate('local-signup', function (err, user, info) {
-    if (err) {
-      return next(err); // will generate a 500 error
-    }
-    // Generate a JSON response reflecting authentication status
-    if (!user) {
-      return res.send({success: false, msg: info.msg});
-    }
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    req.login(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-      res.setHeader('Content-Type', 'application/json');
-      console.log('Authentication succeeded');
-      token.createToken({email: req.user.email, id: req.user.id, name: req.user.name}, function (res, err, token) {
-        if (err) {
-          return res.status(400).send(err);
-        }
-        res.status(201).json({success: true, token: 'JWT ' + token});
-        console.log('token sent');
-      }.bind(null, res));
-    });
-  })(req, res, next);
-});
-//sends the request through our local signin strategy, and if successful takes user to homepage,
-/*app.post('/signin', passport.authenticate('local-signin', {session: false}),
- function (req, res) {
- // If this function gets called, authentication was successful.
- // `req.user` contains the authenticated user.
- // Remove sensitive data before login
- res.setHeader('Content-Type', 'application/json');
- token.createToken({email: req.user.email, id: req.user.id, name: req.user.name}, function (res, err, token) {
- if (err) {
- return res.status(400).send(err);
- }
- res.status(201).json({success: true, token: 'JWT ' + token});
- console.log('token sent');
- }.bind(null, res));
- });
- */
-app.post('/signin', function (req, res, next) {
-  passport.authenticate('local-signin', function (err, user, info) {
-    if (err) {
-      return next(err); // will generate a 500 error
-    }
-    // Generate a JSON response reflecting authentication status
-    if (!user) {
-      return res.send({success: false, msg: info.msg});
-    }
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    req.login(user, function (err) {
-      if (err) {
-        return next(err);
-      }
-      // If this function gets called, authentication was successful.
-      // `req.user` contains the authenticated user.
-      res.setHeader('Content-Type', 'application/json');
-      token.createToken({email: req.user.email, id: req.user.id, name: req.user.name}, function (res, err, token) {
-        if (err) {
-          return res.status(400).send(err);
-        }
-        res.status(201).json({success: true, token: 'JWT ' + token});
-        console.log('token sent');
-      }.bind(null, res));
-    });
-  })(req, res, next);
-});
-//logs user out of site, deleting them from the session, and returns to homepage
+app.post('/signup', authentication.signup);
+//sends the request through our local sign in strategy
+app.post('/signin', authentication.signin);
+//logs user out of site, deleting their token
 app.get('/logout', authentication.signout);
-/*function(req, res) {
- /*var name = req.user.name;
- console.log("LOG OUT " + req.user.name);
- req.logout();
- res.redirect('/home');
- req.session.notice = "You have successfully been logged out " + name + "!";
- });*/
 
 //---------------research concert---------------
+// Searching for concerts in Eliza and calculate the distance to user's location
+
+//Calculate distance between 2 point in Earth's surface
 function getDistance(lat1,lon1,lat2,lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below
@@ -364,10 +133,15 @@ function getDistance(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
-
+/*parameter position (lng and lat) are required
+radius is 50 if not provided
+date (start, end) is today if not provided
+the server searching for concerts in Eliza,
+then calculate the distance from concerts to user's position,
+return the distance along with concert's information */
 app.get('/search/concerts', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  //params : lng, lat, radius, start,end
+  //params : lng, lat, radius, start, end
   var lng = "";
   var lat = "";
   var radius = "50"; //50km by default
@@ -434,7 +208,6 @@ app.get('/search/concerts', function (req, res) {
       results.concerts = JSON.parse(body);
       console.log("got concerts from Eliza. Next : look for position");
       if (lng !== "" && lat !== "" && radius !== "") {
-        console.log("param query existent");
         var calls2 = [];
         results.concerts.forEach(function (c) {
           if (c.LAT !== "No result found" && c.LNG !== "No result found") {
@@ -446,7 +219,6 @@ app.get('/search/concerts', function (req, res) {
               var limit = parseFloat(radius);
               var distance = getDistance(latUser, lngUser,latEliza,lngEliza);
               if (distance < limit) {
-                console.log("restricted contains " + results.restrictedConcerts.length);
                 c.distance = distance;
                 return results.restrictedConcerts.push(c);
               } else return 1;
@@ -462,7 +234,7 @@ app.get('/search/concerts', function (req, res) {
         });
         console.log("about to send");
         res.send(JSON.stringify(results));
-        //console.log(results);
+        console.log("concerts sent");
       }
       else {
         res.send(JSON.stringify(results));
@@ -472,7 +244,7 @@ app.get('/search/concerts', function (req, res) {
 });
 
 //----------------research work------------------
-//TODO l'espace dans le nom de la chanson
+//Search for works in API oeuvres with or without filters (page TRACK)
 app.get('/search/works', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -486,7 +258,7 @@ app.get('/search/works', function (req, res) {
     optionSacem.qs.filters = req.query.filters;
     request(optionSacem, function (err, response, body) {
       if (err) {
-        return console.log(err); //TODO send back error header
+        return console.log(err);
       } else {
         var bodyObj = JSON.parse(body);
         if (bodyObj.error == "") {
@@ -511,7 +283,7 @@ app.get('/search/works', function (req, res) {
     // all filters
     request(optionSacem, function (err, response, body) {
       if (err) {
-        return console.log(err); //TODO send back error header
+        return console.log(err);
       } else {
         var bodyObj = JSON.parse(body);
         if (bodyObj.error == "") {
@@ -533,8 +305,10 @@ app.get('/search/works', function (req, res) {
     });
   }
 });
+
 //---------------artist------------------/
-//Get artist information from Bands In Town
+//provide content for page artist
+// First, get artist's concerts from Bands In Town
 app.get('/artist', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -551,8 +325,7 @@ app.get('/artist', function (req, res) {
     optionBIT.uri = 'http://api.bandsintown.com/artists/' + artist + '/events.json';
     optionSacem.qs.query = artist;
     optionSacem.qs.filters = "performers";
-    //TODO artist not found from band in town
-    //TODO how to make 2 independent requests
+    //TODO better make 2 independent requests or with async
     request(optionBIT, function (errBit, resBit, bodyBit) {
       if (errBit) {
         detailsArtist.error = "Il y a un problème avec la connection internet. Veuillez réessayer plus tard";
@@ -572,7 +345,7 @@ app.get('/artist', function (req, res) {
           concert.id_bit = concertBit.id;
           detailsArtist.concerts.push(concert);
         }
-
+        // then get the artist's works list from API oeuvres SAcem
         request(optionSacem, function (errSacem, resSacem, bodySacem) {
           if (errSacem) {
             detailsArtist.error = "Il y a un problème avec la connection internet. Veuillez réessayer plus tard";
@@ -608,7 +381,7 @@ app.get('/artist', function (req, res) {
 
 
 //---------------author---------------
-//Show result from API oeuvres or Eliza ? Rather API oeuvres
+//Show result from API oeuvres (list of this author's works)
 app.get('/author', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -650,9 +423,7 @@ app.get('/author', function (req, res) {
 
 
 //---------------work details---------------
-//Information fromAPI oeuvre and Eliza
-//Song details from API Sacem
-//List of concert from Eliza
+//Information from API oeuvre (artists, authors)
 app.get('/work', function (req, res) {
   //params :iswc
   res.setHeader('Content-Type', 'application/json');
@@ -700,6 +471,7 @@ app.get('/work', function (req, res) {
   }
 });
 
+//List of concerts having this song in its program (from Eliza)
 app.get('/work/program', function (req, res) {
   //params :iswc
   res.setHeader('Content-Type', 'application/json');
@@ -733,6 +505,7 @@ app.get('/work/program', function (req, res) {
 
 //----------------program details------------
 //Information about a concert from Eliza
+// param : code program
 app.get('/program', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   var program = {
@@ -786,8 +559,17 @@ app.get('/program', function (req, res) {
   });
 });
 
+/*
+IMPORTANT : In every request which concerns authentication, the server will try to verify
+and extract user's identity from header (json web token) and return 2 booleans: authorised and actionSucceed (if the request is an action)
+authorised = false if there is no token or the token isn't valid
+actionSucceed = false if there is a problem performing action
+ */
 
 //---------------profile---------------
+// return user's information : name, list of favorite artists, authors and songs
+//This information is stored in the database of application
+// No parameter required. User's identity is extracted from request header.
 app.get('/profile', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -871,6 +653,8 @@ app.get('/profile', function (req, res) {
 });
 
 //---------------planning---------------
+//return planning of the user
+// No parameter required. User's identity is extracted from request header.
 app.get('/planning', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -919,13 +703,14 @@ app.get('/planning', function (req, res) {
 });
 
 //---------------action add event---------------
+//add a concert to planning
 app.get('/action/addevent', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   var action = {authorized: false, actionSucceed: false};
   try {
     var requestToken = token.extractToken(req.headers);
     if (requestToken) {
-      var decoded = jwt.decode(requestToken, config.token.secret); //TODO decode or verify ?
+      var decoded = jwt.decode(requestToken, config.token.secret);
       var userid = decoded.id;
       action.authorized = true;
       var cdeprog = "";
@@ -960,13 +745,14 @@ app.get('/action/addevent', function (req, res) {
 });
 
 //---------------action remove event--------------
+//remove a concert from planning
 app.get('/action/removeevent', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   var action = {authorized: false, actionSucceed: false};
   try {
     var requestToken = token.extractToken(req.headers);
     if (requestToken) {
-      var decoded = jwt.decode(requestToken, config.token.secret); //TODO decode or verify ?
+      var decoded = jwt.decode(requestToken, config.token.secret);
       var userid = decoded.id;
       action.authorized = true;
       if (req.query.cdeprog) {
@@ -1017,9 +803,9 @@ app.get('/action/removeevent', function (req, res) {
 });
 
 //---------------action favorite---------------
+//add work, author or artist to favorites
 app.get('/action/addfavorite', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  //TODO revised try and catch blocks : make it more compact
   //params: type, id of the content, title
   var action = {authorized: false, actionSucceed: false};
   try {
@@ -1097,9 +883,10 @@ app.get('/action/addfavorite', function (req, res) {
     res.send(JSON.stringify(action));
   }
 });
+
+//remove work, author or artist from favorites
 app.get('/action/removefavorite', function (req, res) {
   //params: type, id
-  //TODO revised try and catch blocks : make it more compact
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
 
@@ -1181,6 +968,7 @@ app.get('/action/removefavorite', function (req, res) {
 });
 
 //---------------comment---------------
+//witring a comment to databases
 app.post('/comment', function (req, res) {
   //params: cdeprog, date, content
   res.setHeader('Content-Type', 'application/json');
@@ -1217,6 +1005,7 @@ app.post('/comment', function (req, res) {
   }
 
 });
+// get all comments of a concert from databases
 app.get('/comment', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   var cdeprog = req.query.cdeprog;
@@ -1228,7 +1017,7 @@ app.get('/comment', function (req, res) {
       connection.query("SELECT * FROM comment INNER JOIN users ON comment.id_user = users.id where comment.cdeprog= ? ORDER BY creation_date DESC;", [cdeprog], function (err, rows) {
         if (err) {
           console.log(err);
-          return res.send({error: "Error when reading from database"}); // TODO Error Handler
+          return res.send({error: "Error when reading from database"});
         }
         else {
           for (var i = 0, length = rows.length; i < length; i++) {
@@ -1252,6 +1041,7 @@ app.use(function (err, req, res, next) {
 });
 
 //=================PORT============================
+//TODO verify if all connection has established before staring the server
 var port = process.env.PORT || config.port; //select your port or let it pull from .env file //
 app.listen(port, function (err) {
   if (err) {
