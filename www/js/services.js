@@ -1,5 +1,10 @@
 angular.module('starter.services', [])
 
+// Les différents services developpés ici sont utilisés dans les controlleurs des différentes fonctionnalités de l'appli.
+// Ces services sont surtout liés à la version 2
+// Il s'agit: d'ajouter des élements aux favoris, de gérer le planning, de gérer l'identification des utilisateurs
+
+// ========================== SERVICES DE TRACK N GO =======================================
   .service('AuthService', function ($q, $http, API_ENDPOINT) {
 
 
@@ -10,6 +15,8 @@ angular.module('starter.services', [])
     var authToken;
     var userInfo = {};
     var userPlanning=[];
+
+
 
     function loadUserCredentials() {
       var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
@@ -87,8 +94,10 @@ angular.module('starter.services', [])
     loadUserCredentials();
 
     //==============FAVORITES SERVICE===============
-    //Ajouter une chanson aux favoris
 
+
+    //Ajouter une chanson aux favoris. Cette fonction est utilisée par différents controlleurs.
+    // L'ajout aux favoris se fait via l'appel d'un url auquel on envoie code iswc et nom du favori
 
     function addFavorites(iswc, name, cb) {
       $http({
@@ -113,7 +122,8 @@ angular.module('starter.services', [])
       });
     }
 
-    //Supprimer une chanson des favoris
+    //Supprimer une chanson des favoris. Cette fonction est utilisée par différents controlleurs.
+  // La suppression se fait via un appel au serveur auquel on envoie code iswc et nom
     function delFavorites(iswc, name,cb) {
       console.log('la chanson ' + name + ' va être supprimée de vos favoris');
       $http({
@@ -138,8 +148,10 @@ angular.module('starter.services', [])
 
     }
 
-    //Ajouter un auteur aux favoris
+    //Ajouter un auteur aux favoris. Cette fonction est utilisée par différents controlleurs.
+
     function addFavoritesAuth(name,cb) {
+    // Appel au serveur
       $http({
         method: 'GET',
         url: API_ENDPOINT.url + '/action/addfavorite?type=author&name=' + name,
@@ -147,6 +159,7 @@ angular.module('starter.services', [])
           Origin: 'http://localhost:8100'
         }
       }).then(function successCallback(response) {
+      // La réponse est renvoyée par le serveur: différents cas, soit on est connecté, soit on ne l'est pas, soit le favoris a été ajouté
         if(!response.data.authorized) {
           console.log("!action unauthorized! please signin!");
         } else if(!response.data.actionSucceed){
@@ -163,6 +176,7 @@ angular.module('starter.services', [])
 
 
     //Supprimer une chanson des favoris
+    // La suppression se fait via un appel du serveur. Cette fonction est utilisée par différents controlleurs.
     function delFavoritesAuth(name,cb) {
       console.log('cet auteur ' + name + ' va être supprimée de vos favoris');
       $http({
@@ -172,6 +186,7 @@ angular.module('starter.services', [])
           Origin: 'http://localhost:8100'
         }
       }).then(function successCallback(response) {
+      // Différentes réponses possibles qu'il faut traiter
         if(!response.data.authorized) {
           console.log("!action unauthorized! please signin!");
         } else if(!response.data.actionSucceed){
@@ -188,6 +203,7 @@ angular.module('starter.services', [])
 
 
     //Ajouter un artiste aux favoris
+    // L'ajout d'un artiste aux favoris se fait côté serveur. Cette fonction est utilisée par différents controlleurs.
     function addFavoritesArt(name,cb) {
       $http({
         method: 'GET',
@@ -234,6 +250,7 @@ angular.module('starter.services', [])
       });
     }
 
+// Gestion des icones "star": remplie si l'artiste/Auteur/chanson appartient aux favoris de l'utilisateur, ou évidée si l'artiste/Auteur/Morceau ne fait pas partie de ses favoris
     var isLiked = function (iswc,userdata) {
       if (isAuthenticated){
         for (var l = 0; l < userdata.works.length; l++) {
@@ -286,6 +303,7 @@ angular.module('starter.services', [])
       });
     }
 
+// Ajouter un évenement au planning
     var addPlanning = function (date, location, title, cdeprog, id_bit, callback) {
       if (isAuthenticated){
         if (cdeprog) {
@@ -318,7 +336,7 @@ angular.module('starter.services', [])
         callback(false,false);
       }
     };
-
+//Supprimer un évenement du planning
     var delPlanning = function (cdeprog, idBit,callback) {
       if (isAuthenticated){
         console.log("delPlanning with cdeprog" + cdeprog);
@@ -350,6 +368,7 @@ angular.module('starter.services', [])
       }
     };
 
+// Vérifier si un évenement appartient au planning
     var isInPlanning = function(cdeprog,idBit){
       if (!isAuthenticated){
         return false;
@@ -371,7 +390,7 @@ angular.module('starter.services', [])
       return false;
     };
 
-
+// Export des fonctions définies ci dessus pour leur utilisation dans les controlleurs des différentes pages de l'appli
     return {
       login: login,
       register: register,
