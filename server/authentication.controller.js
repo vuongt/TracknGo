@@ -138,7 +138,14 @@ passport.use('local-signin', new LocalStrategy({
   }
 ));
 
-
+/**
+ * Sign in operation : use passport local-signin strategy then if success, retrieve user information from req.user
+ * Create a token from email, id and user name
+ * Send the token
+ * @param req
+ * @param res
+ * @param next
+ */
 function signin(req, res, next) {
   passport.authenticate('local-signin', function (err, user, info) {
     if (err) {
@@ -148,8 +155,6 @@ function signin(req, res, next) {
     if (!user) {
       return res.send({success: false, msg: info.msg});
     }
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
     req.login(user, function (err) {
       if (err) {
         return next(err);
@@ -168,6 +173,11 @@ function signin(req, res, next) {
   })(req, res, next);
 }
 
+/**
+ * Sign out operation : expire the token in the request header
+ * @param req
+ * @param res
+ */
 function signout(req, res) {
   token.expireToken(req.headers, function(err, success) {
     if (err) {
@@ -181,7 +191,13 @@ function signout(req, res) {
     }
   });
 }
-
+/**
+ * Sign up operation: use local-signup strategy and if succeed retrieve user info from req.user
+ * Create a new token and send it to application
+ * @param req
+ * @param res
+ * @param next
+ */
 function signup(req, res,next) {
   passport.authenticate('local-signup', function (err, user, info) {
     if (err) {
@@ -209,7 +225,14 @@ function signup(req, res,next) {
     });
   })(req, res, next);
 }
-//Middleware to verify the token and attaches the user object to the request if authenticated
+
+
+/**
+ * Middleware to verify the token and attaches the user object to the request if authenticated
+ * @param req
+ * @param res
+ * @param next
+ */
 function isAuthenticated(req, res, next) {
   token.verifyToken(req.headers, function(next, err, data) {
     if (err) {

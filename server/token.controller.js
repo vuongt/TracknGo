@@ -18,6 +18,11 @@ var mariaClient = mysql.createPool({
 //Token controller is responsible for creating,
 // deleting and verifying token
 //=================================================
+/**
+ * Extract token from header
+ * @param headers
+ * @returns {*}
+ */
 function extractTokenFromHeader(headers) {
   if (headers == null) throw new Error('Header is null');
   if (headers.authorization == null) throw new Error('Authorization header is null');
@@ -36,6 +41,12 @@ function extractTokenFromHeader(headers) {
   return token;
 }
 
+/**
+ * Create a token from payload
+ * @param payload
+ * @param cb callback function
+ * @returns {*}
+ */
 function createToken(payload, cb) {
   var expire = config.token.expiration;
   console.log('creating token...');
@@ -66,13 +77,12 @@ function createToken(payload, cb) {
 });
 }
 
-function refreshToken(payload,cb){
-  var expire = config.token.expiration;
-  if(payload != null && typeof payload !== 'object') { return cb(new Error('payload is not an Object')) }
-  var token = jwt.sign(payload, config.token.secret, { expiresIn: config.token.expiration_string });
-  // TODO replace the old token
-}
-//Expires a token
+/**
+ * Expire a token : Delete it from database
+ * @param headers
+ * @param cb function callback
+ * @returns {*}
+ */
 function expireToken(headers, cb) {
   try {
     var token = extractTokenFromHeader(headers);
@@ -101,8 +111,12 @@ function expireToken(headers, cb) {
   }
 }
 
-
-//Verify if token is valid
+/**
+ * Verify if token is valid : Extract from header then check
+ * @param headers header of the request
+ * @param cb callback function
+ * @returns {*}
+ */
 function verifyToken(headers, cb) {
   try {
     var token = extractTokenFromHeader(headers);

@@ -221,16 +221,16 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
   //============================ PLANNING MANAGER =====================================
   var foo = AuthService.getPlanning(); //update planning for one fisrt time
   $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
-    AuthService.addPlanning(date, location, title, cdeprog, id_bit, verifyAction);
+    AuthService.addPlanning(date, location, title, cdeprog, id_bit, verifyAction2);
   };
   $scope.removePlanning = function (cdeprog, id_bit) {
     console.log("removing concert from planning with id" + id_bit);
-    AuthService.delPlanning(cdeprog, id_bit, verifyAction);
+    AuthService.delPlanning(cdeprog, id_bit, verifyAction2);
   };
   $scope.isInPlanning = function (cdeprog, id_bit) {
     return AuthService.isInPlanning(cdeprog, id_bit);
   };
-  function verifyAction(authorized, actionSucceed) {
+  function verifyAction2(authorized, actionSucceed) {
     if (!authorized) {
       var confirmPopup = $ionicPopup.confirm({
         title: 'Oups !',
@@ -258,35 +258,6 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
     }
   }
 
-  /*$scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
-    console.log("adding concert with location:" + location);
-
-    AuthService.addPlanning(date, location, title, cdeprog, id_bit, function (result) {
-      if (!result.auth) {
-        var confirmPopup = $ionicPopup.confirm({
-          title: 'Oups !',
-          template: 'Please sign in to do this action',
-          okText: 'Sign in'
-        });
-
-        confirmPopup.then(function (res) {
-          if (res) {
-            $state.go('tab.profil');
-          } else {
-            console.log('Action annulé');
-          }
-          item.isInPlanning = false;
-
-        });
-      }
-    });
-
-
-  };
-  $scope.removePlanning = function ( cdeprog, id_bit) {
-    console.log("removing concert from planning with id" + id_bit);
-    AuthService.delPlanning(cdeprog, id_bit);
-  };*/
 
 
 });

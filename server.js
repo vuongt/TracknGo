@@ -12,7 +12,7 @@ var express = require('express'),
 var app = express();
 var config = require('./config-dev.js'); //config file contains all tokens and other private info
 var authentication = require('./server/authentication.controller.js'); //handle all authentication operations
-
+var userAction = require('./server/user.controller.js');
 //=======================MARIADB======================
 /*Mariasql client to connect to the mariaDB*/
 var mysql = require("mysql");
@@ -115,7 +115,14 @@ app.get('/logout', authentication.signout);
 //---------------research concert---------------
 // Searching for concerts in Eliza and calculate the distance to user's location
 
-//Calculate distance between 2 point in Earth's surface
+/**
+ * Calculate distance between 2 point in Earth's surface
+ * @param lat1
+ * @param lon1
+ * @param lat2
+ * @param lon2
+ * @returns {number} Distance on Earth's surface
+ */
 function getDistance(lat1,lon1,lat2,lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below
@@ -130,6 +137,11 @@ function getDistance(lat1,lon1,lat2,lon2) {
   return d; //in km
 }
 
+/**
+ * Convert deg to rad
+ * @param deg
+ * @returns {number}
+ */
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
@@ -559,6 +571,10 @@ app.get('/program', function (req, res) {
   });
 });
 
+
+//==================================================
+//          USER RELATIVE ACTION - V2
+//==================================================
 /*
 IMPORTANT : In every request which concerns authentication, the server will try to verify
 and extract user's identity from header (json web token) and return 2 booleans: authorised and actionSucceed (if the request is an action)
@@ -570,7 +586,8 @@ actionSucceed = false if there is a problem performing action
 // return user's information : name, list of favorite artists, authors and songs
 //This information is stored in the database of application
 // No parameter required. User's identity is extracted from request header.
-app.get('/profile', function (req, res) {
+app.get('/profile', userAction.profile);
+/*app.get('/profile', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
   console.log('profile request');
@@ -650,12 +667,13 @@ app.get('/profile', function (req, res) {
   } else {
     res.send(JSON.stringify({authorized: false}));
   }
-});
+});*/
 
 //---------------planning---------------
 //return planning of the user
 // No parameter required. User's identity is extracted from request header.
-app.get('/planning', function (req, res) {
+app.get('/planning', userAction.planning );
+/*function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
   try {
@@ -700,11 +718,12 @@ app.get('/planning', function (req, res) {
     return res.send({authorized: false});
   }
 
-});
+}*/
 
 //---------------action add event---------------
 //add a concert to planning
-app.get('/action/addevent', function (req, res) {
+app.get('/action/addevent', userAction.addEvent);
+/*function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   var action = {authorized: false, actionSucceed: false};
   try {
@@ -742,11 +761,12 @@ app.get('/action/addevent', function (req, res) {
     console.log(err);
     res.send(JSON.stringify(action));
   }
-});
+}*/
 
 //---------------action remove event--------------
 //remove a concert from planning
-app.get('/action/removeevent', function (req, res) {
+app.get('/action/removeevent', userAction.removeEvent );
+/*function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   var action = {authorized: false, actionSucceed: false};
   try {
@@ -800,11 +820,12 @@ app.get('/action/removeevent', function (req, res) {
     console.log(err);
     res.send(JSON.stringify(action));
   }
-});
+}*/
 
 //---------------action favorite---------------
 //add work, author or artist to favorites
-app.get('/action/addfavorite', function (req, res) {
+app.get('/action/addfavorite', userAction.addFavorite);
+/*function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   //params: type, id of the content, title
   var action = {authorized: false, actionSucceed: false};
@@ -882,10 +903,11 @@ app.get('/action/addfavorite', function (req, res) {
     console.log(err);
     res.send(JSON.stringify(action));
   }
-});
+}*/
 
 //remove work, author or artist from favorites
-app.get('/action/removefavorite', function (req, res) {
+app.get('/action/removefavorite', userAction.removeFavorite);
+/*function (req, res) {
   //params: type, id
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -965,11 +987,12 @@ app.get('/action/removefavorite', function (req, res) {
   } catch (err) {
     res.send(JSON.stringify(action));
   }
-});
+}*/
 
 //---------------comment---------------
 //witring a comment to databases
-app.post('/comment', function (req, res) {
+app.post('/comment', userAction.postComment);
+/*function (req, res) {
   //params: cdeprog, date, content
   res.setHeader('Content-Type', 'application/json');
   var action = {authorized: false, actionSucceed: false};
@@ -1004,9 +1027,10 @@ app.post('/comment', function (req, res) {
     res.send(JSON.stringify(action));
   }
 
-});
+}*/
 // get all comments of a concert from databases
-app.get('/comment', function (req, res) {
+app.get('/comment', userAction.getComment);
+  /*function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   var cdeprog = req.query.cdeprog;
   var comments = [];
@@ -1032,7 +1056,7 @@ app.get('/comment', function (req, res) {
       });
     }
   });
-});
+}*/
 
 // TODO error handling
 app.use(function (err, req, res, next) {
