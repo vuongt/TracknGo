@@ -1,6 +1,10 @@
 angular.module('starter.services', [])
 
   .service('AuthService', function ($q, $http, API_ENDPOINT) {
+
+
+
+  // ==================================== SERVICES D IDENTIFICATION (login, userdatas...) ==============================
     var LOCAL_TOKEN_KEY = 'yourTokenKey';
     var isAuthenticated = false;
     var authToken;

@@ -201,7 +201,7 @@ angular.module('starter.controllers')
           }
 
 
-          //initialisation google maps
+// ========================================= GOOGLE MAPS MANAGER ===================================
           var init = function () {
 
             var mapOptions = {
