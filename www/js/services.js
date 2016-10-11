@@ -11,13 +11,15 @@ angular.module('starter.services', [])
 
   // ==================================== SERVICES D IDENTIFICATION (login, userdatas...) ==============================
     var LOCAL_TOKEN_KEY = 'yourTokenKey';
-    var isAuthenticated = false;
-    var authToken;
-    var userInfo = {};
-    var userPlanning=[];
+    var isAuthenticated = false; // use as reference to check if user is authenticated
+    var authToken; // store the token
+    var userInfo = {}; // store user name, favorite lists, used by different controller as a reference. It is updated after each related action
+    var userPlanning=[]; // store use planning, used by different controller as a reference. It is updated after each related action
 
 
-
+    /**
+     * get user token from environment then pass it to useCredentials
+     */
     function loadUserCredentials() {
       var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
       if (token) {
@@ -25,11 +27,19 @@ angular.module('starter.services', [])
       }
     }
 
+    /**
+     * set token to environment then pass it to useCredentials
+     * @param token
+     */
     function storeUserCredentials(token) {
       window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
       useCredentials(token);
     }
 
+    /**
+     * use a token : set the default headers authorization and indicate that user is authenticated
+     * @param token
+     */
     function useCredentials(token) {
       isAuthenticated = true;
       authToken = token;
@@ -37,6 +47,11 @@ angular.module('starter.services', [])
       $http.defaults.headers.common.Authorization = authToken;
     }
 
+    /**
+     * Destroy user's credential : delete token from environment, indicate that user isn't authenticated
+     * Set user info and planning to empty
+     * remove default header
+     */
     function destroyUserCredentials() {
       $http.get(API_ENDPOINT.url + '/logout').then(function(response){
         console.log('logout request sent to server');
@@ -49,6 +64,9 @@ angular.module('starter.services', [])
       window.localStorage.removeItem(LOCAL_TOKEN_KEY);
     }
 
+    /**
+     * Get user information : name, favorite works, author and artist and store it to the variable userInfo
+     */
     function storeUserInfo() {
       $http.get(API_ENDPOINT.url+'/profile').then(function (response) {
           userInfo.name = response.data.name;
@@ -58,6 +76,11 @@ angular.module('starter.services', [])
       });
     }
 
+    /**
+     * register action
+     * @param user
+     * @returns {*}
+     */
     var register = function (user) {
       return $q(function (resolve, reject) {
         $http.post(API_ENDPOINT.url + '/signup', user, {header: {Origin: "http://localhost:8100"}}).then(function (result) {
@@ -72,6 +95,11 @@ angular.module('starter.services', [])
       });
     };
 
+    /**
+     * login action
+     * @param user
+     * @returns {*}
+     */
     var login = function (user) {
       return $q(function (resolve, reject) {
         $http.post(API_ENDPOINT.url + '/signin', user).then(function (result) {
@@ -86,7 +114,9 @@ angular.module('starter.services', [])
         });
       });
     };
-
+    /**
+     * logout action
+     */
     var logout = function () {
       destroyUserCredentials();
     };
@@ -149,7 +179,6 @@ angular.module('starter.services', [])
     }
 
     //Ajouter un auteur aux favoris. Cette fonction est utilisée par différents controlleurs.
-
     function addFavoritesAuth(name,cb) {
     // Appel au serveur
       $http({
@@ -226,7 +255,11 @@ angular.module('starter.services', [])
       });
     }
 
-    //Supprimer un artist des favoris
+    /**
+     * Remove artist from favorite
+     * @param name
+     * @param cb
+     */
     function delFavoritesArt(name,cb) {
       console.log('cet auteur '+name+' va être supprimée de vos favoris');
       $http({
@@ -285,7 +318,10 @@ angular.module('starter.services', [])
     };
 
     //===================PLANNING=======================
-    //This function must be called after each action add/remove!!!!
+    /**
+     * This function must be called after each action add/remove!!!!
+     * It retrive user's planning and update the variable userPlanning
+     */
     function updatePlanning() {
       $http({
         method: 'GET',
@@ -297,13 +333,21 @@ angular.module('starter.services', [])
         if (response.data.authorized){
           userPlanning = [];
           userPlanning.push.apply(userPlanning,response.data.events);
-          console.log("userPlanning updated : ")
+          console.log("userPlanning updated")
           console.log(userPlanning);
         }
       });
     }
 
-// Ajouter un évenement au planning
+    /**
+     * Add an event to planning
+     * @param date
+     * @param location
+     * @param title
+     * @param cdeprog
+     * @param id_bit
+     * @param callback
+     */
     var addPlanning = function (date, location, title, cdeprog, id_bit, callback) {
       if (isAuthenticated){
         if (cdeprog) {
@@ -336,7 +380,13 @@ angular.module('starter.services', [])
         callback(false,false);
       }
     };
-//Supprimer un évenement du planning
+
+    /**
+     * Remove an event from planning
+     * @param cdeprog
+     * @param idBit
+     * @param callback
+     */
     var delPlanning = function (cdeprog, idBit,callback) {
       if (isAuthenticated){
         console.log("delPlanning with cdeprog" + cdeprog);
@@ -368,7 +418,12 @@ angular.module('starter.services', [])
       }
     };
 
-// Vérifier si un évenement appartient au planning
+    /**
+     * Verify if an event is in user's planning (if authenticated)
+     * @param cdeprog
+     * @param idBit
+     * @returns {boolean}
+     */
     var isInPlanning = function(cdeprog,idBit){
       if (!isAuthenticated){
         return false;
