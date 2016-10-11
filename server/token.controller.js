@@ -132,13 +132,6 @@ function verifyToken(headers, cb) {
       }
       connection.release()
     });
-    /*redis.get(token, function(err, userData) {
-      if(err) {return cb(err);}
-
-      if(!userData) {return cb(new Error('Token not found'));}
-
-      return cb(null, JSON.parse(userData));
-    });*/
   } catch (err) {
     return cb(err);
   }
