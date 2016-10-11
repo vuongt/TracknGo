@@ -1,6 +1,5 @@
 var express = require('express'),
 // logger = require('morgan'),
-  cookieParser = require('cookie-parser'),
   session = require('express-session'),
   passport = require('passport'),
   request = require('request-promise'),
@@ -75,7 +74,6 @@ var optionBIT = {
 // Express configuration
 //==================================================
 //app.use(logger('combined'));// TODO logging
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false})) /* Parser that only parses urlencoded body de type string*/
   .use(bodyParser.json());
 

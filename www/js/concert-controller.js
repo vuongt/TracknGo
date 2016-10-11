@@ -10,11 +10,11 @@ angular.module('starter.controllers').controller('ConcertCtrl', function (AuthSe
   $scope.userPlanning = AuthService.getPlanning();
   $scope.isLiked = function(iswc){return(AuthService.isLiked(iswc, $scope.userdata));};
   $scope.delFavorites = function(iswc, name){
-      AuthService.delFavorites(iswc, name);
+      AuthService.delFavorites(iswc, name,verifyAction);
       $scope.userdata = AuthService.getUserInfo();
   };
   $scope.addFavorites = function(iswc, name){
-       AuthService.addFavorites(iswc, name);
+       AuthService.addFavorites(iswc, name,verifyAction);
        $scope.userdata = AuthService.getUserInfo();
   };
   $scope.addPlanning = function (date, location, title, cdeprog,idBit) {
