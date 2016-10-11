@@ -3,7 +3,7 @@ angular.module('starter.controllers')
 
   .controller('SearchCtrl', ['$rootScope', '$scope', '$http', 'AuthService', "$stateParams", "$ionicPopup", "$state", function ($rootScope, $scope, $http, AuthService, $stateParams, $ionicPopup, $state) {
 
-
+//============= INITIALIZATIONS ==========================================
     $scope.isSong = true;
     $scope.isSearch=false;
     $scope.isPlus = false;
@@ -15,6 +15,7 @@ angular.module('starter.controllers')
     //$scope.concerts == [];
     console.log($scope.filter);
 
+//============= FAVORITES MANAGER ============================================
     $scope.userdata = AuthService.getUserInfo();
 
     $scope.isLiked = function (iswc) {
@@ -54,7 +55,7 @@ angular.module('starter.controllers')
       }
     }
 
-
+//========================= GET INFOS =======================================
     $scope.submitSearch = function (search, filter, api) {
       $scope.charging = true;
 

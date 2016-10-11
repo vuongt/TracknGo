@@ -2,7 +2,7 @@ angular.module('starter.controllers')
   .controller('HomeCtrl', function ($scope, $state, $cordovaGeolocation, $http, $ionicModal, AuthService, API_ENDPOINT, HEADER_ORIGIN, $stateParams, $ionicPopup) {
 
 
-    //Initialisation des variables d'affichage
+// ================================== INITIALIZATIONS ====================================
     $scope.numLimit = 3;
     $scope.isPlus = false;
 
@@ -17,8 +17,6 @@ angular.module('starter.controllers')
       return [year, month, day].join('-');
     };
 
-
-//Chargement des concerts
     $scope.charging = true;
     $scope.chargingMap = true;
     $scope.isConcertHome = false;
@@ -35,6 +33,7 @@ angular.module('starter.controllers')
     $scope.nombreConcerts = 0;
     $scope.finished = false;
 
+// Vérification des données de lat et de long recupérées dans l'url
     if ($stateParams.lat && $stateParams.lat !== "") {
       $scope.lat = parseFloat($stateParams.lat);
     }
@@ -114,6 +113,7 @@ angular.module('starter.controllers')
         $scope.lng = position.coords.longitude;
       }
 
+//========================================== GET INFOS ================================================
       $http({
         method: 'GET',
         url: API_ENDPOINT.url + '/search/concerts?lng=' + $scope.lng + '&lat=' + $scope.lat + '&radius=' + $scope.radius + '&start=' + $scope.start + '&end=' + $scope.end,
@@ -201,7 +201,7 @@ angular.module('starter.controllers')
           }
 
 
-          //initialisation google maps
+// ========================================= GOOGLE MAPS MANAGER ===================================
           var init = function () {
 
             var mapOptions = {

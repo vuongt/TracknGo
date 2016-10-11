@@ -1,4 +1,9 @@
 angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService,API_ENDPOINT) {
+
+
+  //============================ INITIALIZATIONS ============================
+
+
   $scope.iswc = $stateParams.iswc;
   $scope.title = $stateParams.title;
   $scope.myGoBack = function () {
@@ -17,6 +22,8 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
     return [year, month, day].join('-');
   };
 
+
+//=========================== FAVORITES MANAGER ====================================
   $scope.userdata = AuthService.getUserInfo();
 
   $scope.delFavoritesAuth = function (name) {
@@ -77,6 +84,7 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
 
   $scope.charging = false;
 
+// ==================================== GET SONGS ======================================
   $http({
     method: 'GET',
     url: API_ENDPOINT.url + '/work?iswc=' + $scope.iswc,
@@ -118,16 +126,15 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
   }, function errorCallback(response) {
   });
 
-  /*  $scope.printMore = function() {
-   $scope.numLimit=$scope.numLimit+5;
-   $route.reload();
-   };*/
 
 
+// Retourner en arrière
   $scope.myGoBack = function () {
     $ionicHistory.goBack();
   };
 
+
+//===================================== GET CONCERTS ===================================
 
   $scope.chargeConcerts = function (iswc) {
     console.log('system retrieving concerts where' + iswc + 'is announced');
@@ -210,6 +217,8 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
 
 
   };
+
+  //============================ PLANNING MANAGER =====================================
   var foo = AuthService.getPlanning(); //update planning for one fisrt time
   $scope.addPlanning = function (date, location, title, cdeprog, id_bit) {
     AuthService.addPlanning(date, location, title, cdeprog, id_bit, verifyAction);

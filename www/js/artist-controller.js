@@ -1,7 +1,10 @@
+// Controlleur Page Artiste (tab-artist), chargement des informations de la page
+
 angular.module('starter.controllers').controller('ArtistCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService,API_ENDPOINT) {
+// Récupération dans l'url du nom de l'artiste dont on souhaite charger la page
   $scope.name = $stateParams.name;
-  //$scope.concerts=[];
-  //$scope.songs=[];
+
+//Initialisation de variables
   $scope.numLimit = 5;
   $scope.isPlus = false;
   Date.prototype.yyyymmdd = function () {

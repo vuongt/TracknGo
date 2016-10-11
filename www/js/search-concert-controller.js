@@ -13,6 +13,8 @@ angular.module('starter.controllers')
         $scope.radius = "50";
       }
     };
+
+    //=========================== GET INFO ============================================
     $scope.search = function(locationString,geolocation,radius,start,end,programmes,interpret){
       if (start && end && start <= end){
         $scope.start = start;
@@ -29,6 +31,8 @@ angular.module('starter.controllers')
         if (geolocation && locationString){
           this.geolocation=false;
         }
+
+        // ======== FIRST CASE: gelocation on ===========
         if (geolocation){
           $scope.charging=true;
           var options = {timeout: 10000, enableHighAccuracy: true};
@@ -43,6 +47,7 @@ angular.module('starter.controllers')
             $ionicLoading.hide();
             console.log(err);
           });
+          //======== SECOND CASE: research with an address ========
         } else {
           $scope.location="";
           geocoder.geocode( { 'address' : locationString}, function( results, status ) {
@@ -69,6 +74,8 @@ angular.module('starter.controllers')
         });
       }
     };
+
+    //================================ GEOLOCATION ===================================
     $scope.geolocationOn= function (geolocation){
       this.geolocation = true;
     }
