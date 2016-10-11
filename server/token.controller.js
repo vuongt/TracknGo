@@ -2,7 +2,7 @@
  * Created by vuong on 22/09/2016.
  */
 var jwt = require('jsonwebtoken'),
-  config= require('../config-dev.js');
+  config = require('../config-dev.js');
 
 /*Mariasql client to connect to the mariaDB*/
 var mysql = require("mysql");

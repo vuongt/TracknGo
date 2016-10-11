@@ -5,24 +5,18 @@ var express = require('express'),
   passport = require('passport'),
   request = require('request-promise'),
   bodyParser = require('body-parser'),
-  token = require('./server/token.controller.js'),
-  jwt = require('jsonwebtoken'),
   async = require('async');
 
 var app = express();
-var config = require('./config-dev.js'); //config file contains all tokens and other private info
-var authentication = require('./server/authentication.controller.js'); //handle all authentication operations
+//config file contains all tokens and other private info
+var config = require('./config-dev.js');
+
+// handle all authentication operations
+var authentication = require('./server/authentication.controller.js');
+
+// handle all user relative operations (version 2)
 var userAction = require('./server/user.controller.js');
-//=======================MARIADB======================
-/*Mariasql client to connect to the mariaDB*/
-var mysql = require("mysql");
-var mariaClient = new mysql.createPool({
-  connectionLimit: 50,
-  host: config.mariasql.host,
-  user: config.mariasql.user,
-  password: config.mariasql.password,
-  database: config.mariasql.db
-});
+
 //======================API oeuvres===================
 // Establish connection with API oeuvres
 //====================================================

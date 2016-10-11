@@ -26,6 +26,14 @@ var mariaClient = new mysql.createPool({
   database: config.mariasql.db
 });
 
+/**
+ * return user's information : name, list of favorite artists, authors and songs
+ * This information is stored in the database of application
+ * No parameter required. User's identity is extracted from request header.
+ * @param req
+ * @param res
+ * @returns {*}
+ */
 function profile(req,res){
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -107,6 +115,14 @@ function profile(req,res){
     res.send(JSON.stringify({authorized: false}));
   }
 }
+
+/**
+ * Return planning of user
+ * No parameter required. User's identity is extracted from request header.
+ * @param req
+ * @param res
+ * @returns {*}
+ */
 function planning(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', config.accessControl);
@@ -153,6 +169,12 @@ function planning(req, res) {
   }
 
 }
+
+/**
+ * Add a concert to planning
+ * @param req
+ * @param res
+ */
 function addEvent(req, res) {
   res.setHeader('Content-Type', 'application/json');
   var action = {authorized: false, actionSucceed: false};
@@ -192,6 +214,12 @@ function addEvent(req, res) {
     res.send(JSON.stringify(action));
   }
 }
+
+/**
+ * remove a concert from planning
+ * @param req
+ * @param res
+ */
 function removeEvent(req, res) {
   res.setHeader('Content-Type', 'application/json');
   var action = {authorized: false, actionSucceed: false};
@@ -247,6 +275,12 @@ function removeEvent(req, res) {
     res.send(JSON.stringify(action));
   }
 }
+
+/**
+ * add work, author or artist to favorites
+ * @param req
+ * @param res
+ */
 function addFavorite(req, res) {
   res.setHeader('Content-Type', 'application/json');
   //params: type, id of the content, title
@@ -326,6 +360,12 @@ function addFavorite(req, res) {
     res.send(JSON.stringify(action));
   }
 }
+
+/**
+ * remove work, author or artist from favorites
+ * @param req
+ * @param res
+ */
 function removeFavorite(req, res) {
   //params: type, id
   res.setHeader('Content-Type', 'application/json');
@@ -407,6 +447,11 @@ function removeFavorite(req, res) {
     res.send(JSON.stringify(action));
   }
 }
+/**
+ * witring a comment to databases
+ * @param req
+ * @param res
+ */
 function postComment(req, res) {
   //params: cdeprog, date, content
   res.setHeader('Content-Type', 'application/json');
@@ -443,6 +488,12 @@ function postComment(req, res) {
   }
 
 }
+
+/**
+ * get all comments of a concert from databases
+ * @param req
+ * @param res
+ */
 function getComment(req, res) {
   res.setHeader('Content-Type', 'application/json');
   var cdeprog = req.query.cdeprog;
@@ -470,6 +521,8 @@ function getComment(req, res) {
     }
   });
 }
+
+
 module.exports = {
   profile:profile,
   planning:planning,
