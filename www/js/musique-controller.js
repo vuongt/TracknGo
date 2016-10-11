@@ -1,7 +1,7 @@
 angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope, $http, $stateParams, $state, $ionicPopup, $ionicHistory, AuthService,API_ENDPOINT) {
 
 
-  //============================ INITIALIZATIONS ============================
+  //============================ INITIALIZATIONS ===============================
 
 
   $scope.iswc = $stateParams.iswc;
@@ -50,6 +50,7 @@ angular.module('starter.controllers').controller('MusiqueCtrl', function ($scope
   $scope.isLikedAuth = function (name) {
     return (AuthService.isLikedAuth(name, $scope.userdata));
   };
+
   $scope.isLikedArt = function (name) {
     return (AuthService.isLikedArt(name, $scope.userdata));
   };
