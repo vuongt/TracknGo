@@ -1,5 +1,7 @@
 angular.module('starter.controllers').controller('PlanningCtrl', function (AuthService, $scope) {
 
+
+//==================================== PLANNING MANAGER ============================================
   $scope.month = new Date();
 
   $scope.monthNames = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin",
@@ -14,6 +16,7 @@ angular.module('starter.controllers').controller('PlanningCtrl', function (AuthS
   }
    update();
 
+
   $scope.removePlanning = function (cdeprog, id_bit) {
     AuthService.delPlanning(cdeprog, id_bit,verifyAction);
     console.log("concert removed");
@@ -21,6 +24,10 @@ angular.module('starter.controllers').controller('PlanningCtrl', function (AuthS
   $scope.isInPlanning = function(cdeprog, id_bit){
     return AuthService.isInPlanning(cdeprog, id_bit);
   };
+
+
+
+
   function verifyAction(authorized,actionSucceed){
     if (!authorized) {
       var confirmPopup = $ionicPopup.confirm({
