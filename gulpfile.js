@@ -83,7 +83,18 @@ gulp.task('change-config', function () {
   var res = config.substring(24, config.indexOf('.', 24));
   if (res === 'config-dev') {
     sh.sed('-i','config-dev', 'config-prod', './server.js');
+    sh.sed('-i','config-dev', 'config-prod', './server/authentication.controller.js');
+    sh.sed('-i','config-dev', 'config-prod', './server/token.controller.js');
+    sh.sed('-i','config-dev', 'config-prod', './server/user.controller.js');
+    sh.sed('-i','config-dev', 'config-prod', './server/functionV1.js');
+
   } else {
     sh.sed('-i','config-prod', 'config-dev', './server.js');
+    sh.sed('-i','config-prod', 'config-dev', './server/authentication.controller.js');
+    sh.sed('-i','config-prod', 'config-dev', './server/token.controller.js');
+    sh.sed('-i','config-prod', 'config-dev', './server/user.controller.js');
+    sh.sed('-i','config-prod', 'config-dev', './server/functionV1.js');
+
+
   }
 });
