@@ -5,7 +5,7 @@
 var request = require('request-promise'),
     async = require('async');
 
-var config = require('../config-prod.js');
+var config = require('../config-dev.js');
 
 //======================API oeuvres===================
 // Establish connection with API oeuvres
