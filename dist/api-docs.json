@@ -1,0 +1,483 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API",
+    "description": "insert description here",
+    "termsOfService": "http://swagger.io/terms/"
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "TRACK",
+      "description": "recupere les informations sur les oeuvres/artistes/auteurs"
+    },
+    {
+      "name": "GO",
+      "description": "recupere les informations sur les concerts"
+    },
+    {
+      "name": "AUTHENTICATION",
+      "description": "fonctions pour l'authentification"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/signup": {
+      "post": {
+        "tags": [
+          "AUTHENTICATION"
+        ],
+        "description": "",
+        "operationId": "signup",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userInfo",
+            "in": "body",
+            "description": "Info of the user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userInfo"
+            }
+          }
+        ]
+      }
+    },
+    "/signin": {
+      "post": {
+        "tags": [
+          "AUTHENTICATION"
+        ],
+        "description": "",
+        "operationId": "signin",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "SignInInfo",
+            "in": "body",
+            "description": "Info of the user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/signInInfo"
+            }
+          }
+        ]
+      }
+    },
+    "/artist": {
+      "get": {
+        "tags": [
+          "TRACK"
+        ],
+        "description": "",
+        "operationId": "artist",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "name of the artist",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/name"
+            }
+          }
+        ]
+      }
+    },
+    "/author": {
+      "get": {
+        "tags": [
+          "TRACK"
+        ],
+        "description": "",
+        "operationId": "author",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "name of the author",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/name"
+            }
+          }
+        ]
+      }
+    },
+    "/search/works": {
+      "get": {
+        "tags": [
+          "TRACK"
+        ],
+        "description": "search for work in oeuvresREST",
+        "operationId": "search/works",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "champs de recherche",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/query"
+            }
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "description": "filter for search",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/filter"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "if missing : first 100 results",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "exemple de réponse",
+            "schema": {
+              "$ref": "#/definitions/work_search_response"
+            }
+          }
+        }
+      }
+    },
+    "/work": {
+      "get": {
+        "tags": [
+          "TRACK"
+        ],
+        "description": "",
+        "operationId": "work",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iswc",
+            "in": "query",
+            "description": "iswc of the work you want",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/iswc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "exemple de réponse",
+            "schema": {
+              "$ref": "#/definitions/work_response"
+            }
+          }
+        }
+      }
+    },
+    "/work/program": {
+      "get": {
+        "tags": [
+          "TRACK"
+        ],
+        "description": "get concerts from Eliza",
+        "operationId": "work/program",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iswc",
+            "in": "query",
+            "description": "iswc of the work you want",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/iswc"
+            }
+          }
+        ]
+      }
+    },
+    "/search/concerts": {
+      "get": {
+        "tags": [
+          "GO"
+        ],
+        "description": "",
+        "operationId": "search/concert",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "lat of center pos",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/lat"
+            }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "description": "lng of center pos",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/lng"
+            }
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "description": "radius in wich we seach concerts",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/radius"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "start date",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/date"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "description": "end date",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/date"
+            }
+          }
+        ]
+      }
+    },
+    "/program": {
+      "get": {
+        "tags": [
+          "GO"
+        ],
+        "description": "Get information of a program. Available only for program in ELiza",
+        "operationId": "work/program",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cdeprog",
+            "in": "query",
+            "description": "cdeprog of the prog you want",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cdeprog"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "signInInfo": {
+      "properties": {
+        "password": {
+          "required": true,
+          "type": "string",
+          "example": "James1234"
+        },
+        "email": {
+          "required": true,
+          "type": "string",
+          "example": "james@gmail.com"
+        }
+      }
+    },
+    "userInfo": {
+      "properties": {
+        "name": {
+          "required": true,
+          "type": "string",
+          "example": "James"
+        },
+        "password": {
+          "required": true,
+          "type": "string",
+          "example": "James1234"
+        },
+        "email": {
+          "required": true,
+          "type": "string",
+          "example": "james@gmail.com"
+        }
+      }
+    },
+    "lat": {
+      "required": true,
+      "type": "float",
+      "example": 48.882441899999996
+    },
+    "lng": {
+      "required": true,
+      "type": "float",
+      "example": 2.2679693000000043
+    },
+    "radius": {
+      "required": true,
+      "type": "float",
+      "example": 50
+    },
+    "date": {
+      "required": true,
+      "type": "date",
+      "example": "2016-10-08"
+    },
+    "name": {
+      "properties": {
+        "name": {
+          "required": true,
+          "type": "string",
+          "example": "goldman"
+        }
+      }
+    },
+    "cdeprog": {
+      "required": true,
+      "type": "string",
+      "example": "0007599295"
+    },
+    "iswc": {
+      "properties": {
+        "iswc": {
+          "required": true,
+          "type": "string",
+          "example": "T-703.516.738.7"
+        }
+      }
+    },
+    "query": {
+      "properties": {
+        "query": {
+          "required": true,
+          "type": "string",
+          "example": "goldman"
+        }
+      }
+    },
+    "filter": {
+      "properties": {
+        "filter": {
+          "required": true,
+          "type": "string",
+          "example": "performers"
+        }
+      }
+    },
+    "page": {
+      "properties": {
+        "page": {
+          "type": "integer",
+          "example": 1
+        }
+      }
+    },
+    "work_search_response": {
+      "properties": {
+        "error": {
+          "required": false,
+          "type": "string",
+          "example": ""
+        },
+        "results": {
+          "required": false,
+          "type": "any",
+          "example": [
+            {
+              "iswc": "T-004.063.385.9",
+              "title": "FAMILLE"
+            },
+            {
+              "iswc": "T-003.050.091.4",
+              "title": "LES RESTAUS DU COEUR"
+            }
+          ]
+        }
+      }
+    },
+    "work_response": {
+      "properties": {
+        "error": {
+          "required": false,
+          "type": "string",
+          "example": ""
+        },
+        "iswc": {
+          "required": false,
+          "type": "string",
+          "example": "T-003.049.184.9"
+        },
+        "title": {
+          "required": false,
+          "type": "string",
+          "example": "AZIZA"
+        },
+        "composerAuthor": {
+          "required": false,
+          "type": "any",
+          "example": [
+            "Daniel BALAVOINE"
+          ]
+        },
+        "performer": {
+          "required": false,
+          "type": "any",
+          "example": [
+            "Daniel BALAVOINE",
+            "Gilles PELLEGRINI",
+            " FOLY LIANE",
+            " FOLY LIANE"
+          ]
+        }
+      }
+    },
+    "400error": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "400 Bad Request"
+        }
+      }
+    }
+  }
+}

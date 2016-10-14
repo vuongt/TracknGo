@@ -2,8 +2,11 @@ var express = require('express'),
   session = require('express-session'),
   passport = require('passport'),
   bodyParser = require('body-parser');
+  argv = require('minimist')(process.argv.slice(2)),
+  swagger = require("swagger-node-express");
 
 var app = express();
+var subpath = express();
 //config file contains all tokens and other private info
 var config = require('./config-dev.js');
 
@@ -36,7 +39,30 @@ app.use(function (req, res, next) {
     next();
   }
 });
+//for swagger
+app.use("/v1", subpath);
+swagger.setAppHandler(subpath);
 
+app.use(express.static('dist'));
+
+swagger.setApiInfo({
+  title: "example API",
+  description: "API to do something, manage something...",
+  termsOfServiceUrl: "",
+  contact: "yourname@something.com",
+  license: "",
+  licenseUrl: ""
+});
+
+swagger.setHeaders = function setHeaders(res) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+  res.header("Access-Control-Allow-Headers", "Content-Type, X-API-KEY");
+};
+
+subpath.get('/', function (req, res) {
+  res.sendFile(__dirname + '/dist/index.html');
+});
 //=======================ROUTES========================
 // Express routing
 //=====================================================
@@ -121,6 +147,19 @@ app.use(function (err, req, res) {
   console.log(err);
   res.status(500).send('Something broke!');
 });
+
+
+
+swagger.configureSwaggerPaths('', 'api-docs', '');
+
+var domain = '149.202.167.34';
+if(argv.domain !== undefined)
+  domain = argv.domain;
+else
+  console.log('No --domain=xxx specified, taking default hostname "149.202.167.34".');
+var applicationUrl = 'http://' + domain;
+swagger.configure(applicationUrl, '1.0.0');
+
 
 //=================PORT============================
 //TODO verify if all connection has established before staring the server
