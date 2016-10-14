@@ -1,6 +1,6 @@
 The first time you pull this project type :
 
-    sudo npm install -g gulp
+    npm install
     
 This will install gulp, bower and gulp-util which are needed to use the gulp install task that you will need to use after each pull to check if modules were updated.
 
