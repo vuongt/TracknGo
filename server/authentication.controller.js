@@ -6,7 +6,7 @@ var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     bcrypt = require('bcryptjs');
 var token    = require('./token.controller.js');
-var config = require('../config-dev');
+var config = require('../config-dev.js');
 
 /*Mariasql client to connect to the mariaDB*/
 var mysql = require("mysql");
